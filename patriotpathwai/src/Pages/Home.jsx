@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import { useRef } from "react";
 import { Box } from "@mui/material";
 import Main from "../Components/Home/Main";
 import Features from "../Components/Home/Features";
@@ -14,21 +14,47 @@ function Home({ onSignup, onLogin }) {
 
   const scrollToSection = (ref) => {
     if (ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth' });
+      ref.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <Box sx={{
-      height: '100vh',
-      overflowY: 'scroll',
-      scrollSnapType: 'y mandatory'
-    }}>
-      <Header onSignup={onSignup} onLogin={onLogin} scrollToSection={scrollToSection} mainRef={mainRef} featuresRef={featuresRef} aboutRef={aboutRef} contactRef={contactRef}/>
-      <Main ref={mainRef} sx={{ scrollSnapAlign: 'start', height: '100vh' }}/>
-      <Features ref={featuresRef} sx={{ scrollSnapAlign: 'start', height: '100vh' }}/>
-      <AboutUs ref={aboutRef} sx={{ scrollSnapAlign: 'start', height: '100vh' }}/>
-      <Contact ref={contactRef} sx={{ scrollSnapAlign: 'start', height: '100vh' }}/>
+    <Box
+      sx={{
+        height: "100vh",
+        overflowY: "scroll",
+        scrollSnapType: "y mandatory",
+      }}
+    >
+      <Header
+        onSignup={onSignup}
+        onLogin={onLogin}
+        scrollToSection={scrollToSection}
+        mainRef={mainRef}
+        featuresRef={featuresRef}
+        aboutRef={aboutRef}
+        contactRef={contactRef}
+      />
+      <Main
+        ref={mainRef}
+        featureRef={featuresRef}
+        scrollToSection={scrollToSection}
+        sx={{ scrollSnapAlign: "start", height: "100vh" }}
+      />
+      <Features
+        ref={featuresRef}
+        sx={{ scrollSnapAlign: "start", height: "100vh" }}
+      />
+      <AboutUs
+        ref={aboutRef}
+        scrollToSection={scrollToSection}
+        contactRef={contactRef}
+        sx={{ scrollSnapAlign: "start", height: "100vh" }}
+      />
+      <Contact
+        ref={contactRef}
+        sx={{ scrollSnapAlign: "start", height: "100vh" }}
+      />
     </Box>
   );
 }
