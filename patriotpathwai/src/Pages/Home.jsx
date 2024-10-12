@@ -184,7 +184,7 @@ const LearnMoreButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-function Home() {
+function Home({ onSignup, onLogin }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -256,7 +256,7 @@ function Home() {
           <Button color="inherit" variant="outlined" sx={{ ml: 2 }} onClick={handleLogin}>
             Login
           </Button>
-          <Button color="inherit" variant="outlined" sx={{ ml: 2 }} onClick={handleSignUp}>
+          <Button color="inherit" variant="outlined" sx={{ ml: 2 }} onClick={onSignup}>
             Sign Up
           </Button>
         </Toolbar>
