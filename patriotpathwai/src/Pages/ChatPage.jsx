@@ -30,177 +30,187 @@ const darkTheme = createTheme({
 });
 
 function ChatPage() {
-    const [activeFeature, setActiveFeature] = useState('Career Coach');
-    const [messages, setMessages] = useState([]);
-    const [userInput, setUserInput] = useState('');
-  
-    const logout = useLogoutFunction();
-    const handleSignOut = async () => {
-      await logout(true);
-    };
-  
-    const handleFileImport = (event) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        console.log('Imported file:', file.name);
-      }
-    };
-  
-    const handleSendMessage = () => {
-      if (userInput.trim()) {
-        // Add user message
+  const [activeFeature, setActiveFeature] = useState('Career Coach');
+  const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState('');
+
+  const logout = useLogoutFunction();
+  const handleSignOut = async () => {
+    await logout(true);
+  };
+
+  const handleFileImport = (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log('Imported file:', file.name);
+    }
+  };
+
+  const handleSendMessage = () => {
+    if (userInput.trim()) {
+      // Add user message
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'user', text: userInput }
+      ]);
+
+      // Add AI typing indicator
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'ai', text: 'AI is generating a response...' }
+      ]);
+
+      // Simulate delay for AI response
+      setTimeout(() => {
         setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: 'user', text: userInput }
-        ]);
-  
-        // Simulate AI response
-        setMessages((prevMessages) => [
-          ...prevMessages,
+          ...prevMessages.slice(0, -1), // Remove the typing indicator
           { sender: 'ai', text: 'This is a response from the AI.' }
         ]);
-  
-        // Clear input field
-        setUserInput('');
-      }
-    };
-  
-    return (
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <Box display="flex" height="100vh">
-          <Sidebar
-            activeFeature={activeFeature}
-            setActiveFeature={setActiveFeature}
-            handleSignOut={handleSignOut}
-          />
+      }, 2000); // Delay of 2 seconds
 
-          <Box flex={1} display="flex" flexDirection="column">
-            <Box bgcolor="background.paper" p={2}>
-              <Typography variant="h5">{activeFeature}</Typography>
-            </Box>
+      // Clear input field
+      setUserInput('');
+    }
+  };
 
-            {/* Chat Area */}
-            <Container component="main" flex={1} py={2} sx={{marginTop: '20px'}}>
-              {messages.length === 0 ? (
-                <>
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Box display="flex" height="100vh">
+        <Sidebar
+          activeFeature={activeFeature}
+          setActiveFeature={setActiveFeature}
+          handleSignOut={handleSignOut}
+        />
+
+        <Box flex={1} display="flex" flexDirection="column">
+          <Box bgcolor="background.paper" p={2}>
+            <Typography variant="h5">{activeFeature}</Typography>
+          </Box>
+
+          {/* Chat Area */}
+          <Container component="main" flex={1} py={2} sx={{ marginTop: '20px' }}>
+            {messages.length === 0 ? (
+              <>
+                <Box
+                  bgcolor="background.paper"
+                  borderRadius={1}
+                  p={3}
+                  mb={2}
+                  mt={4}
+                >
                   <Box
-                    bgcolor="background.paper"
-                    borderRadius={1}
-                    p={3}
+                    width={64}
+                    height={64}
+                    bgcolor="primary.main"
+                    borderRadius="50%"
+                    mx="auto"
                     mb={2}
-                    mt={4}
-                  >
-                    <Box
-                      width={64}
-                      height={64}
-                      bgcolor="primary.main"
-                      borderRadius="50%"
-                      mx="auto"
-                      mb={2}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <MessageCircle size={32} />
-                    </Box>
-                    <Typography variant="h6" align="center">
-                      Where careers begin
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      align="center"
-                      color="textSecondary"
-                    >
-                      Get personalized career advice and guidance.
-                    </Typography>
-                  </Box>
-                  <Box
-                    display="grid"
-                    gridTemplateColumns="repeat(3, 1fr)"
-                    gap={2}
-                  >
-                    {[
-                      "Explore Opportunities",
-                      "Skill Development",
-                      "Career Path Planning",
-                    ].map((text) => (
-                      <Box
-                        bgcolor="background.paper"
-                        borderRadius={1}
-                        p={2}
-                        key={text}
-                      >
-                        <Typography variant="subtitle1">{text}</Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          Description about {text.toLowerCase()}.
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                </>
-              ) : (
-                messages.map((msg, index) => (
-                  <Box
-                    key={index}
                     display="flex"
-                    justifyContent={
-                      msg.sender === "user" ? "flex-end" : "flex-start"
-                    }
-                    mb={2}
+                    alignItems="center"
+                    justifyContent="center"
                   >
+                    <MessageCircle size={32} />
+                  </Box>
+                  <Typography variant="h6" align="center">
+                    Where careers begin
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    align="center"
+                    color="textSecondary"
+                  >
+                    Get personalized career advice and guidance.
+                  </Typography>
+                </Box>
+                <Box
+                  display="grid"
+                  gridTemplateColumns="repeat(3, 1fr)"
+                  gap={2}
+                >
+                  {[
+                    "Explore Opportunities",
+                    "Skill Development",
+                    "Career Path Planning",
+                  ].map((text) => (
                     <Box
                       bgcolor="background.paper"
                       borderRadius={1}
                       p={2}
-                      maxWidth="60%"
+                      key={text}
                     >
-                      <Typography variant="body1">{msg.text}</Typography>
+                      <Typography variant="subtitle1">{text}</Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Description about {text.toLowerCase()}.
+                      </Typography>
                     </Box>
-                  </Box>
-                ))
-              )}
-            </Container>
-
-            {/* Footer Box */}
-            <Box bgcolor="background.paper" p={2} mt="auto">
-              <Box display="flex" alignItems="center">
-                <TextField
-                  placeholder="Type your message here..."
-                  fullWidth
-                  variant="outlined"
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                  InputProps={{
-                    style: { backgroundColor: "#424242", borderRadius: "20px" },
-                  }}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault(); 
-                      handleSendMessage();
+                  ))}
+                </Box>
+              </>
+            ) : (
+              messages.map((msg, index) => (
+                <Box
+                  key={index}
+                  display="flex"
+                  justifyContent={
+                    msg.sender === "user" ? "flex-end" : "flex-start"
+                  }
+                  mb={2}
+                >
+                  <Box
+                    bgcolor={
+                      msg.sender === "user" ? "#FFCC33" : "#006633"
                     }
-                  }}
-                />
-                <label htmlFor="file-import">
-                  <IconButton component="span">
-                    <Paperclip />
-                    <input
-                      id="file-import"
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={handleFileImport}
-                    />
-                  </IconButton>
-                </label>
-                <IconButton color="primary" onClick={handleSendMessage}>
-                  <Send />
+                    borderRadius={1}
+                    p={2}
+                    maxWidth="60%"
+                  >
+                    <Typography variant="body1">{msg.text}</Typography>
+                  </Box>
+                </Box>
+              ))
+            )}
+          </Container>
+
+          {/* Footer Box */}
+          <Box bgcolor="background.paper" p={2} mt="auto">
+            <Box display="flex" alignItems="center">
+              <TextField
+                placeholder="Type your message here..."
+                fullWidth
+                variant="outlined"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                InputProps={{
+                  style: { backgroundColor: "#424242", borderRadius: "20px" },
+                }}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
+              />
+              <label htmlFor="file-import">
+                <IconButton component="span">
+                  <Paperclip />
+                  <input
+                    id="file-import"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={handleFileImport}
+                  />
                 </IconButton>
-              </Box>
+              </label>
+              <IconButton color="primary" onClick={handleSendMessage}>
+                <Send />
+              </IconButton>
             </Box>
           </Box>
         </Box>
-      </ThemeProvider>
-    );
-  }
+      </Box>
+    </ThemeProvider>
+  );
+}
 
 export default ChatPage;
