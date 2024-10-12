@@ -5,6 +5,7 @@ import { Box, Container, Typography, TextField, IconButton } from '@mui/material
 import Sidebar from '../Components/Sidebar'; // Importing Sidebar component
 import { MessageCircle, Send, Paperclip } from 'lucide-react';
 import { useLogoutFunction } from '@propelauth/react';
+import { TypeAnimation } from 'react-type-animation';
 
 const darkTheme = createTheme({
   palette: {
@@ -83,27 +84,18 @@ function ChatPage() {
 
   const handleSendMessage = () => {
     if (userInput.trim()) {
-      // Add user message
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: 'user', text: userInput }
       ]);
-
-      // Add AI typing indicator
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: 'ai', text: 'AI is generating a response...' }
-      ]);
-
-      // Simulate delay for AI response
+      
       setTimeout(() => {
         setMessages((prevMessages) => [
-          ...prevMessages.slice(0, -1), // Remove the typing indicator
+          ...prevMessages, 
           { sender: 'ai', text: 'This is a response from the AI.' }
         ]);
-      }, 2000); // Delay of 2 seconds
+      }, 1000); 
 
-      // Clear input field
       setUserInput('');
     }
   };
@@ -200,7 +192,16 @@ function ChatPage() {
                     p={2}
                     maxWidth="60%"
                   >
-                    <Typography variant="body1">{msg.text}</Typography>
+                    <Typography variant="body1">
+                      {msg.sender === "ai" && index === messages.length - 1 ? 
+                        <TypeAnimation 
+                          sequence={[msg.text]} 
+                          speed={50} 
+                          wrapper="span" 
+                          cursor 
+                        /> : 
+                        msg.text}
+                    </Typography>
                   </Box>
                 </Box>
               ))
