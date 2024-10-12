@@ -31,12 +31,22 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
             key={feature.name}
             selected={activeFeature === feature.name}
             onClick={() => handleFeatureClick(feature)}
-            sx={{ cursor: 'pointer', borderRadius: '10px', marginBottom: 2, backgroundColor: '#046A38'}}
+            sx={{
+              cursor: 'pointer',
+              borderRadius: '10px',
+              marginBottom: 2,
+              backgroundColor: '#046A38',
+              height: 48 // Set a fixed height for consistency
+            }}
           >
             <ListItemIcon>
               <feature.icon />
             </ListItemIcon>
-            <ListItemText primary={feature.name} />
+            <ListItemText 
+              primary={feature.name} 
+              primaryTypographyProps={{ noWrap: true }} // Ensure text doesn't wrap
+              sx={{ marginLeft: '-8px' }} // Adjust this value to move text more to the left
+            />
           </ListItem>
         ))}
       </List>
