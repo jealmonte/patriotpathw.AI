@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { Typography, Box, TextField, Button, Alert } from "@mui/material";
 import { styled } from "@mui/system";
 import BackgroundAnimation from "../BackgroundAnimation"; // Import the BackgroundAnimation component
@@ -32,7 +32,7 @@ const fadeIn = {
   visible: { opacity: 1, y: 0 },
 };
 
-export default function Contact() {
+const Contact = forwardRef((props, ref) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -84,7 +84,7 @@ export default function Contact() {
   };
 
   return (
-    <Section>
+    <Section ref={ref}>
       <BackgroundAnimation />
 
       <FormBox component={motion.div}
@@ -188,4 +188,8 @@ export default function Contact() {
        </FormBox>
      </Section>
    );
-}
+})
+
+Contact.displayName = "Contact";
+
+export default Contact;

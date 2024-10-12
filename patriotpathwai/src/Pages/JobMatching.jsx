@@ -72,7 +72,7 @@ const jobData = [
 const JobMatching = () => {
   const [activeFeature, setActiveFeature] = useState("Job Matching");
   const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const jobsPerPage = 2; // Number of jobs per page
+  const jobsPerPage = 6; // Number of jobs per page
   const logout = useLogoutFunction();
 
   // Calculate the jobs to display based on current page
