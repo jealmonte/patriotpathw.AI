@@ -85,13 +85,13 @@ function ChatPage() {
 
   switch (activeFeature) {
     case 'Career Coach':
-      setSystemContent("You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more then you need to make amount 3 sentences");
+      setSystemContent("You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more then you need to. AT MOST 3 short concise sentences");
       break;
     case 'Interview Prep':
-      setSystemContent("You are helping a person with there interviews, if they ask for behavioral questions givem them a behaviorla question like tell me what is your greatest strength, if they asked for more of a technical question depending on the job they give you give me a technical question for that role");
+      setSystemContent("You are helping a person with there interviews, if they ask for behavioral questions givem them a behaviorla question like tell me what is your greatest strength, if they asked for more of a technical question depending on the job they give you give me a technical question for that role. AT MOST 3 short concise sentences");
       break;
     case 'Offer Negotiation':
-      setSystemContent("You are a career development advisor and a client has come to you asking for advice on a job offer negotiation, you job is to tell them what they should ask for in their counter offer this can be things such as increased cash componesation, increased stock grants(if applicable), more pay time off, and/or remote/hybrid work schdule. Give them pointers one where they could increase their job offer not all the things mentioned have to be increased. Be concise and to the point never respond more than 4 to 5 sentences");
+      setSystemContent("You are a career development advisor and a client has come to you asking for advice on a job offer negotiation, you job is to tell them what they should ask for in their counter offer this can be things such as increased cash componesation, increased stock grants(if applicable), more pay time off, and/or remote/hybrid work schdule. Give them pointers one where they could increase their job offer not all the things mentioned have to be increased. AT MOST 3 short concise sentences");
       break;
     default:
      setSystemContent("You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice");
@@ -259,10 +259,23 @@ function ChatPage() {
                   mb={2}
                 >
                   <Box
-                    bgcolor={msg.sender === "user" ? "#FFCC33" : "#006633"}
+                    bgcolor={msg.sender === "user" ? "#c29a21" : "#006633"}
                     borderRadius={1}
                     p={2}
                     maxWidth="60%"
+                    style={{
+                      boxShadow: `
+      0px 0px 10px 2px ${
+        msg.sender === "user" ? "#c29a21" : "#006633"
+      }, /* Glow effect */
+      rgba(0, 0, 0, 0.07) 0px 1px 2px, 
+      rgba(0, 0, 0, 0.07) 0px 2px 4px, 
+      rgba(0, 0, 0, 0.07) 0px 4px 8px, 
+      rgba(0, 0, 0, 0.07) 0px 8px 16px, 
+      rgba(0, 0, 0, 0.07) 0px 16px 32px, 
+      rgba(0, 0, 0, 0.07) 0px 32px 64px
+    `,
+                    }}
                   >
                     <Typography variant="body1">
                       {msg.sender === "ai" && index === messages.length - 1 ? (
