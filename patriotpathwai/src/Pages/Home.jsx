@@ -86,7 +86,7 @@ const GetStartedButton = styled(Button)(({ theme }) => ({
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
-  width: '8em',
+  width: '8.5em',
   height: '2.6em',
   lineHeight: '2.5em',
   margin: '20px',
@@ -94,13 +94,13 @@ const GetStartedButton = styled(Button)(({ theme }) => ({
   cursor: 'pointer',
   overflow: 'hidden',
   border: `2px solid var(--color)`,
-  transition: 'color 0.5s',
+  transition: 'color 0.5s, border-color 0.5s',
   zIndex: 1,
   fontSize: '17px',
   borderRadius: '6px',
   fontWeight: 500,
   color: 'var(--color)',
-  
+
   '&:before': {
     content: '""',
     position: 'absolute',
@@ -115,7 +115,8 @@ const GetStartedButton = styled(Button)(({ theme }) => ({
   },
 
   '&:hover': {
-    color: '#fff',
+    color: '#fff !important', 
+    borderColor: '#139F59 !important', 
 
     '&:before': {
       top: '-30px',
@@ -125,7 +126,7 @@ const GetStartedButton = styled(Button)(({ theme }) => ({
 
   '&:active': {
     '&:before': {
-      backgroundColor: '#139F59',
+      backgroundColor: '#139F59', 
       transition: 'background-color 0s',
     },
   },
@@ -137,7 +138,7 @@ const LearnMoreButton = styled(Button)(({ theme }) => ({
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
-  width: '8em',
+  width: '8.5em',
   height: '2.6em',
   lineHeight: '2.5em',
   margin: '20px',
@@ -167,6 +168,7 @@ const LearnMoreButton = styled(Button)(({ theme }) => ({
 
   '&:hover': {
     color: '#fff',
+    border: `2px solid var(--color) !important`,
 
     '&:before': {
       top: '-30px',
@@ -237,7 +239,7 @@ function Home() {
       <AnimatedDots ref={canvasRef} />
       <StyledAppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 , letterSpacing: 3}}>
             PatriotPath
           </Typography>
           <Button color="inherit">Features</Button>
@@ -246,7 +248,7 @@ function Home() {
           <Button color="inherit" variant="outlined" sx={{ ml: 2 }}>
             Login
           </Button>
-          <Button color="inherit" variant="outlined" sx={{ ml: 2 }} onClick={() => {console.log('working')}}>
+          <Button color="inherit" variant="outlined" sx={{ ml: 2 }}>
             Sign Up
           </Button>
         </Toolbar>
@@ -255,7 +257,7 @@ function Home() {
         <Typography variant="h3">
           Unleash the power of career planning with
         </Typography>
-        <Title variant='h1'>
+        <Title variant='h1' style={{letterSpacing: 4}}>
           PatriotPath
         </Title>
         <Subtitle variant="h2" color='#D3D3D3'>
