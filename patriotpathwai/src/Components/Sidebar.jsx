@@ -31,7 +31,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
             key={feature.name}
             selected={activeFeature === feature.name}
             onClick={() => handleFeatureClick(feature)}
-            sx={{ cursor: 'pointer', borderRadius: '10px' }}
+            sx={{ cursor: 'pointer', borderRadius: '10px', marginBottom: 2, backgroundColor: '#046A38'}}
           >
             <ListItemIcon>
               <feature.icon />
@@ -43,7 +43,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
       <Button
         startIcon={<LogOut />}
         variant="contained"
-        color="secondary"
+        color="success"
         style={{ marginTop: "auto" }}
         onClick={handleSignOut}
       >
