@@ -88,6 +88,7 @@ const Features = forwardRef((props, ref) => {
           container
           spacing={4}
           justifyContent="center"
+          alignItems="stretch" // Ensure all children stretch equally
           style={{ zIndex: 1 }}
           ref={containerRef}
           component={motion.div}
@@ -96,10 +97,23 @@ const Features = forwardRef((props, ref) => {
           animate={inView ? "visible" : "hidden"}
         >
           {features.map(({ Icon, title, description }, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              key={index}
+              style={{ display: "flex" }}
+            >
               <FeatureBox
                 variants={featureVariants}
                 transition={{ duration: 0.5, ease: "easeOut" }}
+                style={{
+                  flex: 1, // Makes the box grow to fit available space
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between", // Ensure even spacing between elements
+                }}
               >
                 <ListItemIcon>
                   <Icon style={{ color: "#139F59", fontSize: 60 }} />
@@ -112,7 +126,7 @@ const Features = forwardRef((props, ref) => {
                 />
                 <Typography
                   variant="body2"
-                  style={{ marginTop: "10px", fontSize: "1.5rem" }}
+                  style={{ marginTop: "10px", fontSize: "1.5rem", flexGrow: 1 }}
                 >
                   {description}
                 </Typography>
@@ -165,6 +179,6 @@ const features = [
     Icon: UpcomingIcon,
     title: "More to Come!",
     description:
-      "Stay tuned for more features and tools that will continue to enhance your career journey.",
+      "Stay tuned for more features and tools that will continue to enhance your career journey in the future.",
   },
 ];
