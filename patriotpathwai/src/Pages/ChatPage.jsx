@@ -105,7 +105,7 @@ function ChatPage() {
             { role: "system", content: systemContent},
             { role: "user", content: userInput }
           ],
-          max_tokens: 150,
+          max_tokens: 50,
           temperature: 0.7,
         },
         {
@@ -169,7 +169,11 @@ function ChatPage() {
             component="main"
             flex={1}
             py={2}
-            sx={{ marginTop: "20px" }}
+            sx={{
+              marginTop: "20px",
+              overflowY: "auto",
+              paddingBottom: "30px",
+            }}
           >
             {messages.length === 0 ? (
               <>
@@ -178,7 +182,7 @@ function ChatPage() {
                     borderRadius: "25px",
                     background: "#212121",
                     boxShadow:
-                      "15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60)",
+                      "10px 10px 15px rgb(25, 25, 25), -10px -10px 15px rgb(60, 60, 60)",
                     p: 3,
                     mb: 4.5,
                     mt: 4,
@@ -233,8 +237,9 @@ function ChatPage() {
                         borderRadius: "30px",
                         background: "#212121",
                         boxShadow:
-                          "15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60)",
+                          "10px 10px 15px rgb(25, 25, 25), -10px -10px 15px rgb(60, 60, 60)",
                         p: 2,
+                        mb: 3,
                       }}
                       key={text}
                     >
