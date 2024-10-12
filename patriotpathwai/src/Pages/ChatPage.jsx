@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import axios from 'axios';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Box, Container, Typography, TextField, IconButton } from '@mui/material';
 import Sidebar from '../Components/Sidebar'; // Importing Sidebar component
@@ -82,19 +83,57 @@ function ChatPage() {
     }
   };
 
-  const handleSendMessage = () => {
+  const fetchAIResponse = async (userInput) => {
+    const apiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY; // Ensure this is set in your .env file
+    const endpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT; // Your Azure endpoint
+  
+    try {
+      const response = await axios.post(
+        `${endpoint}`,
+        {
+          messages: [
+            { role: "system", content: "You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more then you need to make amount 3 sentences" },
+            { role: "user", content: userInput }
+          ],
+          max_tokens: 150,
+          temperature: 0.7,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'api-key': apiKey,
+          },
+        }
+      );
+      return response.data.choices[0].message.content.trim();
+    } catch (error) {
+      if (error.response) {
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        console.error('Error response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+      } else {
+        console.error('Error message:', error.message);
+      }
+      return 'Sorry, I am unable to process your request at the moment.';
+    }
+  };
+
+  const handleSendMessage = async () => {
     if (userInput.trim()) {
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: 'user', text: userInput }
       ]);
       
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages, 
-          { sender: 'ai', text: 'This is a response from the AI.' }
-        ]);
-      }, 1000); 
+      const aiResponse = await fetchAIResponse(userInput);
+
+      // Add AI response to messages
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'ai', text: aiResponse }
+      ]);
 
       setUserInput('');
     }
