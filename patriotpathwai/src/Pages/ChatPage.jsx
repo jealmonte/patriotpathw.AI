@@ -23,6 +23,7 @@ import {
   LogOut,
   Paperclip
 } from 'lucide-react';
+import { useLogoutFunction } from "@propelauth/react";
 
 const darkTheme = createTheme({
   palette: {
@@ -46,7 +47,10 @@ const darkTheme = createTheme({
 
 function ChatPage() {
   const [activeFeature, setActiveFeature] = useState('Career Coach');
-
+  const logout = useLogoutFunction();
+  const handleSignOut = async () => {
+    await logout(true); // Call the logout function with redirect to true
+  };
   const features = [
     { name: 'Career Coach', icon: MessageCircle },
     { name: 'Job Matching', icon: BriefcaseIcon },
@@ -74,7 +78,7 @@ function ChatPage() {
           display="flex"
           flexDirection="column"
         >
-          <Typography variant="h5" letterSpacing={4}gutterBottom>
+          <Typography variant="h5" letterSpacing={4} gutterBottom>
             PatriotPath
           </Typography>
           <List>
@@ -98,6 +102,7 @@ function ChatPage() {
             variant="contained"
             color="secondary"
             style={{ marginTop: "auto" }}
+            onClick={handleSignOut} // Add onClick handler
           >
             Sign Out
           </Button>

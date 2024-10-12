@@ -233,6 +233,14 @@ function Home() {
     };
   }, []);
 
+  const handleLogin = () => {
+    window.location.href = 'https://59746679014.propelauthtest.com/login';
+  };
+
+  const handleSignUp = () => {
+    window.location.href = 'https://59746679014.propelauthtest.com/signup';
+  };
+
   return (
     <GradientBackground>
       <GridOverlay />
@@ -245,10 +253,10 @@ function Home() {
           <Button color="inherit">Features</Button>
           <Button color="inherit">About</Button>
           <Button color="inherit">Contact</Button>
-          <Button color="inherit" variant="outlined" sx={{ ml: 2 }}>
+          <Button color="inherit" variant="outlined" sx={{ ml: 2 }} onClick={handleLogin}>
             Login
           </Button>
-          <Button color="inherit" variant="outlined" sx={{ ml: 2 }}>
+          <Button color="inherit" variant="outlined" sx={{ ml: 2 }} onClick={handleSignUp}>
             Sign Up
           </Button>
         </Toolbar>
