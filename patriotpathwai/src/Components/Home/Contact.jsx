@@ -1,13 +1,14 @@
-import React, { forwardRef, useState } from "react";
+import React, { useState } from "react";
 import { Typography, Box, TextField, Button, Alert } from "@mui/material";
 import { styled } from "@mui/system";
 import BackgroundAnimation from "../BackgroundAnimation"; // Import the BackgroundAnimation component
+import { motion } from 'framer-motion';
 
 // Styled components
 const Section = styled(Box)({
   minHeight: "80vh",
   padding: "80px 20px",
-  background: "linear-gradient(to bottom, #0a0a0a, #1a3a2a)", // Replace with gradient background
+  background: "linear-gradient(to bottom, #0a0a0a, #1a3a2a)", // Gradient background
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -26,16 +27,20 @@ const FormBox = styled(Box)({
   zIndex: 1, // Ensure the form box stays on top of the background animation
 });
 
-const Contact = forwardRef((props, ref) => {
+const fadeIn = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0 },
+};
+
+export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
 
-  const [submitted, setSubmitted] = useState(false); // Track if form is submitted
+  const [result, setResult] = useState("");
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -44,40 +49,59 @@ const Contact = forwardRef((props, ref) => {
     }));
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent page refresh
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setResult("Sending....");
 
-    console.log("Form Data Submitted:", formData);
+    const formPayload = new FormData();
+    formPayload.append("name", formData.name);
+    formPayload.append("email", formData.email);
+    formPayload.append("message", formData.message);
+    formPayload.append("access_key", "ac978316-9d52-448e-a33d-a43ca0e32175");
 
-    // Clear the form fields
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-    });
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formPayload,
+      });
 
-    // Show the success message
-    setSubmitted(true);
+      const data = await response.json();
 
-    // Hide the message after 3 seconds
-    setTimeout(() => setSubmitted(false), 3000);
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        console.log("Error", data);
+        setResult(data.message);
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setResult("An error occurred. Please try again.");
+    }
+    
+    // Show success message for a short duration
+    setTimeout(() => setResult(""), 3000);
   };
 
   return (
-    <Section ref={ref}>
-      {/* Add the animated background */}
+    <Section>
       <BackgroundAnimation />
 
-      <FormBox>
+      <FormBox component={motion.div}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.8, delayChildren: 0.3, staggerChildren: 0.2 }}
+        variants={fadeIn}>
+        
         <Typography variant="h3" gutterBottom>
           Contact Us
         </Typography>
 
-        {/* Success message */}
-        {submitted && (
-          <Alert severity="success" sx={{ marginBottom: "20px" }}>
-            Your message has been sent successfully!
+        {/* Success/Error message */}
+        {result && (
+          <Alert severity={result.includes("Successfully") ? "success" : "error"} sx={{ marginBottom: "20px" }}>
+            {result}
           </Alert>
         )}
 
@@ -144,11 +168,11 @@ const Contact = forwardRef((props, ref) => {
                 "& fieldset": {
                   borderColor: "#fff", // Default border color
                 },
-                "&:hover fieldset": {
-                  borderColor: "#FFCC33 !important", // Border color on hover
+                "& hover fieldset": {
+                  borderColor:"#FFCC33 !important", // Border color on hover 
                 },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#FFCC33", // Border color when focused
+                "& .Mui-focused fieldset": {
+                  borderColor:"#FFCC33", // Border color when focused 
                 },
               },
             }}
@@ -156,17 +180,12 @@ const Contact = forwardRef((props, ref) => {
           <Button
             type="submit"
             variant="contained"
-            color="primary"
-            sx={{ marginTop: "20px" }}
+            sx={{ marginTop:"20px" }}
           >
-            Submit
+             Submit 
           </Button>
-        </form>
-      </FormBox>
-    </Section>
-  );
-});
-
-Contact.displayName = "Contact";
-
-export default Contact;
+         </form>
+       </FormBox>
+     </Section>
+   );
+}
