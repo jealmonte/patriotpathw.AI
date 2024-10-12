@@ -6,10 +6,12 @@ import {
   Typography,
   Card,
   CardContent,
-  CardMedia,
   Button,
   Stack,
   Pagination,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import Sidebar from "../Components/Sidebar";
 import { useLogoutFunction } from "@propelauth/react";
@@ -25,54 +27,206 @@ const darkTheme = createTheme({
   },
 });
 
-// Example Job Data Array (This would come from your API in a real-world scenario)
+// Example Job Data Array (Formatted with Lists for Descriptions)
 const jobData = [
   {
     id: 1,
     title: "Principal Associate, Information Security Office Consultant",
     company: "Capital One",
-    description:
-      "Lead security assessments and audits while supporting security compliance across Capital One's financial operations.",
+    description: {
+      basicQualifications: [
+        "High School Diploma, GED or equivalent certification",
+        "At least 3 years of experience working in cybersecurity or information technology",
+        "At least 1 year of experience providing guidance and oversight of Security concepts",
+      ],
+      preferredQualifications: [
+        "Bachelor’s Degree",
+        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
+        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
+        "Familiarity with Cloud patch management practices such as system rehydration and image management",
+        "Experience utilizing Agile methodologies",
+        "Experience with Software Security Architecture",
+        "Experience with Application Security",
+        "Experience with Threat Modeling",
+        "Experience with Penetration Testing and/or Vulnerability Management",
+        "Experience with integrating SaaS products into an Enterprise Environment",
+        "Experience with securing Container services",
+        "Financial services industry experience",
+        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
+        "Experience in Offensive and/or Defensive Security techniques",
+        "Experience in a regulated environment",
+      ],
+    },
     location: "McLean, VA",
   },
   {
     id: 2,
-    title: "Summer Intern - Data Governance & Strategy",
-    company: "Federal Reserve Board",
-    description:
-      "Assist in data governance strategy development, analyze financial datasets, and contribute to policymaking decisions.",
-    location: "Washington, DC (On-site)",
+    title: "Principal Associate, Information Security Office Consultant",
+    company: "Capital One",
+    description: {
+      basicQualifications: [
+        "High School Diploma, GED or equivalent certification",
+        "At least 3 years of experience working in cybersecurity or information technology",
+        "At least 1 year of experience providing guidance and oversight of Security concepts",
+      ],
+      preferredQualifications: [
+        "Bachelor’s Degree",
+        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
+        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
+        "Familiarity with Cloud patch management practices such as system rehydration and image management",
+        "Experience utilizing Agile methodologies",
+        "Experience with Software Security Architecture",
+        "Experience with Application Security",
+        "Experience with Threat Modeling",
+        "Experience with Penetration Testing and/or Vulnerability Management",
+        "Experience with integrating SaaS products into an Enterprise Environment",
+        "Experience with securing Container services",
+        "Financial services industry experience",
+        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
+        "Experience in Offensive and/or Defensive Security techniques",
+        "Experience in a regulated environment",
+      ],
+    },
+    location: "McLean, VA",
   },
   {
     id: 3,
-    title: "Reinforcement Learning Research Intern for Game AI",
-    company: "SonyAI",
-    description:
-      "Conduct research on advanced AI techniques to improve reinforcement learning models in gaming environments.",
-    location: "Massachusetts, United States (Remote)",
+    title: "Principal Associate, Information Security Office Consultant",
+    company: "Capital One",
+    description: {
+      basicQualifications: [
+        "High School Diploma, GED or equivalent certification",
+        "At least 3 years of experience working in cybersecurity or information technology",
+        "At least 1 year of experience providing guidance and oversight of Security concepts",
+      ],
+      preferredQualifications: [
+        "Bachelor’s Degree",
+        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
+        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
+        "Familiarity with Cloud patch management practices such as system rehydration and image management",
+        "Experience utilizing Agile methodologies",
+        "Experience with Software Security Architecture",
+        "Experience with Application Security",
+        "Experience with Threat Modeling",
+        "Experience with Penetration Testing and/or Vulnerability Management",
+        "Experience with integrating SaaS products into an Enterprise Environment",
+        "Experience with securing Container services",
+        "Financial services industry experience",
+        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
+        "Experience in Offensive and/or Defensive Security techniques",
+        "Experience in a regulated environment",
+      ],
+    },
+    location: "McLean, VA",
   },
   {
     id: 4,
-    title: "Software Engineer Intern",
-    company: "Google",
-    description:
-      "Work on cutting-edge software projects to enhance Google’s cloud computing platform.",
-    location: "Mountain View, CA",
+    title: "Principal Associate, Information Security Office Consultant",
+    company: "Capital One",
+    description: {
+      basicQualifications: [
+        "High School Diploma, GED or equivalent certification",
+        "At least 3 years of experience working in cybersecurity or information technology",
+        "At least 1 year of experience providing guidance and oversight of Security concepts",
+      ],
+      preferredQualifications: [
+        "Bachelor’s Degree",
+        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
+        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
+        "Familiarity with Cloud patch management practices such as system rehydration and image management",
+        "Experience utilizing Agile methodologies",
+        "Experience with Software Security Architecture",
+        "Experience with Application Security",
+        "Experience with Threat Modeling",
+        "Experience with Penetration Testing and/or Vulnerability Management",
+        "Experience with integrating SaaS products into an Enterprise Environment",
+        "Experience with securing Container services",
+        "Financial services industry experience",
+        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
+        "Experience in Offensive and/or Defensive Security techniques",
+        "Experience in a regulated environment",
+      ],
+    },
+    location: "McLean, VA",
   },
   {
     id: 5,
-    title: "Data Scientist Intern",
-    company: "Meta",
-    description:
-      "Develop machine learning models and analyze user engagement data to improve platform features.",
-    location: "Menlo Park, CA",
+    title: "Principal Associate, Information Security Office Consultant",
+    company: "Capital One",
+    description: {
+      basicQualifications: [
+        "High School Diploma, GED or equivalent certification",
+        "At least 3 years of experience working in cybersecurity or information technology",
+        "At least 1 year of experience providing guidance and oversight of Security concepts",
+      ],
+      preferredQualifications: [
+        "Bachelor’s Degree",
+        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
+        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
+        "Familiarity with Cloud patch management practices such as system rehydration and image management",
+        "Experience utilizing Agile methodologies",
+        "Experience with Software Security Architecture",
+        "Experience with Application Security",
+        "Experience with Threat Modeling",
+        "Experience with Penetration Testing and/or Vulnerability Management",
+        "Experience with integrating SaaS products into an Enterprise Environment",
+        "Experience with securing Container services",
+        "Financial services industry experience",
+        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
+        "Experience in Offensive and/or Defensive Security techniques",
+        "Experience in a regulated environment",
+      ],
+    },
+    location: "McLean, VA",
   },
+  {
+    id: 6,
+    title: "Principal Associate, Information Security Office Consultant",
+    company: "Capital One",
+    description: {
+      basicQualifications: [
+        "High School Diploma, GED or equivalent certification",
+        "At least 3 years of experience working in cybersecurity or information technology",
+        "At least 1 year of experience providing guidance and oversight of Security concepts",
+      ],
+      preferredQualifications: [
+        "Bachelor’s Degree",
+        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
+        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
+        "Familiarity with Cloud patch management practices such as system rehydration and image management",
+        "Experience utilizing Agile methodologies",
+        "Experience with Software Security Architecture",
+        "Experience with Application Security",
+        "Experience with Threat Modeling",
+        "Experience with Penetration Testing and/or Vulnerability Management",
+        "Experience with integrating SaaS products into an Enterprise Environment",
+        "Experience with securing Container services",
+        "Financial services industry experience",
+        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
+        "Experience in Offensive and/or Defensive Security techniques",
+        "Experience in a regulated environment",
+      ],
+    },
+    location: "McLean, VA",
+  },
+  // Other job entries here...
 ];
+
+// Render Bullet Points Function
+const renderBulletPoints = (items) => (
+  <List dense>
+    {items.map((item, index) => (
+      <ListItem key={index} disablePadding>
+        <ListItemText primary={`• ${item}`} />
+      </ListItem>
+    ))}
+  </List>
+);
 
 const JobMatching = () => {
   const [activeFeature, setActiveFeature] = useState("Job Matching");
   const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const jobsPerPage = 6; // Number of jobs per page
+  const jobsPerPage = 3; // Number of jobs per page
   const logout = useLogoutFunction();
 
   // Calculate the jobs to display based on current page
@@ -124,13 +278,25 @@ const JobMatching = () => {
                       <Typography variant="subtitle1" color="text.secondary">
                         {job.company}
                       </Typography>
-                      <Typography variant="body2" sx={{ marginTop: 1 }}>
-                        {job.description}
+
+                      {/* Basic Qualifications */}
+                      <Typography variant="subtitle2" sx={{ marginTop: 2 }}>
+                        Basic Qualifications:
                       </Typography>
+                      {renderBulletPoints(job.description.basicQualifications)}
+
+                      {/* Preferred Qualifications */}
+                      <Typography variant="subtitle2" sx={{ marginTop: 2 }}>
+                        Preferred Qualifications:
+                      </Typography>
+                      {renderBulletPoints(
+                        job.description.preferredQualifications
+                      )}
+
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ marginTop: 1 }}
+                        sx={{ marginTop: 2 }}
                       >
                         Location: {job.location}
                       </Typography>
