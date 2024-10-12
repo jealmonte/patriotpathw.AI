@@ -1,32 +1,39 @@
-import React, { useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import axios from 'axios';
-import CssBaseline from '@mui/material/CssBaseline';
-import { Box, Container, Typography, TextField, IconButton } from '@mui/material';
-import Sidebar from '../Components/Sidebar'; // Importing Sidebar component
-import { MessageCircle, Send, Paperclip } from 'lucide-react';
-import { useLogoutFunction } from '@propelauth/react';
-import { TypeAnimation } from 'react-type-animation';
+import React, { useState } from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import axios from "axios";
+import CssBaseline from "@mui/material/CssBaseline";
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  IconButton,
+  Button,
+} from "@mui/material";
+import Sidebar from "../Components/Sidebar"; // Importing Sidebar component
+import { MessageCircle, Send, Paperclip } from "lucide-react";
+import { useLogoutFunction } from "@propelauth/react";
+import { TypeAnimation } from "react-type-animation";
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#90caf9',
+      main: "#90caf9",
     },
     success: {
-      main: '#046A38'
+      main: "#046A38",
     },
     secondary: {
-      main: '#f48fb1',
+      main: "#f48fb1",
     },
     background: {
-      default: '#303030',
-      paper: '#424242',
+      default: "#303030",
+      paper: "#424242",
     },
     text: {
-      primary: '#ffffff',
-      secondary: '#b0bec5',
+      primary: "#ffffff",
+      secondary: "#b0bec5",
     },
   },
 });
@@ -39,33 +46,33 @@ const ButtonGrid = () => {
   };
 
   <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
-  {[
-    { title: "Explore Opportunities", text: "Discover your dream career" },
-    { title: "Skill Development", text: "Develop new technical skills" },
-    { title: "Career Path Planning", text: "Plan your road map to success" },
-  ].map((item) => (
-    <Box
-      bgcolor="background.paper"
-      borderRadius={1}
-      p={2}
-      key={item.title} // Use item.title as the key
-      onClick={() => handleButtonClick(item.title)}
-      sx={{ cursor: 'pointer' }}
-    >
-      <Typography variant="subtitle1">{item.title}</Typography>
-      <Typography variant="body2" color="textSecondary">
-        {item.text}
-      </Typography>
-    </Box>
-  ))}
-</Box>
+    {[
+      { title: "Explore Opportunities", text: "Discover your dream career" },
+      { title: "Skill Development", text: "Develop new technical skills" },
+      { title: "Career Path Planning", text: "Plan your road map to success" },
+    ].map((item) => (
+      <Box
+        bgcolor="background.paper"
+        borderRadius={1}
+        p={2}
+        key={item.title} // Use item.title as the key
+        onClick={() => handleButtonClick(item.title)}
+        sx={{ cursor: "pointer" }}
+      >
+        <Typography variant="subtitle1">{item.title}</Typography>
+        <Typography variant="body2" color="textSecondary">
+          {item.text}
+        </Typography>
+      </Box>
+    ))}
+  </Box>;
 };
 
 function ChatPage() {
-  const [activeFeature, setActiveFeature] = useState('Career Coach');
-  const [systemContent, setSystemContent] = useState('');
+  const [activeFeature, setActiveFeature] = useState("Career Coach");
+  const [systemContent, setSystemContent] = useState("");
   const [messages, setMessages] = useState([]);
-  const [userInput, setUserInput] = useState('');
+  const [userInput, setUserInput] = useState("");
 
   const logout = useLogoutFunction();
   const handleSignOut = async () => {
@@ -75,7 +82,7 @@ function ChatPage() {
   const handleFileImport = (event) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log('Imported file:', file.name);
+      console.log("Imported file:", file.name);
     }
   };
 
@@ -83,50 +90,58 @@ function ChatPage() {
     const apiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY; // Ensure this is set in your .env file
     const endpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT; // Your Azure endpoint
 
-  switch (activeFeature) {
-    case 'Career Coach':
-      setSystemContent("You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more then you need to. AT MOST 3 short concise sentences");
-      break;
-    case 'Interview Prep':
-      setSystemContent("You are helping a person with there interviews, if they ask for behavioral questions givem them a behaviorla question like tell me what is your greatest strength, if they asked for more of a technical question depending on the job they give you give me a technical question for that role. AT MOST 3 short concise sentences");
-      break;
-    case 'Offer Negotiation':
-      setSystemContent("You are a career development advisor and a client has come to you asking for advice on a job offer negotiation, you job is to tell them what they should ask for in their counter offer this can be things such as increased cash componesation, increased stock grants(if applicable), more pay time off, and/or remote/hybrid work schdule. Give them pointers one where they could increase their job offer not all the things mentioned have to be increased. AT MOST 3 short concise sentences");
-      break;
-    default:
-     setSystemContent("You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice");
-  }
-  
+    switch (activeFeature) {
+      case "Career Coach":
+        setSystemContent(
+          "You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more then you need to. AT MOST 3 short concise sentences"
+        );
+        break;
+      case "Interview Prep":
+        setSystemContent(
+          "You are helping a person with there interviews, if they ask for behavioral questions givem them a behaviorla question like tell me what is your greatest strength, if they asked for more of a technical question depending on the job they give you give me a technical question for that role. AT MOST 3 short concise sentences"
+        );
+        break;
+      case "Offer Negotiation":
+        setSystemContent(
+          "You are a career development advisor and a client has come to you asking for advice on a job offer negotiation, you job is to tell them what they should ask for in their counter offer this can be things such as increased cash componesation, increased stock grants(if applicable), more pay time off, and/or remote/hybrid work schdule. Give them pointers one where they could increase their job offer not all the things mentioned have to be increased. AT MOST 3 short concise sentences"
+        );
+        break;
+      default:
+        setSystemContent(
+          "You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice"
+        );
+    }
+
     try {
       const response = await axios.post(
         `${endpoint}`,
         {
           messages: [
-            { role: "system", content: systemContent},
-            { role: "user", content: userInput }
+            { role: "system", content: systemContent },
+            { role: "user", content: userInput },
           ],
           max_tokens: 50,
           temperature: 0.7,
         },
         {
           headers: {
-            'Content-Type': 'application/json',
-            'api-key': apiKey,
+            "Content-Type": "application/json",
+            "api-key": apiKey,
           },
         }
       );
       return response.data.choices[0].message.content.trim();
     } catch (error) {
       if (error.response) {
-        console.error('Error response data:', error.response.data);
-        console.error('Error response status:', error.response.status);
-        console.error('Error response headers:', error.response.headers);
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
       } else if (error.request) {
-        console.error('Error request:', error.request);
+        console.error("Error request:", error.request);
       } else {
-        console.error('Error message:', error.message);
+        console.error("Error message:", error.message);
       }
-      return 'Sorry, I am unable to process your request at the moment.';
+      return "Sorry, I am unable to process your request at the moment.";
     }
   };
 
@@ -134,18 +149,18 @@ function ChatPage() {
     if (userInput.trim()) {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: 'user', text: userInput }
+        { sender: "user", text: userInput },
       ]);
-      
+
       const aiResponse = await fetchAIResponse(userInput);
 
       // Add AI response to messages
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: 'ai', text: aiResponse }
+        { sender: "ai", text: aiResponse },
       ]);
 
-      setUserInput('');
+      setUserInput("");
     }
   };
 
@@ -231,8 +246,9 @@ function ChatPage() {
                       title: "Career Path Planning",
                       text: "Plan your road map to career success",
                     },
-                  ].map((text) => (
-                    <Box
+                  ].map((item, index) => (
+                    <Button
+                      key={index} // Assign key here to the Button element
                       sx={{
                         borderRadius: "30px",
                         background: "#212121",
@@ -240,16 +256,23 @@ function ChatPage() {
                           "10px 10px 15px rgb(25, 25, 25), -10px -10px 15px rgb(60, 60, 60)",
                         p: 2,
                         mb: 3,
+                        display: "flex",
+                        flexDirection: "column", // Ensure text is stacked vertically
+                        alignItems: "flex-start", // Align text to the left
+                        textTransform: "none", // Prevent uppercase transformation
+                        "&:focus": {
+                          outline: "none", // Disable focus outline when the button is focused
+                        },
                       }}
-                      key={text}
+                      onClick={console.log("yes")}
                     >
                       <Typography variant="subtitle1" color="#FFC300">
-                        {text.title}
+                        {item.title}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        {text.text}.
+                        {item.text}.
                       </Typography>
-                    </Box>
+                    </Button>
                   ))}
                 </Box>
               </>
