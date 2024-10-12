@@ -15,6 +15,7 @@ import UpcomingIcon from "@mui/icons-material/Upcoming"; // More to Come
 import { motion } from "framer-motion"; // For animations
 import { useInView } from "react-intersection-observer"; // For scroll-triggered animations
 import BackgroundAnimation from "../BackgroundAnimation"; // Import the reusable background animation component
+import React, { forwardRef } from "react";
 
 // Styled components
 const Section = styled(Box)({
@@ -55,7 +56,7 @@ const contentFadeIn = {
   visible: { opacity: 1 },
 };
 
-const Features = () => {
+const Features = forwardRef((props,ref) => {
   // Create scroll triggers for each feature, trigger animation multiple times
   const [careerRef, inViewCareer] = useInView({ triggerOnce: false });
   const [jobRef, inViewJob] = useInView({ triggerOnce: false });
@@ -67,7 +68,7 @@ const Features = () => {
   const boxTransitionDuration = 0.5; // Duration of the box slide animation
 
   return (
-    <Section>
+    <Section ref={ref}>
       {/* Add the animated background */}
       <BackgroundAnimation />
 
@@ -324,7 +325,7 @@ const Features = () => {
       </Box>
     </Section>
   );
-};
+});
 
 Features.displayName = "Features";
 

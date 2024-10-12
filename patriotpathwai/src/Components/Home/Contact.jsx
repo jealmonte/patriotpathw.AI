@@ -1,3 +1,4 @@
+import React, {forwardRef, useRef} from "react";
 import { Typography, Box, TextField, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import BackgroundAnimation from "../BackgroundAnimation"; // Import the BackgroundAnimation component
@@ -25,9 +26,9 @@ const FormBox = styled(Box)({
   zIndex: 1, // Ensure the form box stays on top of the background animation
 });
 
-const Contact = () => {
+const Contact = forwardRef((props,ref) => {
   return (
-    <Section>
+    <Section ref={ref}>
       {/* Add the animated background */}
       <BackgroundAnimation />
 
@@ -103,7 +104,7 @@ const Contact = () => {
       </FormBox>
     </Section>
   );
-};
+});
 
 Contact.displayName = "Contact";
 

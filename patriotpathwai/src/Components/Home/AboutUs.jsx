@@ -1,3 +1,4 @@
+import React, {forwardRef, useRef} from "react";
 import { Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
 import { motion } from "framer-motion"; // Animation library
@@ -23,9 +24,10 @@ const fadeIn = {
   visible: { opacity: 1, y: 0 },
 };
 
-const AboutUs = () => {
+const AboutUs = forwardRef((props,ref) => {
+
   return (
-    <Section>
+    <Section ref={ref}>
       {/* Add the animated background */}
       <BackgroundAnimation />
 
@@ -63,7 +65,7 @@ const AboutUs = () => {
       </motion.div>
     </Section>
   );
-};
+});
 
 AboutUs.displayName = "AboutUs";
 

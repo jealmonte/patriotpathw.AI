@@ -8,7 +8,7 @@ const StyledAppBar = styled(AppBar)({
   zIndex: 3,
 });
 
-const Header = () => (
+const Header = ({scrollToSection, mainRef, featuresRef, aboutRef, contactRef}) => (
   <StyledAppBar position="absolute">
     <Toolbar>
       <Typography
@@ -18,13 +18,13 @@ const Header = () => (
       >
         PatriotPath
       </Typography>
-      <Button color="inherit">
+      <Button color="inherit" onClick={() => scrollToSection(featuresRef)}>
         Features
       </Button>
-      <Button color="inherit">
+      <Button color="inherit" onClick={() => scrollToSection(aboutRef)}>
         About
       </Button>
-      <Button color="inherit">
+      <Button color="inherit" onClick={() => scrollToSection(contactRef)}>
         Contact
       </Button>
       <Button color="inherit" variant="outlined" sx={{ ml: 2 }}>
