@@ -1,9 +1,13 @@
 import openai
 from django.conf import settings
 import json
+from dotenv import load_dotenv
+import os
 
-openai.api_key = "4af297af666c4c03956290d40b67d5ee"  # Replace with your actual key
-openai.api_base = "https://patriotpath.openai.azure.com/"
+load_dotenv()
+
+openai.api_key = os.getenv("AZURE_OPENAI_API_KEY")  # Use environment variable
+openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT")  # Use environment variable
 openai.api_type = 'azure'
 openai.api_version = '2024-04-09'
 
