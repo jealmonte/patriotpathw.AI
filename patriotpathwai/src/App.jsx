@@ -10,6 +10,7 @@ import Home from "./Pages/Home.jsx";
 import ChatPage from "./Pages/ChatPage";
 import UploadResume from "./Pages/UploadResume";
 import Questionnaire from "./Components/Questionaire.jsx";
+import JobMatching from "./Pages/JobMatching";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function App() {
@@ -63,6 +64,7 @@ function AppRoutes() {
         <Route path="/chatpage" element={<ChatPage />} />
         <Route path="/SignUp/Questionnaire" element={<Questionnaire />} />
         <Route path="/uploadresume" element={<UploadResume />} />
+        <Route path="/job-matching" element={<JobMatching />} />
       </Routes>
     </BrowserRouter>
   );
