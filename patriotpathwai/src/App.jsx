@@ -2,7 +2,8 @@ import React from 'react';
 import { AuthProvider } from '@propelauth/react';
 import Home from './Pages/Home.jsx';
 import ChatPage from './Pages/ChatPage';
-import UploadResume from './Pages/UploadResume'; // Import the UploadResume component
+import UploadResume from './Pages/UploadResume';
+import ResumeReview from './Pages/ResumeReview';
 import { Box } from '@mui/material';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -14,7 +15,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/chatpage" element={<ChatPage />} />
-          <Route path="/uploadresume" element={<UploadResume />} /> // Add the new route
+          <Route path="/uploadresume" element={<UploadResume />} />
+          <Route path="/resume-review" element={<ResumeReview />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
