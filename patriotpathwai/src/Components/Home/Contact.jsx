@@ -5,7 +5,7 @@ import BackgroundAnimation from "../BackgroundAnimation"; // Import the Backgrou
 
 // Styled components
 const Section = styled(Box)({
-  minHeight: "100vh",
+  minHeight: "80vh",
   padding: "80px 20px",
   background: "linear-gradient(to bottom, #0a0a0a, #1a3a2a)", // Replace with gradient background
   display: "flex",
