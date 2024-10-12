@@ -66,6 +66,9 @@ const ButtonGrid = () => {
 
 function ChatPage() {
   const [activeFeature, setActiveFeature] = useState('Career Coach');
+  const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState('');
+
   const logout = useLogoutFunction();
   const handleSignOut = async () => {
     await logout(true);
@@ -78,48 +81,130 @@ function ChatPage() {
     }
   };
 
+  const handleSendMessage = () => {
+    if (userInput.trim()) {
+      // Add user message
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'user', text: userInput }
+      ]);
+
+      // Add AI typing indicator
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'ai', text: 'AI is generating a response...' }
+      ]);
+
+      // Simulate delay for AI response
+      setTimeout(() => {
+        setMessages((prevMessages) => [
+          ...prevMessages.slice(0, -1), // Remove the typing indicator
+          { sender: 'ai', text: 'This is a response from the AI.' }
+        ]);
+      }, 2000); // Delay of 2 seconds
+
+      // Clear input field
+      setUserInput('');
+    }
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Box display="flex" height="100vh">
-        {/* Using the Sidebar component */}
-        <Sidebar 
-          activeFeature={activeFeature} 
-          setActiveFeature={setActiveFeature} 
+        <Sidebar
+          activeFeature={activeFeature}
+          setActiveFeature={setActiveFeature}
           handleSignOut={handleSignOut}
         />
 
-        {/* Main Content */}
         <Box flex={1} display="flex" flexDirection="column">
           <Box bgcolor="background.paper" p={2}>
             <Typography variant="h5">{activeFeature}</Typography>
           </Box>
-          <Container component="main" flex={1} py={2}>
-            <Box bgcolor="background.paper" borderRadius={1} p={3} mb={2} mt={4}>
-              <Box
-                width={64}
-                height={64}
-                bgcolor="primary.main"
-                borderRadius="50%"
-                mx="auto"
-                mb={2}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <MessageCircle size={32} />
-              </Box>
-              <Typography variant="h6" align="center">
-                Where careers begin
-              </Typography>
-              <Typography variant="body2" align="center" color="textSecondary">
-                Get personalized career advice and guidance.
-              </Typography>
-            </Box>
 
-            {/* Use ButtonGrid component */}
-            <ButtonGrid />
-
+          {/* Chat Area */}
+          <Container component="main" flex={1} py={2} sx={{ marginTop: '20px' }}>
+            {messages.length === 0 ? (
+              <>
+                <Box
+                  bgcolor="background.paper"
+                  borderRadius={1}
+                  p={3}
+                  mb={2}
+                  mt={4}
+                >
+                  <Box
+                    width={64}
+                    height={64}
+                    bgcolor="primary.main"
+                    borderRadius="50%"
+                    mx="auto"
+                    mb={2}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <MessageCircle size={32} />
+                  </Box>
+                  <Typography variant="h6" align="center">
+                    Where careers begin
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    align="center"
+                    color="textSecondary"
+                  >
+                    Get personalized career advice and guidance.
+                  </Typography>
+                </Box>
+                <Box
+                  display="grid"
+                  gridTemplateColumns="repeat(3, 1fr)"
+                  gap={2}
+                >
+                  {[
+                    "Explore Opportunities",
+                    "Skill Development",
+                    "Career Path Planning",
+                  ].map((text) => (
+                    <Box
+                      bgcolor="background.paper"
+                      borderRadius={1}
+                      p={2}
+                      key={text}
+                    >
+                      <Typography variant="subtitle1">{text}</Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        Description about {text.toLowerCase()}.
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </>
+            ) : (
+              messages.map((msg, index) => (
+                <Box
+                  key={index}
+                  display="flex"
+                  justifyContent={
+                    msg.sender === "user" ? "flex-end" : "flex-start"
+                  }
+                  mb={2}
+                >
+                  <Box
+                    bgcolor={
+                      msg.sender === "user" ? "#FFCC33" : "#006633"
+                    }
+                    borderRadius={1}
+                    p={2}
+                    maxWidth="60%"
+                  >
+                    <Typography variant="body1">{msg.text}</Typography>
+                  </Box>
+                </Box>
+              ))
+            )}
           </Container>
 
           {/* Footer Box */}
@@ -129,8 +214,16 @@ function ChatPage() {
                 placeholder="Type your message here..."
                 fullWidth
                 variant="outlined"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
                 InputProps={{
                   style: { backgroundColor: "#424242", borderRadius: "20px" },
+                }}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
                 }}
               />
               <label htmlFor="file-import">
@@ -144,7 +237,7 @@ function ChatPage() {
                   />
                 </IconButton>
               </label>
-              <IconButton color="primary">
+              <IconButton color="primary" onClick={handleSendMessage}>
                 <Send />
               </IconButton>
             </Box>
