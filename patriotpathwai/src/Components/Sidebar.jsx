@@ -36,7 +36,10 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
               borderRadius: '10px',
               marginBottom: 2,
               backgroundColor: '#046A38',
-              height: 48 // Set a fixed height for consistency
+              height: 48,
+              '&:hover': {
+                backgroundColor: '#FFCC33', // Add yellow hover effect
+              },
             }}
           >
             <ListItemIcon>
@@ -44,8 +47,8 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
             </ListItemIcon>
             <ListItemText 
               primary={feature.name} 
-              primaryTypographyProps={{ noWrap: true }} // Ensure text doesn't wrap
-              sx={{ marginLeft: '-8px' }} // Adjust this value to move text more to the left
+              primaryTypographyProps={{ noWrap: true }}
+              sx={{ marginLeft: '-8px' }}
             />
           </ListItem>
         ))}
