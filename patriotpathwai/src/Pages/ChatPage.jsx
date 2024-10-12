@@ -29,6 +29,41 @@ const darkTheme = createTheme({
   },
 });
 
+// Define ButtonGrid component
+const ButtonGrid = () => {
+  const handleButtonClick = (text) => {
+    console.log(`Button clicked: ${text}`);
+    // Add your button click logic here
+  };
+
+  return (
+    <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+      {[
+        "Explore Opportunities",
+        "Skill Development",
+        "Career Path Planning",
+        "Test",
+        "Test",
+        "Test",
+      ].map((text) => (
+        <Box
+          bgcolor="background.paper"
+          borderRadius={1}
+          p={2}
+          key={text}
+          onClick={() => handleButtonClick(text)}
+          sx={{ cursor: 'pointer' }} // Change cursor to pointer
+        >
+          <Typography variant="subtitle1">{text}</Typography>
+          <Typography variant="body2" color="textSecondary">
+            Description about {text.toLowerCase()}.
+          </Typography>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
 function ChatPage() {
   const [activeFeature, setActiveFeature] = useState('Career Coach');
   const [messages, setMessages] = useState([]);
