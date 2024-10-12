@@ -20,7 +20,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
   };
 
   return (
-    <Box width={240} bgcolor="background.paper" p={2} display="flex" flexDirection="column">
+    <Box width={240} bgcolor="#212121" p={2} display="flex" flexDirection="column">
       <Typography variant="h5" letterSpacing={4} gutterBottom>
         PatriotPath
       </Typography>
