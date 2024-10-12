@@ -38,32 +38,27 @@ const ButtonGrid = () => {
     // Add your button click logic here
   };
 
-  return (
-    <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
-      {[
-        "Explore Opportunities",
-        "Skill Development",
-        "Career Path Planning",
-        "Test",
-        "Test",
-        "Test",
-      ].map((text) => (
-        <Box
-          bgcolor="background.paper"
-          borderRadius={1}
-          p={2}
-          key={text}
-          onClick={() => handleButtonClick(text)}
-          sx={{ cursor: 'pointer' }} // Change cursor to pointer
-        >
-          <Typography variant="subtitle1">{text}</Typography>
-          <Typography variant="body2" color="textSecondary">
-            Description about {text.toLowerCase()}.
-          </Typography>
-        </Box>
-      ))}
+  <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+  {[
+    { title: "Explore Opportunities", text: "Discover your dream career" },
+    { title: "Skill Development", text: "Develop new technical skills" },
+    { title: "Career Path Planning", text: "Plan your road map to success" },
+  ].map((item) => (
+    <Box
+      bgcolor="background.paper"
+      borderRadius={1}
+      p={2}
+      key={item.title} // Use item.title as the key
+      onClick={() => handleButtonClick(item.title)}
+      sx={{ cursor: 'pointer' }}
+    >
+      <Typography variant="subtitle1">{item.title}</Typography>
+      <Typography variant="body2" color="textSecondary">
+        {item.text}
+      </Typography>
     </Box>
-  );
+  ))}
+</Box>
 };
 
 function ChatPage() {
@@ -165,25 +160,34 @@ function ChatPage() {
         />
 
         <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="background.paper" p={2}>
+          <Box bgcolor="#212121" p={2}>
             <Typography variant="h5">{activeFeature}</Typography>
           </Box>
 
           {/* Chat Area */}
-          <Container component="main" flex={1} py={2} sx={{ marginTop: '20px' }}>
+          <Container
+            component="main"
+            flex={1}
+            py={2}
+            sx={{ marginTop: "20px" }}
+          >
             {messages.length === 0 ? (
               <>
                 <Box
-                  bgcolor="background.paper"
-                  borderRadius={1}
-                  p={3}
-                  mb={2}
-                  mt={4}
+                  sx={{
+                    borderRadius: "25px",
+                    background: "#212121",
+                    boxShadow:
+                      "15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60)",
+                    p: 3,
+                    mb: 4.5,
+                    mt: 4,
+                  }}
                 >
                   <Box
                     width={64}
                     height={64}
-                    bgcolor="primary.main"
+                    bgcolor="#006633"
                     borderRadius="50%"
                     mx="auto"
                     mb={2}
@@ -193,7 +197,7 @@ function ChatPage() {
                   >
                     <MessageCircle size={32} />
                   </Box>
-                  <Typography variant="h6" align="center">
+                  <Typography variant="h5" align="center">
                     Where careers begin
                   </Typography>
                   <Typography
@@ -204,25 +208,41 @@ function ChatPage() {
                     Get personalized career advice and guidance.
                   </Typography>
                 </Box>
+
                 <Box
                   display="grid"
                   gridTemplateColumns="repeat(3, 1fr)"
-                  gap={2}
+                  gap={3}
                 >
                   {[
-                    "Explore Opportunities",
-                    "Skill Development",
-                    "Career Path Planning",
+                    {
+                      title: "Explore Opportunities",
+                      text: "Discover your dream career path",
+                    },
+                    {
+                      title: "Skill Development",
+                      text: "Develop new and current technical skills",
+                    },
+                    {
+                      title: "Career Path Planning",
+                      text: "Plan your road map to career success",
+                    },
                   ].map((text) => (
                     <Box
-                      bgcolor="background.paper"
-                      borderRadius={1}
-                      p={2}
+                      sx={{
+                        borderRadius: "30px",
+                        background: "#212121",
+                        boxShadow:
+                          "15px 15px 30px rgb(25, 25, 25), -15px -15px 30px rgb(60, 60, 60)",
+                        p: 2,
+                      }}
                       key={text}
                     >
-                      <Typography variant="subtitle1">{text}</Typography>
+                      <Typography variant="subtitle1" color="#FFC300">
+                        {text.title}
+                      </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        Description about {text.toLowerCase()}.
+                        {text.text}.
                       </Typography>
                     </Box>
                   ))}
@@ -239,22 +259,22 @@ function ChatPage() {
                   mb={2}
                 >
                   <Box
-                    bgcolor={
-                      msg.sender === "user" ? "#FFCC33" : "#006633"
-                    }
+                    bgcolor={msg.sender === "user" ? "#FFCC33" : "#006633"}
                     borderRadius={1}
                     p={2}
                     maxWidth="60%"
                   >
                     <Typography variant="body1">
-                      {msg.sender === "ai" && index === messages.length - 1 ? 
-                        <TypeAnimation 
-                          sequence={[msg.text]} 
-                          speed={50} 
-                          wrapper="span" 
-                          cursor 
-                        /> : 
-                        msg.text}
+                      {msg.sender === "ai" && index === messages.length - 1 ? (
+                        <TypeAnimation
+                          sequence={[msg.text]}
+                          speed={50}
+                          wrapper="span"
+                          cursor
+                        />
+                      ) : (
+                        msg.text
+                      )}
                     </Typography>
                   </Box>
                 </Box>
@@ -263,7 +283,7 @@ function ChatPage() {
           </Container>
 
           {/* Footer Box */}
-          <Box bgcolor="background.paper" p={2} mt="auto">
+          <Box bgcolor="#212121" p={2} mt="auto">
             <Box display="flex" alignItems="center">
               <TextField
                 placeholder="Type your message here..."
@@ -272,17 +292,20 @@ function ChatPage() {
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 InputProps={{
-                  style: { backgroundColor: "#424242", borderRadius: "20px" },
+                  style: { backgroundColor: "#292929", borderRadius: "20px" },
                 }}
                 onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     e.preventDefault();
                     handleSendMessage();
                   }
                 }}
               />
               <label htmlFor="file-import">
-                <IconButton component="span">
+                <IconButton
+                  component="span"
+                  style={{ marginRight: "10px", marginLeft: "10px" }}
+                >
                   <Paperclip />
                   <input
                     id="file-import"
@@ -292,7 +315,16 @@ function ChatPage() {
                   />
                 </IconButton>
               </label>
-              <IconButton color="primary" onClick={handleSendMessage}>
+              <IconButton
+                color="#006633"
+                style={{
+                  backgroundColor: "#006633",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+                onClick={handleSendMessage}
+              >
                 <Send />
               </IconButton>
             </Box>
