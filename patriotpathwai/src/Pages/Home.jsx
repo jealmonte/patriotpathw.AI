@@ -6,7 +6,7 @@ import AboutUs from "../Components/Home/AboutUs";
 import Contact from "../Components/Home/Contact";
 import Header from "../Components/Home/Header";
 
-function Home() {
+function Home({ onSignup, onLogin }) {
   const mainRef = useRef(null);
   const featuresRef = useRef(null);
   const aboutRef = useRef(null);
@@ -24,7 +24,7 @@ function Home() {
       overflowY: 'scroll',
       scrollSnapType: 'y mandatory'
     }}>
-      <Header scrollToSection={scrollToSection} mainRef={mainRef} featuresRef={featuresRef} aboutRef={aboutRef} contactRef={contactRef}/>
+      <Header onSignup={onSignup} onLogin={onLogin} scrollToSection={scrollToSection} mainRef={mainRef} featuresRef={featuresRef} aboutRef={aboutRef} contactRef={contactRef}/>
       <Main ref={mainRef} sx={{ scrollSnapAlign: 'start', height: '100vh' }}/>
       <Features ref={featuresRef} sx={{ scrollSnapAlign: 'start', height: '100vh' }}/>
       <AboutUs ref={aboutRef} sx={{ scrollSnapAlign: 'start', height: '100vh' }}/>

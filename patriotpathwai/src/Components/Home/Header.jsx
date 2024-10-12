@@ -8,7 +8,11 @@ const StyledAppBar = styled(AppBar)({
   zIndex: 3,
 });
 
-const Header = ({scrollToSection, mainRef, featuresRef, aboutRef, contactRef}) => (
+const handleLogin = () => {
+  window.location.href = 'https://59746679014.propelauthtest.com/login';
+};
+
+const Header = ({scrollToSection, mainRef, featuresRef, aboutRef, contactRef, onLogin, onSignup}) => (
   <StyledAppBar position="absolute">
     <Toolbar>
       <Typography
@@ -27,13 +31,14 @@ const Header = ({scrollToSection, mainRef, featuresRef, aboutRef, contactRef}) =
       <Button color="inherit" onClick={() => scrollToSection(contactRef)}>
         Contact
       </Button>
-      <Button color="inherit" variant="outlined" sx={{ ml: 2 }}>
+      <Button color="inherit" variant="outlined" sx={{ ml: 2 }} onClick={handleLogin}>
         Login
       </Button>
       <Button
         color="inherit"
         variant="outlined"
         sx={{ ml: 2 }}
+        onClick={onSignup}
       >
         Sign Up
       </Button>
