@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { Box, Container, Typography, Button } from "@mui/material";
 import { styled } from "@mui/system";
+import PropTypes from "prop-types";
 
 // Styles
 const GradientBackground = styled(Box)({
@@ -174,7 +175,7 @@ const LearnMoreButton = styled(Button)(() => ({
   },
 }));
 
-const Main = () => {
+const Main = ({ scrollToSection, featureRef }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -239,7 +240,9 @@ const Main = () => {
         </Subtitle>
         <Box>
           <GetStartedButton>Get Started</GetStartedButton>
-          <LearnMoreButton>Learn More</LearnMoreButton>
+          <LearnMoreButton onClick={() => scrollToSection(featureRef)}>
+            Learn More
+          </LearnMoreButton>
         </Box>
       </ContentContainer>
     </GradientBackground>
@@ -247,5 +250,10 @@ const Main = () => {
 };
 
 Main.displayName = "Main";
+
+Main.propTypes = {
+  scrollToSection: PropTypes.func.isRequired, // Ensures it's a function
+  featureRef: PropTypes.object.isRequired, // Ensures it's a ref object
+};
 
 export default Main;
