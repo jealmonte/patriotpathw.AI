@@ -1,35 +1,19 @@
 import React, { useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import {
-  Box,
-  Button,
-  Container,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  TextField
-} from '@mui/material';
-import {
-  MessageCircle,
-  BriefcaseIcon,
-  UserCheck,
-  FileText,
-  DollarSign,
-  Send,
-  LogOut,
-  Paperclip
-} from 'lucide-react';
-import { useLogoutFunction } from "@propelauth/react";
+import { Box, Container, Typography, TextField, IconButton } from '@mui/material';
+import Sidebar from '../Components/Sidebar'; // Importing Sidebar component
+import { MessageCircle, Send, Paperclip } from 'lucide-react';
+import { useLogoutFunction } from '@propelauth/react';
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
       main: '#90caf9',
+    },
+    success: {
+      main: '#046A38'
     },
     secondary: {
       main: '#f48fb1',
@@ -49,15 +33,8 @@ function ChatPage() {
   const [activeFeature, setActiveFeature] = useState('Career Coach');
   const logout = useLogoutFunction();
   const handleSignOut = async () => {
-    await logout(true); // Call the logout function with redirect to true
+    await logout(true);
   };
-  const features = [
-    { name: 'Career Coach', icon: MessageCircle },
-    { name: 'Job Matching', icon: BriefcaseIcon },
-    { name: 'Interview Prep', icon: UserCheck },
-    { name: 'Offer Negotiation', icon: DollarSign },
-    { name: 'Resume Review', icon: FileText },
-  ];
 
   const handleFileImport = (event) => {
     const file = event.target.files?.[0];
@@ -70,43 +47,12 @@ function ChatPage() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Box display="flex" height="100vh">
-        {/* Sidebar */}
-        <Box
-          width={240}
-          bgcolor="background.paper"
-          p={2}
-          display="flex"
-          flexDirection="column"
-        >
-          <Typography variant="h5" letterSpacing={4} gutterBottom>
-            PatriotPath
-          </Typography>
-          <List>
-            {features.map((feature) => (
-              <ListItem
-                button
-                key={feature.name}
-                selected={activeFeature === feature.name}
-                onClick={() => setActiveFeature(feature.name)}
-                sx={{ cursor: 'pointer', borderRadius: '10px' }}
-              >
-                <ListItemIcon>
-                  <feature.icon />
-                </ListItemIcon>
-                <ListItemText primary={feature.name} />
-              </ListItem>
-            ))}
-          </List>
-          <Button
-            startIcon={<LogOut />}
-            variant="contained"
-            color="secondary"
-            style={{ marginTop: "auto" }}
-            onClick={handleSignOut} // Add onClick handler
-          >
-            Sign Out
-          </Button>
-        </Box>
+        {/* Using the Sidebar component */}
+        <Sidebar 
+          activeFeature={activeFeature} 
+          setActiveFeature={setActiveFeature} 
+          handleSignOut={handleSignOut}
+        />
 
         {/* Main Content */}
         <Box flex={1} display="flex" flexDirection="column">

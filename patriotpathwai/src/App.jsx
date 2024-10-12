@@ -4,6 +4,9 @@ import { Box } from '@mui/material';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './Pages/Home.jsx';
 import ChatPage from './Pages/ChatPage';
+import UploadResume from './Pages/UploadResume';
+import { Box } from '@mui/material';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Questionnaire from './Components/Questionaire.jsx';
 
 function App() {
@@ -37,6 +40,7 @@ function AppRoutes() {
         <Route path="/" element={<Home onSignup={handleSignup} onLogin={handleLogin} />} />
         <Route path="/chatpage" element={<ChatPage />} />
         <Route path="/SignUp/Questionnaire" element={<Questionnaire />} />
+        <Route path="/uploadresume" element={<UploadResume />} />
       </Routes>
     </BrowserRouter>
   );
