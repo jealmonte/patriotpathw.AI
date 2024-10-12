@@ -19,6 +19,7 @@ const Header = ({scrollToSection, mainRef, featuresRef, aboutRef, contactRef, on
         variant="h6"
         component="div"
         sx={{ flexGrow: 1, cursor: "pointer" }}
+        onClick={() => scrollToSection(mainRef)}
       >
         PatriotPath
       </Typography>

@@ -36,7 +36,7 @@ function Home({ onSignup, onLogin }) {
         contactRef={contactRef}
       />
       <Main
-        ref={mainRef}
+        mainRef={mainRef}
         featureRef={featuresRef}
         scrollToSection={scrollToSection}
         sx={{ scrollSnapAlign: "start", height: "100vh" }}

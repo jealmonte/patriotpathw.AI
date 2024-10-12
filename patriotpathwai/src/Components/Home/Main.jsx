@@ -175,7 +175,7 @@ const LearnMoreButton = styled(Button)(() => ({
   },
 }));
 
-const Main = ({ scrollToSection, featureRef }) => {
+const Main = ({ scrollToSection, featureRef, mainRef }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -225,7 +225,7 @@ const Main = ({ scrollToSection, featureRef }) => {
   }, []);
 
   return (
-    <GradientBackground>
+    <GradientBackground ref={mainRef}>
       <GridOverlay />
       <AnimatedDots ref={canvasRef} />
       <ContentContainer>
