@@ -1,5 +1,5 @@
-import React, {forwardRef, useRef} from "react";
-import { Typography, Box, TextField, Button } from "@mui/material";
+import React, { forwardRef, useState } from "react";
+import { Typography, Box, TextField, Button, Alert } from "@mui/material";
 import { styled } from "@mui/system";
 import BackgroundAnimation from "../BackgroundAnimation"; // Import the BackgroundAnimation component
 
@@ -26,7 +26,44 @@ const FormBox = styled(Box)({
   zIndex: 1, // Ensure the form box stays on top of the background animation
 });
 
-const Contact = forwardRef((props,ref) => {
+const Contact = forwardRef((props, ref) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [submitted, setSubmitted] = useState(false); // Track if form is submitted
+
+  // Handle input change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent page refresh
+
+    console.log("Form Data Submitted:", formData);
+
+    // Clear the form fields
+    setFormData({
+      name: "",
+      email: "",
+      message: "",
+    });
+
+    // Show the success message
+    setSubmitted(true);
+
+    // Hide the message after 3 seconds
+    setTimeout(() => setSubmitted(false), 3000);
+  };
+
   return (
     <Section ref={ref}>
       {/* Add the animated background */}
@@ -36,71 +73,95 @@ const Contact = forwardRef((props,ref) => {
         <Typography variant="h3" gutterBottom>
           Contact Us
         </Typography>
-        <TextField
-          label="Your Name"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{ style: { color: "#fff" } }} // Label color
-          InputProps={{
-            style: { color: "#fff" }, // Text color
-            sx: {
-              "& fieldset": {
-                borderColor: "#fff", // Default border color
+
+        {/* Success message */}
+        {submitted && (
+          <Alert severity="success" sx={{ marginBottom: "20px" }}>
+            Your message has been sent successfully!
+          </Alert>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ style: { color: "#fff" } }} // Label color
+            InputProps={{
+              style: { color: "#fff" }, // Text color
+              sx: {
+                "& fieldset": {
+                  borderColor: "#fff", // Default border color
+                },
+                "&:hover fieldset": {
+                  borderColor: "#FFCC33 !important", // Border color on hover
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#FFCC33", // Border color when focused
+                },
               },
-              "&:hover fieldset": {
-                borderColor: "#FFCC33 !important", // Border color on hover, set !important to avoid being overridden
+            }}
+          />
+          <TextField
+            label="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ style: { color: "#fff" } }}
+            InputProps={{
+              style: { color: "#fff" },
+              sx: {
+                "& fieldset": {
+                  borderColor: "#fff", // Default border color
+                },
+                "&:hover fieldset": {
+                  borderColor: "#FFCC33 !important", // Border color on hover
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#FFCC33", // Border color when focused
+                },
               },
-              "&.Mui-focused fieldset": {
-                borderColor: "#FFCC33", // Border color when focused
+            }}
+          />
+          <TextField
+            label="Message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            multiline
+            rows={4}
+            InputLabelProps={{ style: { color: "#fff" } }}
+            InputProps={{
+              style: { color: "#fff" },
+              sx: {
+                "& fieldset": {
+                  borderColor: "#fff", // Default border color
+                },
+                "&:hover fieldset": {
+                  borderColor: "#FFCC33 !important", // Border color on hover
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#FFCC33", // Border color when focused
+                },
               },
-            },
-          }}
-        />
-        <TextField
-          label="Your Email"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{ style: { color: "#fff" } }}
-          InputProps={{
-            style: { color: "#fff" },
-            sx: {
-              "& fieldset": {
-                borderColor: "#fff", // Default border color
-              },
-              "&:hover fieldset": {
-                borderColor: "#FFCC33 !important", // Border color on hover
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#FFCC33", // Border color when focused
-              },
-            },
-          }}
-        />
-        <TextField
-          label="Your Message"
-          fullWidth
-          margin="normal"
-          multiline
-          rows={4}
-          InputLabelProps={{ style: { color: "#fff" } }}
-          InputProps={{
-            style: { color: "#fff" },
-            sx: {
-              "& fieldset": {
-                borderColor: "#fff", // Default border color
-              },
-              "&:hover fieldset": {
-                borderColor: "#FFCC33 !important", // Border color on hover
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#FFCC33", // Border color when focused
-              },
-            },
-          }}
-        />
-        <Button variant="contained" color="primary" sx={{ marginTop: "20px" }}>
-          Submit
-        </Button>
+            }}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ marginTop: "20px" }}
+          >
+            Submit
+          </Button>
+        </form>
       </FormBox>
     </Section>
   );
