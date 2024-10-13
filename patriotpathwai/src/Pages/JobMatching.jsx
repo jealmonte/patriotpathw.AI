@@ -27,6 +27,55 @@ import { keyframes } from '@emotion/react';
 
 
 const darkTheme = createTheme({
+  typography: {
+    body1: {
+      fontFamily: 
+      'Inter', // Replace with your desired font
+    },
+    body2: {
+      fontFamily: 
+      'Inter', // Replace with your desired font
+    },
+    caption: {
+      fontFamily: 
+      'Inter',
+    },
+    h1: {
+      fontFamily: 
+      'Inter', // Replace with your desired font
+    },
+    h2: {
+      fontFamily: 
+      'Inter', // Replace with your desired font
+    },
+    h3: {fontFamily: 
+      'Inter', // Replace with your desired font
+    },
+    h4: {fontFamily: 
+      'Inter', // Replace with your desired font
+    },
+    h5: {fontFamily: 
+      'Inter', // Replace with your desired font
+    },
+    h6: {fontFamily: 
+      'Inter', // Replace with your desired font
+    },
+    inherit: {
+      fontFamily: 'Inter',
+    },
+    overline: {
+      fontFamily: 'Inter',
+    },
+    subtitle1: {
+      fontFamily: 'Inter',
+    },
+    subtitle2: {
+      fontFamily: 'Inter',
+    },
+    string: {
+      fontFamily: 'Inter',
+    },
+  },
   palette: {
     mode: "dark",
     primary: { main: "#90caf9" },
@@ -138,7 +187,7 @@ const AnimatedDots = styled("canvas")({
 
 const StyledApplyButton = styled(Button)(({ theme }) => ({
   "--color": "#139F59",
-  fontFamily: "inherit",
+  fontFamily: "Inter",
   paddingLeft: '7px',
   paddingRight: '7px',
   display: "inline-flex",
