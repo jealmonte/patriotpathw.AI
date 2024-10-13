@@ -14,55 +14,52 @@ import Sidebar from "../Components/Sidebar"; // Importing Sidebar component
 import { MessageCircle, Send, Paperclip } from "lucide-react";
 import { useLogoutFunction } from "@propelauth/react";
 import { TypeAnimation } from "react-type-animation";
+import BackgroundAnimation from "../Components/BackgroundAnimation";
+import { styled } from "@mui/system";
 
 const darkTheme = createTheme({
   typography: {
     body1: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
+      fontFamily: "Inter", // Replace with your desired font
     },
     body2: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
+      fontFamily: "Inter", // Replace with your desired font
     },
     caption: {
-      fontFamily: 
-      'Inter',
+      fontFamily: "Inter",
     },
     h1: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
+      fontFamily: "Inter", // Replace with your desired font
     },
     h2: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
+      fontFamily: "Inter", // Replace with your desired font
     },
-    h3: {fontFamily: 
-      'Inter', // Replace with your desired font
+    h3: {
+      fontFamily: "Inter", // Replace with your desired font
     },
-    h4: {fontFamily: 
-      'Inter', // Replace with your desired font
+    h4: {
+      fontFamily: "Inter", // Replace with your desired font
     },
-    h5: {fontFamily: 
-      'Inter', // Replace with your desired font
+    h5: {
+      fontFamily: "Inter", // Replace with your desired font
     },
-    h6: {fontFamily: 
-      'Inter', // Replace with your desired font
+    h6: {
+      fontFamily: "Inter", // Replace with your desired font
     },
     inherit: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     overline: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     subtitle1: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     subtitle2: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     string: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
   },
   palette: {
@@ -85,6 +82,10 @@ const darkTheme = createTheme({
       secondary: "#b0bec5",
     },
   },
+});
+
+const GradientBackground = styled(Box)({
+  background: "linear-gradient(to bottom, #a5f3fc, #0a0a0a)",
 });
 
 // Define ButtonGrid component
@@ -136,35 +137,39 @@ function ChatPage() {
   };
 
   const fetchAIResponse = async (userInput) => {
-    const apiKey = import.meta.env.VITE_LAW_PER_API_KEY; 
-  
+    const apiKey = import.meta.env.VITE_LAW_PER_API_KEY;
+
     let systemContent = "";
     switch (activeFeature) {
       case "Career Coach":
-        systemContent = "You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more than you need to. AT MOST 3 short concise sentences.";
+        systemContent =
+          "You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more than you need to. AT MOST 3 short concise sentences.";
         break;
       case "Interview Prep":
-        systemContent = "You are helping a person with their interviews. If they ask for behavioral questions, give them a behavioral question like 'Tell me what is your greatest strength'. If they ask for more of a technical question depending on the job they give you, give me a technical question for that role. AT MOST 3 short concise sentences.";
+        systemContent =
+          "You are helping a person with their interviews. If they ask for behavioral questions, give them a behavioral question like 'Tell me what is your greatest strength'. If they ask for more of a technical question depending on the job they give you, give me a technical question for that role. AT MOST 3 short concise sentences.";
         break;
       case "Offer Negotiation":
-        systemContent = "You are a career development advisor and a client has come to you asking for advice on a job offer negotiation. Your job is to tell them what they should ask for in their counter offer. This can be things such as increased cash compensation, increased stock grants (if applicable), more paid time off, and/or remote/hybrid work schedule. Give them pointers on where they could increase their job offer; not all the things mentioned have to be increased. AT MOST 3 short concise sentences.";
+        systemContent =
+          "You are a career development advisor and a client has come to you asking for advice on a job offer negotiation. Your job is to tell them what they should ask for in their counter offer. This can be things such as increased cash compensation, increased stock grants (if applicable), more paid time off, and/or remote/hybrid work schedule. Give them pointers on where they could increase their job offer; not all the things mentioned have to be increased. AT MOST 3 short concise sentences.";
         break;
       default:
-        systemContent = "You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice.";
+        systemContent =
+          "You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice.";
     }
-  
+
     try {
       const options = {
-        method: 'POST',
+        method: "POST",
         headers: {
           Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           model: "llama-3.1-sonar-small-128k-online",
           messages: [
             { role: "system", content: systemContent },
-            { role: "user", content: userInput }
+            { role: "user", content: userInput },
           ],
           max_tokens: 70,
           temperature: 0.7,
@@ -177,13 +182,16 @@ function ChatPage() {
           top_k: 0,
           stream: false,
           presence_penalty: 0,
-          frequency_penalty: 1
-        })
+          frequency_penalty: 1,
+        }),
       };
-  
-      const response = await fetch('https://api.perplexity.ai/chat/completions', options);
+
+      const response = await fetch(
+        "https://api.perplexity.ai/chat/completions",
+        options
+      );
       const data = await response.json();
-  
+
       if (response.ok) {
         return data.choices[0].message.content.trim();
       } else {
@@ -216,203 +224,213 @@ function ChatPage() {
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Box display="flex" height="100vh">
-        <Sidebar
-          activeFeature={activeFeature}
-          setActiveFeature={setActiveFeature}
-          handleSignOut={handleSignOut}
-        />
+    <GradientBackground>
+      <Box zIndex={100000}>
+        <ThemeProvider theme={darkTheme}>
+          <BackgroundAnimation />
+          <CssBaseline />
+          <Box display="flex" height="100vh">
+            <Sidebar
+              activeFeature={activeFeature}
+              setActiveFeature={setActiveFeature}
+              handleSignOut={handleSignOut}
+            />
 
-        <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="#212121" p={2}>
-            <Typography variant="h5">{activeFeature}</Typography>
-          </Box>
+            <Box flex={1} display="flex" flexDirection="column">
+              <Box bgcolor="rgba(0, 0, 0, 0.3)" p={2}>
+                <Typography variant="h5">{activeFeature}</Typography>
+              </Box>
 
-          {/* Chat Area */}
-          <Container
-            component="main"
-            flex={1}
-            py={2}
-            sx={{
-              marginTop: "20px",
-              overflowY: "auto",
-              paddingBottom: "30px",
-            }}
-          >
-            {messages.length === 0 ? (
-              <>
-                <Box
-                  sx={{
-                    borderRadius: "25px",
-                    background: "#212121",
-                    boxShadow:
-                      "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-                    p: 3,
-                    mb: 4.5,
-                    mt: 4,
-                  }}
-                >
-                  <Box
-                    width={64}
-                    height={64}
-                    bgcolor="#006633"
-                    borderRadius="50%"
-                    mx="auto"
-                    mb={2}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <MessageCircle size={32} />
-                  </Box>
-                  <Typography variant="h5" align="center">
-                    Where careers begin
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    align="center"
-                    color="textSecondary"
-                  >
-                    Get personalized career advice and guidance.
-                  </Typography>
-                </Box>
-
-                <Box
-                  display="grid"
-                  gridTemplateColumns="repeat(3, 1fr)"
-                  gap={3}
-                >
-                  {[
-                    {
-                      title: "Explore Opportunities",
-                      text: "Discover your dream career path",
-                    },
-                    {
-                      title: "Skill Development",
-                      text: "Develop new and current technical skills",
-                    },
-                    {
-                      title: "Career Path Planning",
-                      text: "Plan your road map to career success",
-                    },
-                  ].map((item, index) => (
-                    <Button
-                      key={index} // Assign key here to the Button element
+              {/* Chat Area */}
+              <Container
+                component="main"
+                flex={1}
+                py={2}
+                sx={{
+                  marginTop: "20px",
+                  overflowY: "auto",
+                  paddingBottom: "30px",
+                }}
+              >
+                {messages.length === 0 ? (
+                  <>
+                    <Box
                       sx={{
-                        borderRadius: "30px",
+                        borderRadius: "25px",
                         background: "#212121",
                         boxShadow:
                           "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-                        p: 2,
-                        mb: 3,
-                        display: "flex",
-                        flexDirection: "column", // Ensure text is stacked vertically
-                        alignItems: "flex-start", // Align text to the left
-                        textTransform: "none", // Prevent uppercase transformation
-                        "&:focus": {
-                          outline: "none", // Disable focus outline when the button is focused
-                        },
+                        p: 3,
+                        mb: 4.5,
+                        mt: 4,
                       }}
                     >
-                      <Typography variant="subtitle1" color="#FFC300">
-                        {item.title}
+                      <Box
+                        width={64}
+                        height={64}
+                        bgcolor="#006633"
+                        borderRadius="50%"
+                        mx="auto"
+                        mb={2}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <MessageCircle size={32} />
+                      </Box>
+                      <Typography variant="h5" align="center">
+                        Where careers begin
                       </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {item.text}.
+                      <Typography
+                        variant="body2"
+                        align="center"
+                        color="textSecondary"
+                      >
+                        Get personalized career advice and guidance.
                       </Typography>
-                    </Button>
-                  ))}
-                </Box>
-              </>
-            ) : (
-              messages.map((msg, index) => (
-                <Box
-                  key={index}
-                  display="flex"
-                  justifyContent={
-                    msg.sender === "user" ? "flex-end" : "flex-start"
-                  }
-                  mb={2}
-                >
-                  <Box
-                    bgcolor={msg.sender === "user" ? "#c29a21" : "#006633"}
-                    borderRadius={1}
-                    p={2}
-                    maxWidth="60%"
-                    style={{
-                      boxShadow: "rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px",
-                    }}
-                  >
-                    <Typography variant="body1">
-                      {msg.sender === "ai" && index === messages.length - 1 ? (
-                        <TypeAnimation
-                          sequence={[msg.text]}
-                          speed={50}
-                          wrapper="span"
-                          cursor
-                        />
-                      ) : (
-                        msg.text
-                      )}
-                    </Typography>
-                  </Box>
-                </Box>
-              ))
-            )}
-          </Container>
+                    </Box>
 
-          {/* Footer Box */}
-          <Box bgcolor="#212121" p={2} mt="auto">
-            <Box display="flex" alignItems="center">
-              <TextField
-                placeholder="Type your message here..."
-                fullWidth
-                variant="outlined"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                InputProps={{
-                  style: { backgroundColor: "#292929", borderRadius: "20px" },
-                }}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleSendMessage();
-                  }
-                }}
-              />
-              <label htmlFor="file-import">
-                <IconButton
-                  component="span"
-                  style={{ marginRight: "10px", marginLeft: "10px" }}
-                >
-                  <Paperclip />
-                  <input
-                    id="file-import"
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={handleFileImport}
+                    <Box
+                      display="grid"
+                      gridTemplateColumns="repeat(3, 1fr)"
+                      gap={3}
+                    >
+                      {[
+                        {
+                          title: "Explore Opportunities",
+                          text: "Discover your dream career path",
+                        },
+                        {
+                          title: "Skill Development",
+                          text: "Develop new and current technical skills",
+                        },
+                        {
+                          title: "Career Path Planning",
+                          text: "Plan your road map to career success",
+                        },
+                      ].map((item, index) => (
+                        <Button
+                          key={index} // Assign key here to the Button element
+                          sx={{
+                            borderRadius: "30px",
+                            background: "#212121",
+                            boxShadow:
+                              "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
+                            p: 2,
+                            mb: 3,
+                            display: "flex",
+                            flexDirection: "column", // Ensure text is stacked vertically
+                            alignItems: "flex-start", // Align text to the left
+                            textTransform: "none", // Prevent uppercase transformation
+                            "&:focus": {
+                              outline: "none", // Disable focus outline when the button is focused
+                            },
+                          }}
+                        >
+                          <Typography variant="subtitle1" color="#FFC300">
+                            {item.title}
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            {item.text}.
+                          </Typography>
+                        </Button>
+                      ))}
+                    </Box>
+                  </>
+                ) : (
+                  messages.map((msg, index) => (
+                    <Box
+                      key={index}
+                      display="flex"
+                      justifyContent={
+                        msg.sender === "user" ? "flex-end" : "flex-start"
+                      }
+                      mb={2}
+                    >
+                      <Box
+                        bgcolor={msg.sender === "user" ? "#c29a21" : "#006633"}
+                        borderRadius={1}
+                        p={2}
+                        maxWidth="60%"
+                        style={{
+                          boxShadow:
+                            "rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px",
+                        }}
+                      >
+                        <Typography variant="body1">
+                          {msg.sender === "ai" &&
+                          index === messages.length - 1 ? (
+                            <TypeAnimation
+                              sequence={[msg.text]}
+                              speed={50}
+                              wrapper="span"
+                              cursor
+                            />
+                          ) : (
+                            msg.text
+                          )}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  ))
+                )}
+              </Container>
+
+              {/* Footer Box */}
+              <Box bgcolor="rgba(0, 0, 0, 0.3)" p={2} mt="auto">
+                <Box display="flex" alignItems="center">
+                  <TextField
+                    placeholder="Type your message here..."
+                    fullWidth
+                    variant="outlined"
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    InputProps={{
+                      style: {
+                        backgroundColor: "#292929",
+                        borderRadius: "20px",
+                      },
+                    }}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
                   />
-                </IconButton>
-              </label>
-              <IconButton
-                color="#006633"
-                style={{
-                  backgroundColor: "#006633",
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-                onClick={handleSendMessage}
-              >
-                <Send />
-              </IconButton>
+                  <label htmlFor="file-import">
+                    <IconButton
+                      component="span"
+                      style={{ marginRight: "10px", marginLeft: "10px" }}
+                    >
+                      <Paperclip />
+                      <input
+                        id="file-import"
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={handleFileImport}
+                      />
+                    </IconButton>
+                  </label>
+                  <IconButton
+                    color="#006633"
+                    style={{
+                      backgroundColor: "#006633",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                    onClick={handleSendMessage}
+                  >
+                    <Send />
+                  </IconButton>
+                </Box>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        </ThemeProvider>
       </Box>
-    </ThemeProvider>
+    </GradientBackground>
   );
 }
 

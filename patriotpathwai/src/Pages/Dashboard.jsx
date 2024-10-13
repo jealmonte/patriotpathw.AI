@@ -18,10 +18,11 @@ import Sidebar from "../Components/Sidebar"; // Importing Sidebar component
 import { useLogoutFunction } from "@propelauth/react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Plus } from "lucide-react";
+import BackgroundAnimation from "../Components/BackgroundAnimation";
 
 const darkTheme = createTheme({
   palette: {
-    success: { main: "#046A38"},
+    success: { main: "#046A38" },
     mode: "dark",
     primary: { main: "#90caf9" },
     secondary: { main: "#f48fb1" },
@@ -35,54 +36,49 @@ const darkTheme = createTheme({
       secondary: "#b0bec5",
     },
   },
-    typography: {
-      body1: {
-        fontFamily: 
-        'Inter', // Replace with your desired font
-      },
-      body2: {
-        fontFamily: 
-        'Inter', // Replace with your desired font
-      },
-      caption: {
-        fontFamily: 
-        'Inter',
-      },
-      h1: {
-        fontFamily: 
-        'Inter', // Replace with your desired font
-      },
-      h2: {
-        fontFamily: 
-        'Inter', // Replace with your desired font
-      },
-      h3: {fontFamily: 
-        'Inter', // Replace with your desired font
-      },
-      h4: {fontFamily: 
-        'Inter', // Replace with your desired font
-      },
-      h5: {fontFamily: 
-        'Inter', // Replace with your desired font
-      },
-      h6: {fontFamily: 
-        'Inter', // Replace with your desired font
-      },
-      inherit: {
-        fontFamily: 'Inter',
-      },
-      overline: {
-        fontFamily: 'Inter',
-      },
-      subtitle1: {
-        fontFamily: 'Inter',
-      },
-      subtitle2: {
-        fontFamily: 'Inter',
-      },
-      string: {
-        fontFamily: 'Inter',
-      },
+  typography: {
+    body1: {
+      fontFamily: "Inter", // Replace with your desired font
+    },
+    body2: {
+      fontFamily: "Inter", // Replace with your desired font
+    },
+    caption: {
+      fontFamily: "Inter",
+    },
+    h1: {
+      fontFamily: "Inter", // Replace with your desired font
+    },
+    h2: {
+      fontFamily: "Inter", // Replace with your desired font
+    },
+    h3: {
+      fontFamily: "Inter", // Replace with your desired font
+    },
+    h4: {
+      fontFamily: "Inter", // Replace with your desired font
+    },
+    h5: {
+      fontFamily: "Inter", // Replace with your desired font
+    },
+    h6: {
+      fontFamily: "Inter", // Replace with your desired font
+    },
+    inherit: {
+      fontFamily: "Inter",
+    },
+    overline: {
+      fontFamily: "Inter",
+    },
+    subtitle1: {
+      fontFamily: "Inter",
+    },
+    subtitle2: {
+      fontFamily: "Inter",
+    },
+    string: {
+      fontFamily: "Inter",
+    },
   },
 });
 
@@ -105,6 +101,7 @@ const Dashboard = () => {
 
   return (
     <ThemeProvider theme={darkTheme}>
+      <BackgroundAnimation />
       <CssBaseline />
       <Box display="flex" height="100vh">
         <Sidebar
@@ -236,9 +233,10 @@ const Dashboard = () => {
                     borderRadius={2}
                     height="250px"
                   >
-                  <Typography variant="h6">
-                    Empower Your Career with AI: Upload, Analyze, and Elevate Your Resume Instantly!
-                  </Typography>
+                    <Typography variant="h6">
+                      Empower Your Career with AI: Upload, Analyze, and Elevate
+                      Your Resume Instantly!
+                    </Typography>
                     <IconButton
                       component="span"
                       sx={{
@@ -352,7 +350,9 @@ const Dashboard = () => {
                     alignItems="center"
                     flexDirection="column"
                   >
-                    <Typography variant="h4">AI-powered salary insights</Typography>
+                    <Typography variant="h4">
+                      AI-powered salary insights
+                    </Typography>
                     <Typography variant="h1" mt={2}>
                       $75,000
                     </Typography>
