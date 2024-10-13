@@ -1,70 +1,123 @@
-import React, { useState } from 'react';
-import { Box, Container, Typography, Card, CardContent } from '@mui/material';
-import { useLogoutFunction } from '@propelauth/react';
-import { TypeAnimation } from 'react-type-animation';
+import React, { useState, useEffect } from 'react';
+import { 
+  Box, 
+  Button, 
+  Card, 
+  CardContent, 
+  CardHeader, 
+  Grid, 
+  TextField, 
+  Typography, 
+  List, 
+  ListItem, 
+  ListItemIcon, 
+  ListItemText,
+  createTheme,
+  ThemeProvider,
+  AppBar,
+  Toolbar,
+  CssBaseline
+} from '@mui/material';
+import { styled } from '@mui/system';
+import { 
+  MessageSquare, 
+  Zap, 
+  TrendingUp 
+} from 'lucide-react';
 import Sidebar from '../Components/Sidebar';
 import axios from 'axios';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { useLogoutFunction } from '@propelauth/react';
 
-const darkTheme = createTheme({
+// Create a custom dark theme
+const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#90caf9',
-    },
-    success: {
-      main: '#046A38',
+      main: '#22c55e',
     },
     secondary: {
-      main: '#f48fb1',
+      main: '#a5f3fc',
     },
     background: {
-      default: '#303030',
-      paper: '#424242',
+      default: '#18181b',
+      paper: '#27272a',
     },
     text: {
-      primary: '#ffffff',
-      secondary: '#b0bec5',
+      primary: '#f4f4f5',
+      secondary: '#CFFAFE',
+    },
+  },
+  typography: {
+    fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif',
+    h5: {
+      fontSize: '1.5rem',
+      fontWeight: 600,
+      letterSpacing: -1,
+    },
+    body1: {
+      fontWeight: 500,
+      fontSize: '0.98em'
     },
   },
 });
+
+// Styled components
+const GradientCard = styled(Card)(({ theme }) => ({
+  background: `linear-gradient(45deg, #24905f, #a6e890)`,
+  boxShadow: '0px 0px 15px rgba(52, 230, 89, 0.7)',
+  margin: '20px',
+}));
 
 function OfferNegotiation() {
   const [activeFeature, setActiveFeature] = useState('Offer Negotiation');
   const [systemContent, setSystemContent] = useState('');
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
+  const [salary, setSalary] = useState(() => {
+    // Check sessionStorage for existing salary
+    const savedSalary = sessionStorage.getItem('userSalary');
+    return savedSalary ? parseInt(savedSalary, 10) : null; // Initialize with saved salary or null
+  });
 
   const logout = useLogoutFunction();
   const handleSignOut = async () => {
     await logout(true);
+    sessionStorage.removeItem('userSalary'); // Clear the salary on logout
   };
 
-  const fetchAIResponse = async (userInput) => {
-    const apiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY; // Ensure this is set in your .env file
-    const endpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT; // Your Azure endpoint
+  // Function to generate a random salary
+  const generateRandomSalary = () => {
+    const min = 72000;
+    const max = 86000;
+    const randomSalary = Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.floor(randomSalary / 100) * 100; // Round to nearest hundred
+  };
 
+  useEffect(() => {
+    if (salary === null) {
+      const newSalary = generateRandomSalary();
+      setSalary(newSalary);
+      sessionStorage.setItem('userSalary', newSalary); // Save the salary in sessionStorage
+    }
+  }, [salary]);
+
+  const fetchAIResponse = async (userInput) => {
+    const apiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY;
+    const endpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
+
+    // Set system content based on active feature
     switch (activeFeature) {
       case "Career Coach":
-        setSystemContent(
-          "You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more then you need to. AT MOST 3 short concise sentences"
-        );
+        setSystemContent("You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more than you need to. AT MOST 3 short concise sentences");
         break;
       case "Interview Prep":
-        setSystemContent(
-          "You are helping a person with there interviews, if they ask for behavioral questions givem them a behaviorla question like tell me what is your greatest strength, if they asked for more of a technical question depending on the job they give you give me a technical question for that role. AT MOST 3 short concise sentences"
-        );
+        setSystemContent("You are helping a person with their interviews, if they ask for behavioral questions give them a behavioral question like tell me what is your greatest strength, if they asked for more of a technical question depending on the job they give you give me a technical question for that role. AT MOST 3 short concise sentences");
         break;
       case "Offer Negotiation":
-        setSystemContent(
-          "You are a career development advisor and a client has come to you asking for advice on a job offer negotiation, you job is to tell them what they should ask for in their counter offer this can be things such as increased cash componesation, increased stock grants(if applicable), more pay time off, and/or remote/hybrid work schdule. Give them pointers one where they could increase their job offer not all the things mentioned have to be increased. AT MOST 3 short concise sentences"
-        );
+        setSystemContent("You are a career development advisor and a client has come to you asking for advice on a job offer negotiation, your job is to tell them what they should ask for in their counter offer this can be things such as increased cash compensation, increased stock grants(if applicable), more pay time off, and/or remote/hybrid work schedule. Give them pointers on where they could increase their job offer not all the things mentioned have to be increased. AT MOST 3 short concise sentences");
         break;
       default:
-        setSystemContent(
-          "You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice"
-        );
+        setSystemContent("You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice");
     }
 
     try {
@@ -109,7 +162,6 @@ function OfferNegotiation() {
 
       const aiResponse = await fetchAIResponse(userInput);
 
-      // Add AI response to messages
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "ai", text: aiResponse },
@@ -120,52 +172,104 @@ function OfferNegotiation() {
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box display="flex" height="100vh">
+      <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#18181b', color: '#f4f4f5' }}>
         <Sidebar
           activeFeature={activeFeature}
           setActiveFeature={setActiveFeature}
           handleSignOut={handleSignOut}
+          sx={{ width: '240px' }}
         />
 
-        <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="#212121" p={2}>
-            <Typography variant="h5">Offer Negotiation AI</Typography>
-          </Box>
-
-          <Container component="main" flex={1} py={2} sx={{ marginTop: '20px', overflowY: 'auto', paddingBottom: '30px' }}>
-            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={3}>
-              <Card sx={{
-              borderRadius: '10px',
-              background: 'linear-gradient(45deg, #24905f, #a6e890)', // Change gradient colors to green-yellow
-              boxShadow: '0px 0px 15px rgba(52, 230, 89, 0.7)',
-            }}>
-              <CardContent>
-                <Typography variant="h6" color="white">Salary Analysis</Typography>
-                <Typography variant="subtitle2" color="rgba(255, 255, 255, 0.7)">AI-powered salary insights</Typography>
-                <Typography variant="h4" color="white" mt={1}>$75,000</Typography>
-              </CardContent>
-            </Card>
-
-            <Card sx={{
-              borderRadius: '10px',
-              background: 'linear-gradient(45deg, #24905f, #a6e890)', // Change gradient colors to green-yellow
-              boxShadow: '0px 0px 15px rgba(52, 230, 89, 0.7)',
-            }}>
-              <CardContent>
-                <Typography variant="h6" color="white">Negotiation Assistant</Typography>
-                <Typography variant="subtitle2" color="rgba(255, 255, 255, 0.7)">Get real-time negotiation advice</Typography>
-                {/* Add chat component here */}
-              </CardContent>
-            </Card>
-            </Box>
-          </Container>
-
-          {/* Footer Box */}
-          <Box bgcolor="#212121" p={2} mt="auto">
-            {/* Add footer content here */}
-          </Box>
+        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+          <AppBar position="static" sx={{ background: '#212121', boxShadow: 'none' }}>
+            <Toolbar>
+              <Typography marginLeft="-10px" fontWeight="400" variant="h5" sx={{ flexGrow: 1 }}>
+                Offer Negotiation AI
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Grid container spacing={3} sx={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+            <Grid item xs={12} md={5}>
+              <GradientCard>
+                <CardHeader
+                  title={<Typography variant="h5" fontWeight="bold" color="#a5f3fc">Salary Analysis</Typography>}
+                  subheader={<Typography color="#CFFAFE">AI-powered salary insights based on your profile</Typography>}
+                />
+                <CardContent>
+                  <Box sx={{ height: 160, bgcolor: '#27272a', borderRadius: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#a5f3fc' }}>
+                      ${salary}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </GradientCard>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <GradientCard>
+                <CardHeader
+                  title={<Typography variant="h5" fontWeight="bold" color="#a5f3fc">Negotiation Tactics</Typography>}
+                  subheader={<Typography color="#CFFAFE">AI-suggested strategies for your negotiation</Typography>}
+                />
+                <CardContent sx={{ maxHeight: 200, overflow: 'auto' }}>
+                  <List>
+                    {[
+                      { icon: <TrendingUp />, text: 'Highlight Your Value' },
+                      { icon: <Zap />, text: 'Leverage Market Data' },
+                      { icon: <MessageSquare />, text: 'Practice Responses' },
+                    ].map((item, index) => (
+                      <ListItem key={index} sx={{ bgcolor: '#27272a', mb: 1, borderRadius: 1 }}>
+                        <ListItemIcon sx={{ color: '#a5f3fc' }}>{item.icon}</ListItemIcon>
+                        <ListItemText primaryTypographyProps={{ color: '#CFFAFE' }} primary={item.text} />
+                        <Button size="small" variant="contained" color="#a5f3fc" sx={{ color: '#22c55e' }}>
+                          Apply
+                        </Button>
+                      </ListItem>
+                    ))}
+                  </List>
+                </CardContent>
+              </GradientCard>
+            </Grid>
+            <Grid item xs={11}>
+              <GradientCard>
+                <CardHeader
+                  title={<Typography variant="h5" fontWeight="bold" color="#a5f3fc">Negotiation Assistant</Typography>}
+                  subheader={<Typography color="#CFFAFE">Get real-time negotiation advice</Typography>}
+                />
+                <CardContent>
+                  <Box sx={{ height: 240, bgcolor: '#27272a', borderRadius: 1, p: 2, mb: 2, overflow: 'auto' }}>
+                    <Typography color="#f4f4f5">
+                      AI: How can I assist you with your offer negotiation today?
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Type your message here..."
+                      value={userInput}
+                      onChange={(e) => setUserInput(e.target.value)}
+                      sx={{ 
+                        bgcolor: '#27272a',
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            borderColor: '#22c55e',
+                          },
+                          '&:hover fieldset': {
+                            borderColor: 'primary.light',
+                          },
+                        },
+                      }}
+                    />
+                    <Button variant="contained" color="#22c55e" onClick={handleSendMessage}>
+                      Send
+                    </Button>
+                  </Box>
+                </CardContent>
+              </GradientCard>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </ThemeProvider>
