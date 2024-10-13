@@ -28,6 +28,7 @@ import Sidebar from '../Components/Sidebar';
 import axios from 'axios';
 import { useLogoutFunction } from '@propelauth/react';
 import { TypeAnimation } from 'react-type-animation';
+import { useSalary } from '../Components/SalaryContext';
 
 const theme = createTheme({
   typography: {
@@ -112,10 +113,7 @@ function OfferNegotiation() {
   const [activeFeature, setActiveFeature] = useState('Offer Negotiation');
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
-  const [salary, setSalary] = useState(() => {
-    const savedSalary = sessionStorage.getItem('userSalary');
-    return savedSalary ? parseInt(savedSalary, 10) : null;
-  });
+  const { salary, setSalary } = useSalary();
 
   const logout = useLogoutFunction();
   const handleSignOut = async () => {
@@ -136,7 +134,7 @@ function OfferNegotiation() {
       setSalary(newSalary);
       sessionStorage.setItem('userSalary', newSalary);
     }
-  }, [salary]);
+  }, [salary, setSalary]);
 
   const fetchAIResponse = async (userInput) => {
     const apiKey = import.meta.env.VITE_LAW_PER_API_KEY;
@@ -207,7 +205,7 @@ function OfferNegotiation() {
         />
 
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          <AppBar position="static" sx={{ background: '#212121', boxShadow: 'none' }}>
+          <AppBar position="static" sx={{ background: '#111113', boxShadow: 'none' }}>
             <Toolbar>
               <Typography marginLeft="-10px" fontWeight="400" variant="h5" sx={{ flexGrow: 1 }}>
                 Offer Negotiation AI

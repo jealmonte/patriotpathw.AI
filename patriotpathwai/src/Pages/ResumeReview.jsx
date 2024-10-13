@@ -134,7 +134,7 @@ function ResumeReview() {
           setActiveFeature={setActiveFeature} 
         />
         <Box flex={1} display="flex" flexDirection="column">
-          <AppBar position="static" sx={{ background: '#424242', boxShadow: 'none' }}>
+          <AppBar position="static" sx={{ background: '#222322', boxShadow: 'none' }}>
             <Toolbar>
               <Typography variant="h5" sx={{ flexGrow: 1 }}>
                 Resume Review
@@ -173,7 +173,7 @@ function ResumeReview() {
           <Box p={3} bgcolor="background.paper">
             <Typography variant="subtitle1" align="left">Progress</Typography>
             <Typography variant="subtitle1" align="right">{`${Math.round(progress)}%`}</Typography>
-            <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'lightgreen', '& .MuiLinearProgress-bar': { bgcolor: 'darkgreen' } }} />
+            <LinearProgress variant="determinate" value={progress} sx={{ bgcolor: 'darkgreen', '& .MuiLinearProgress-bar': { bgcolor: 'lightgreen' } }} />
           </Box>
         </Box>
       </Box>

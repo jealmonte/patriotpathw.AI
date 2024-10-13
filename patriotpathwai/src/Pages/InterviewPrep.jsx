@@ -286,7 +286,7 @@ const InterviewPrep = () => {
           handleSignOut={handleSignOut}
         />
         <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="background.paper" p={2} boxShadow={1}>
+          <Box bgcolor="#111111" p={2} boxShadow={1}>
             <Typography variant="h5" color="text.primary">
               Interview Preparation
             </Typography>
