@@ -2,8 +2,10 @@ import React from 'react';
 import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { MessageCircle, BriefcaseIcon, UserCheck, FileText, DollarSign, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 const features = [
+  { name: 'Dashboard', icon: DashboardIcon, path: '/dashboard' },
   { name: 'Career Coach', icon: MessageCircle, path: '/chatpage' },
   { name: 'Job Matching', icon: BriefcaseIcon, path: '/job-matching' },
   { name: 'Interview Prep', icon: UserCheck, path: '/interview-prep' },
