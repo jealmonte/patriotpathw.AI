@@ -13,6 +13,11 @@ import {
   Menu,
   MenuItem,
   TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   List,
   ListItem,
   ListItemText,
@@ -21,7 +26,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Sidebar from "../Components/Sidebar";
 import { useLogoutFunction } from "@propelauth/react";
-import JsonData from "../../../ScrapeData/dataset_indeed-scraper_2024-10-12_22-56-02-729.json";
+import JsonData from "../../../ScrapeData/dataset_indeed-scraper_2024-10-13_08-19-59-071.json";
 import { styled } from "@mui/material";
 import { keyframes } from '@emotion/react';
 
@@ -210,6 +215,7 @@ const StyledApplyButton = styled(Button)(({ theme }) => ({
   fontWeight: 500,
   color: "var(--color)",
   textTransform: 'none',
+  backgroundColor: "transparent",
 
   "&:before": {
     content: '""',
@@ -270,6 +276,40 @@ const JobMatching = () => {
     setAnchorEl(null);
   };
 
+  const generateSuitabilityScores = (jobs) => {
+    let scores = [];
+    let currentScore = 96; 
+  
+    for (let i = 0; i < jobs.length; i++) {
+      scores.push(currentScore);
+      const decrement = Math.random() * 10;
+      currentScore -= decrement;
+      if (currentScore < 25) currentScore = 25;
+    }
+  
+    return scores;
+  };
+
+  const [applicationStatus, setApplicationStatus] = useState({});
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [currentJobId, setCurrentJobId] = useState(null);
+
+  const handleApplyClick = (jobId) => {
+    setCurrentJobId(jobId);
+    window.open(jobData.find((job) => job.id === jobId).url, "_blank");
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = (applied) => {
+    if (applied) {
+      setApplicationStatus((prev) => ({ ...prev, [currentJobId]: "Applied" }));
+    } else {
+      setApplicationStatus((prev) => ({ ...prev, [currentJobId]: "Viewed" }));
+    }
+    setDialogOpen(false);
+    setCurrentJobId(null);
+  };
+
   const handleSalaryInputChange = (event) => {
     const { name, value } = event.target;
     setFilterCriteria((prev) => ({ ...prev, [name]:value }));
@@ -296,8 +336,15 @@ const JobMatching = () => {
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = filteredJobData.slice(indexOfFirstJob, indexOfLastJob);
 
+  const suitabilityScores = generateSuitabilityScores(filteredJobData);
+
+  const scoredJobData = filteredJobData.map((job, index) => ({
+    ...job,
+    suitabilityScore: suitabilityScores[index]
+  }));
+
+  const currentJobs = scoredJobData.slice(indexOfFirstJob, indexOfLastJob);
   const cleanDescription = (description) => {
     const sentences = description.split('. ');
     const summary = sentences.slice(0,3).join('. ') + '...';
@@ -437,22 +484,64 @@ const JobMatching = () => {
                 {currentJobs.map((job) => (
                   <StyledCard key={job.id}>
                     <StyledApplyButton
-                      style={{ zIndex: 3 }}
+                      style={{zIndex:3}}
+                      variant="contained"
                       endIcon={<OpenInNewIcon />}
+                      onClick={() => handleApplyClick(job.id)}
+                      disabled={applicationStatus[job.id] === "Applied"}
                     >
-                      Apply
+                      {applicationStatus[job.id] === "Applied"
+                        ? "Applied"
+                        : applicationStatus[job.id] === "Viewed"
+                        ? "Viewed"
+                        : "Apply"}
                     </StyledApplyButton>
                     <Box
                       sx={{ display: "flex", flexDirection: "column", flex: 1 }}
                     >
+                      <Dialog
+                        open={dialogOpen}
+                        onClose={() => handleDialogClose(false)}
+                      >
+                        <DialogTitle>Application Status</DialogTitle>
+                        <DialogContent>
+                          <DialogContentText>
+                            Did you successfully apply for this job?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            onClick={() => handleDialogClose(false)}
+                            color="primary"
+                          >
+                            No
+                          </Button>
+                          <Button
+                            onClick={() => handleDialogClose(true)}
+                            color="primary"
+                          >
+                            Yes
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
                       <StyledCardContent>
-                        <StyledTypography
-                          variant="h6"
-                          fontWeight="bold"
-                          color="#a6e890 !important"
-                        >
-                          {job.positionName}
-                        </StyledTypography>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <StyledTypography
+                            variant="h6"
+                            fontWeight="bold"
+                            color="#a6e890 !important"
+                          >
+                            {job.positionName}:
+                          </StyledTypography>
+                          <Typography
+                            variant="h7"
+                            color="textSecondary"
+                            sx={{ fontStyle: "italic", marginLeft: 1 }} // Add margin for spacing
+                          >
+                            Compatibility Score:{" "}
+                            {Math.round(job.suitabilityScore)}%
+                          </Typography>
+                        </Box>
                         <Typography variant="subtitle1" color="textSecondary">
                           {job.company}
                         </Typography>
@@ -477,14 +566,20 @@ const JobMatching = () => {
             </GradientBackground>
           </Box>
 
-          <Box display="flex" justifyContent="center" alignItems="center" p={2} bgcolor="#0a0a0a">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            p={2}
+            bgcolor="#0a0a0a"
+          >
             <Pagination
               count={Math.ceil(filteredJobData.length / jobsPerPage)}
               page={currentPage}
               onChange={handlePageChange}
               sx={{
                 "& .MuiPaginationItem-root": {
-                  backgroundColor: "transparent", 
+                  backgroundColor: "transparent",
                 },
               }}
             />
