@@ -42,60 +42,62 @@ function OfferNegotiation() {
   };
 
   const fetchAIResponse = async (userInput) => {
-    const apiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY; // Ensure this is set in your .env file
-    const endpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT; // Your Azure endpoint
-
+    const apiKey = import.meta.env.VITE_LAW_PER_API_KEY; // Ensure this is set in your .env file
+  
+    let systemContent = "";
     switch (activeFeature) {
       case "Career Coach":
-        setSystemContent(
-          "You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more then you need to. AT MOST 3 short concise sentences"
-        );
+        systemContent = "You are a career advisor mostly geared toward giving advice around technology roles. Be direct and concise and don't speak more than you need to. AT MOST 3 short concise sentences.";
         break;
       case "Interview Prep":
-        setSystemContent(
-          "You are helping a person with there interviews, if they ask for behavioral questions givem them a behaviorla question like tell me what is your greatest strength, if they asked for more of a technical question depending on the job they give you give me a technical question for that role. AT MOST 3 short concise sentences"
-        );
+        systemContent = "You are helping a person with their interviews. If they ask for behavioral questions, give them a behavioral question like 'Tell me what is your greatest strength'. If they ask for more of a technical question depending on the job they give you, give me a technical question for that role. AT MOST 3 short concise sentences.";
         break;
       case "Offer Negotiation":
-        setSystemContent(
-          "You are a career development advisor and a client has come to you asking for advice on a job offer negotiation, you job is to tell them what they should ask for in their counter offer this can be things such as increased cash componesation, increased stock grants(if applicable), more pay time off, and/or remote/hybrid work schdule. Give them pointers one where they could increase their job offer not all the things mentioned have to be increased. AT MOST 3 short concise sentences"
-        );
+        systemContent = "You are a career development advisor and a client has come to you asking for advice on a job offer negotiation. Your job is to tell them what they should ask for in their counter offer. This can be things such as increased cash compensation, increased stock grants (if applicable), more paid time off, and/or remote/hybrid work schedule. Give them pointers on where they could increase their job offer; not all the things mentioned have to be increased. AT MOST 3 short concise sentences.";
         break;
       default:
-        setSystemContent(
-          "You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice"
-        );
+        systemContent = "You are a career advisor mostly geared toward giving advice around technology roles. Do the best you can to give concise career advice.";
     }
-
+  
     try {
-      const response = await axios.post(
-        `${endpoint}`,
-        {
+      const options = {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-sonar-small-128k-online",
           messages: [
             { role: "system", content: systemContent },
-            { role: "user", content: userInput },
+            { role: "user", content: userInput }
           ],
-          max_tokens: 50,
+          max_tokens: 150,
           temperature: 0.7,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "api-key": apiKey,
-          },
-        }
-      );
-      return response.data.choices[0].message.content.trim();
-    } catch (error) {
-      if (error.response) {
-        console.error("Error response data:", error.response.data);
-        console.error("Error response status:", error.response.status);
-        console.error("Error response headers:", error.response.headers);
-      } else if (error.request) {
-        console.error("Error request:", error.request);
+          top_p: 0.9,
+          return_citations: true,
+          search_domain_filter: ["perplexity.ai"],
+          return_images: false,
+          return_related_questions: false,
+          search_recency_filter: "month",
+          top_k: 0,
+          stream: false,
+          presence_penalty: 0,
+          frequency_penalty: 1
+        })
+      };
+  
+      const response = await fetch('https://api.perplexity.ai/chat/completions', options);
+      const data = await response.json();
+  
+      if (response.ok) {
+        return data.choices[0].message.content.trim();
       } else {
-        console.error("Error message:", error.message);
+        console.error("Error response data:", data);
+        throw new Error("Failed to fetch AI response");
       }
+    } catch (error) {
+      console.error("Error message:", error.message);
       return "Sorry, I am unable to process your request at the moment.";
     }
   };
