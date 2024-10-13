@@ -192,8 +192,19 @@ const Dashboard = () => {
                     height="250px"
                   >
                     <Typography>Upload your resume</Typography>
-                    <IconButton component="span">
-                      <Plus size={128} color="#424242" />
+                    <IconButton
+                      component="span"
+                      sx={{
+                        "& svg": {
+                          color: "#424242",
+                          transition: "color 0.5s",
+                        },
+                        "&:hover svg": {
+                          color: "#c7c5c5",
+                        },
+                      }}
+                    >
+                      <Plus size={128} />
                     </IconButton>
                   </Box>
                 </CardContent>
@@ -324,13 +335,6 @@ const Dashboard = () => {
                     fullWidth
                     variant="outlined"
                     placeholder="Ask your career question..."
-                    InputProps={{
-                      endAdornment: (
-                        <Button variant="contained" color="success">
-                          Ask
-                        </Button>
-                      ),
-                    }}
                     sx={{ borderRadius: 2 }}
                   />
                 </CardContent>
