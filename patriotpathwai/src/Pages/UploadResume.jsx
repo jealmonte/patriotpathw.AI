@@ -16,6 +16,9 @@ const darkTheme = createTheme({
     secondary: {
       main: '#f48fb1',
     },
+    success: {
+      main: '#046A38',
+    },
     background: {
       default: '#303030',
       paper: '#424242',
@@ -81,7 +84,7 @@ function UploadResume() {
           handleSignOut={handleSignOut}
         />
         <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="background.paper" p={2}>
+          <Box bgcolor="#212121" p={2}>
             <Typography variant="h5">Upload Resume</Typography>
           </Box>
           <Box flex={1} display="flex" justifyContent="center" alignItems="center">
