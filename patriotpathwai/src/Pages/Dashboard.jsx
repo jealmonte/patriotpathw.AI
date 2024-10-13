@@ -21,10 +21,10 @@ import { Plus } from "lucide-react";
 
 const darkTheme = createTheme({
   palette: {
+    success: { main: "#046A38"},
     mode: "dark",
     primary: { main: "#90caf9" },
     secondary: { main: "#f48fb1" },
-    success: { main: "#21eb86" },
     warning: { main: "#ff9800" },
     background: {
       default: "#1b1b1b", // Dark grey background
@@ -35,9 +35,54 @@ const darkTheme = createTheme({
       secondary: "#b0bec5",
     },
   },
-  typography: {
-    fontFamily: "Roboto, sans-serif",
-    h6: { fontWeight: 600 },
+    typography: {
+      body1: {
+        fontFamily: 
+        'Inter', // Replace with your desired font
+      },
+      body2: {
+        fontFamily: 
+        'Inter', // Replace with your desired font
+      },
+      caption: {
+        fontFamily: 
+        'Inter',
+      },
+      h1: {
+        fontFamily: 
+        'Inter', // Replace with your desired font
+      },
+      h2: {
+        fontFamily: 
+        'Inter', // Replace with your desired font
+      },
+      h3: {fontFamily: 
+        'Inter', // Replace with your desired font
+      },
+      h4: {fontFamily: 
+        'Inter', // Replace with your desired font
+      },
+      h5: {fontFamily: 
+        'Inter', // Replace with your desired font
+      },
+      h6: {fontFamily: 
+        'Inter', // Replace with your desired font
+      },
+      inherit: {
+        fontFamily: 'Inter',
+      },
+      overline: {
+        fontFamily: 'Inter',
+      },
+      subtitle1: {
+        fontFamily: 'Inter',
+      },
+      subtitle2: {
+        fontFamily: 'Inter',
+      },
+      string: {
+        fontFamily: 'Inter',
+      },
   },
 });
 
