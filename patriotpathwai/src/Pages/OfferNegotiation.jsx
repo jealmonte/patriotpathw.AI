@@ -139,7 +139,7 @@ function OfferNegotiation() {
   const fetchAIResponse = async (userInput) => {
     const apiKey = import.meta.env.VITE_LAW_PER_API_KEY;
 
-    let systemContent = "You are a salary offer negotiation assistant who assists the user with everything offer negotiation wise. Keep your answers very concise, and straight to the point. Keep formatting in raw paragraph form. User is already given a market range salary for how much their profile is worth, but if asked, inform them they can go higher than what is calculated to be their expected salary. "; // Your system content
+    let systemContent = "You are a salary offer negotiation assistant who assists the user with everything offer negotiation wise. Keep your answers very concise, and straight to the point. Keep formatting in raw paragraph form, no headings, no formatting, no newlines, do not EVER break this rule. User is already given a market range salary for how much their profile is worth, but if asked, inform them they can go higher than what is calculated to be their expected salary. ";
 
     try {
       const options = {
@@ -154,7 +154,7 @@ function OfferNegotiation() {
             { role: "system", content: systemContent },
             { role: "user", content: userInput }
           ],
-          max_tokens: 150,
+          max_tokens: 300,
           temperature: 0.7,
           top_p: 0.9,
         })
@@ -191,6 +191,20 @@ function OfferNegotiation() {
 
       setUserInput("");
     }
+  };
+
+  const handleApplyMessage = async (message) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: "user", text: message },
+    ]);
+
+    const aiResponse = await fetchAIResponse(message);
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: "ai", text: aiResponse },
+    ]);
   };
 
   return (
@@ -237,14 +251,19 @@ function OfferNegotiation() {
                 <CardContent sx={{ maxHeight: 200, overflow: 'auto' }}>
                   <List>
                     {[
-                      { icon: <TrendingUp />, text: 'Highlight Your Value' },
-                      { icon: <Zap />, text: 'Leverage Market Data' },
-                      { icon: <MessageSquare />, text: 'Practice Responses' },
+                      { icon: <TrendingUp />, text: 'Highlight Your Value', message: 'How can I highlight my value to further push the desired salary I want during a negotiation?' },
+                      { icon: <Zap />, text: 'Leverage Market Data', message: 'How can I leverage market data in order to further push the desired salary I want during a negotiation?' },
+                      { icon: <MessageSquare />, text: 'Practice Responses', message: 'Give me four common questions and answers that are used during salary negotiations' },
                     ].map((item, index) => (
                       <ListItem key={index} sx={{ bgcolor: '#27272a', mb: 1, borderRadius: 1 }}>
                         <ListItemIcon sx={{ color: '#a5f3fc' }}>{item.icon}</ListItemIcon>
                         <ListItemText primaryTypographyProps={{ color: '#CFFAFE' }} primary={item.text} />
-                        <Button size="small" variant="contained" sx={{ color: '#22c55e' }}>
+                        <Button 
+                          size="small" 
+                          variant="contained" 
+                          sx={{ color: '#22c55e' }} 
+                          onClick={() => handleApplyMessage(item.message)}
+                        >
                           Apply
                         </Button>
                       </ListItem>
