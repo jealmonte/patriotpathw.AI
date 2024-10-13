@@ -180,231 +180,184 @@ const InterviewPrep = () => {
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
+
   const [activeFeature, setActiveFeature] = useState("Resume Review");
   const [questionType, setQuestionType] = useState(null);
-  const [systemContent, setSystemContent] = useState("");
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [generatedQuestion, setGeneratedQuestion] = useState("");
-  const [userText, setUserText] = useState("");
-  const logout = useLogoutFunction();
 
+  
   const handleSignOut = async () => {
     await logout(true);
   };
+  
+  const technicalQuestions = [
+    "Explain the concept of OOP and its principles.",
+    "What is a RESTful API and how does it work?",
+    "Describe the differences between SQL and NoSQL databases.",
+    "How does garbage collection work in Java?",
+    "What are microservices and their benefits?",
+    "Explain the Model-View-Controller (MVC) architecture.",
+    "What is a deadlock and how can it be avoided?",
+    "Describe the process of continuous integration/continuous deployment (CI/CD).",
+    "What are design patterns? Provide examples.",
+    "How do you handle exceptions in your code?"
+  ];
+
+  const behavioralQuestions = [
+    "Tell me about a time you had to learn something quickly.",
+    "Describe a challenging situation you faced at work and how you handled it.",
+    "How do you prioritize tasks when working on multiple projects?",
+    "Give an example of a goal you reached and how you achieved it.",
+    "Tell me about a time when you worked effectively under pressure.",
+    "Describe a situation where you had to work with someone difficult.",
+    "How do you handle feedback and criticism?",
+    "Tell me about a time when you showed leadership skills.",
+    "Describe a situation where you had to adapt to change quickly.",
+    "How do you approach problem-solving in your work?"
+  ];
 
   const handleQuestionTypeClick = (type) => {
     setQuestionType(type);
   
-    let newSystemContent = "";
-    let newUserText = "";
+    let questionsArray;
   
-    switch (type) {
-      case "behavioral":
-        newSystemContent = "You are helping a person with their behavioral interviews... (JUST AS ME THE QUESTION STRAIGHT AWAY)";
-        newUserText = "Ask me a behavioral interview question";
-        break;
-      case "technical":
-        newSystemContent = "You are helping a person with their technical interviews... (JUST AS ME THE QUESTION STRAIGHT AWAY NO MORE THAN 3 SENTENCES)";
-        newUserText = "Ask me a technical interview question related to software engineering";
-        break;
-      default:
-        newSystemContent = "You are helping a person with their interviews... (JUST AS ME THE QUESTION STRAIGHT AWAY)";
-        newUserText = "Ask me a general interview question";
+    if (type === 'behavioral') {
+      questionsArray = behavioralQuestions;
+    } else if (type === 'technical') {
+      questionsArray = technicalQuestions;
     }
   
-    setSystemContent(newSystemContent);
-    setUserText(newUserText);
+    // Cycle through questions
+    setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % questionsArray.length);
   
-    fetchAIResponse(newSystemContent, newUserText);
-  };
-  
-  const fetchAIResponse = async (systemContent, userText) => {
-    const apiKey = import.meta.env.VITE_LAW_PER_API_KEY;
-  
-    try {
-      const options = {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: "llama-3.1-sonar-large-128k-chat",
-          messages: [
-            { role: "system", content: systemContent },
-            { role: "user", content: userText }
-          ],
-          max_tokens: 150,
-          temperature: 0.7,
-          top_p: 0.9,
-          return_citations: true,
-          search_domain_filter: ["perplexity.ai"],
-          return_images: false,
-          return_related_questions: false,
-          search_recency_filter: "month",
-          top_k: 0,
-          stream: false,
-          presence_penalty: 0,
-          frequency_penalty: 1
-        })
-      };
-  
-      const response = await fetch('https://api.perplexity.ai/chat/completions', options);
-      const data = await response.json();
-  
-      if (response.ok) {
-        const fullResponse = data.choices[0].message.content.trim();
-        
-        // Split the response at the first occurrence of '**'
-        const splitResponse = fullResponse.split('**');
-        
-        // Check if there are parts after splitting
-        if (splitResponse.length > 1) {
-          // Join everything after the first '**'
-          const cleanedQuestion = splitResponse.slice(1).join('**').trim();
-          setGeneratedQuestion(cleanedQuestion);
-        } else {
-          // If no '**' is found, use the full response
-          setGeneratedQuestion(fullResponse);
-        }
-      } else {
-        console.error("Error response data:", data);
-        throw new Error("Failed to fetch AI response");
-      }
-    } catch (error) {
-      console.error("Error message:", error.message);
-      setGeneratedQuestion("Sorry, I am unable to process your request at the moment.");
-    }
+    // Introduce a delay before setting the generated question
+    setGeneratedQuestion(""); // Clear the previous question
+    setTimeout(() => {
+      setGeneratedQuestion(questionsArray[currentQuestionIndex]);
+    }, 2000); // Delay of 2000 milliseconds (2 seconds)
   };
 
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Box display="flex" height="100vh">
-        <Sidebar
-          activeFeature={activeFeature}
-          setActiveFeature={setActiveFeature}
-          handleSignOut={handleSignOut}
-        />
-        <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="#111111" p={2} boxShadow={1}>
-            <Typography variant="h5" color="#ffee8c">
-              Interview Preparation
-            </Typography>
-          </Box>
-          <GradientBackground>
-            <GridOverlay />
-            <AnimatedDots ref={canvasRef} />
-            <Box
-              flex={1}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              flexDirection="column"
-              p={1}
-              gap={3}
-            >
-              <Typography variant="h1" color="#ffffff !important" align="center">
-                Ace Your Interview
-              </Typography>
-              <Typography variant="h3" color="#dedede !important" align="center">
-                Tailored Questions for Success
-              </Typography>
-              <Box display="flex" gap={2}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleQuestionTypeClick("behavioral")}
-                  sx={{
-                    width: 280,
-                    height: 60,
-                    fontSize: "1.2rem",
-                    textTransform: "none",
-                    backgroundColor: "#50d900",
-                    border: "none",
-                    fontFamily: "inherit",
-                    textAlign: "center",
-                    cursor: "pointer",
-                    transition: "0.4s",
-                    zIndex: "2",
-                    "&:hover": {
-                      boxShadow: "7px 5px 56px -14px #50d900",
-                      backgroundColor: "#30a813",
-                    },
-                    "&:active": {
-                      transform: "scale(0.97)",
-                      boxShadow: "7px 5px 56px -10px #50d900",
-                    },
-                    "&:focus": { outline: "none" },
-                  }}
-                >
-                  Behavioral Questions
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleQuestionTypeClick("technical")}
-                  sx={{
-                    width: 280,
-                    height: 60,
-                    fontSize: "1.2rem",
-                    textTransform: "none",
-                    backgroundColor: "#50d900",
-                    border: "none",
-                    fontFamily: "inherit",
-                    textAlign: "center",
-                    cursor: "pointer",
-                    transition: "0.4s",
-                    zIndex: "2",
-                    "&:hover": {
-                      boxShadow: "7px 5px 56px -14px #50d900",
-                      backgroundColor: "#30a813",
-                    },
-                    "&:active": {
-                      transform: "scale(0.97)",
-                      boxShadow: "7px 5px 56px -10px #50d900",
-                    },
-                    "&:focus": { outline: "none" },
-                  }}
-                >
-                  Technical Questions
-                </Button>
-              </Box>
-
-              <Paper
-                elevation={3}
-                sx={{
-                  width: "60%",
-                  padding: 3,
-                  borderRadius: "12px",
-                  backgroundColor: "background.paper",
-                }}
-              >
-                {!questionType && (
-                  <Typography
-                    variant="h5"
-                    align="center"
-                    color="text.secondary"
-                  >
-                    Please select a question type to begin.
-                  </Typography>
-                )}
-                {generatedQuestion && (
-                  <Typography variant="h6" align="center" color="text.primary">
-                    <TypeAnimation
-                      sequence={[
-                        generatedQuestion, // The text to type out
-                        1000,
-                      ]}
-                    />
-                  </Typography>
-                )}
-              </Paper>
-            </Box>
-          </GradientBackground>
-        </Box>
+  return(
+  <ThemeProvider theme={theme}>
+  <CssBaseline />
+  <Box display="flex" height="100vh">
+    <Sidebar
+      activeFeature={activeFeature}
+      setActiveFeature={setActiveFeature}
+      handleSignOut={handleSignOut}
+    />
+    <Box flex={1} display="flex" flexDirection="column">
+      <Box bgcolor="#111111" p={2} boxShadow={1}>
+        <Typography variant="h5" color="#ffee8c">
+          Interview Preparation
+        </Typography>
       </Box>
-    </ThemeProvider>
-  );
+      <GradientBackground>
+        <GridOverlay />
+        <AnimatedDots ref={canvasRef} />
+        <Box
+          flex={1}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          p={1}
+          gap={3}
+        >
+          <Typography variant="h1" color="#ffffff !important" align="center">
+            Ace Your Interview
+          </Typography>
+          <Typography variant="h3" color="#dedede !important" align="center">
+            Tailored Questions for Success
+          </Typography>
+          <Box display="flex" gap={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleQuestionTypeClick("behavioral")}
+              sx={{
+                width: 280,
+                height: 60,
+                fontSize: "1.2rem",
+                textTransform: "none",
+                backgroundColor: "#50d900",
+                border: "none",
+                fontFamily: "inherit",
+                textAlign: "center",
+                cursor: "pointer",
+                transition: "0.4s",
+                zIndex: "2",
+                "&:hover": {
+                  boxShadow: "7px 5px 56px -14px #50d900",
+                  backgroundColor: "#30a813",
+                },
+                "&:active": {
+                  transform: "scale(0.97)",
+                  boxShadow: "7px 5px 56px -10px #50d900",
+                },
+                "&:focus": { outline: "none" },
+              }}
+            >
+              Behavioral Questions
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleQuestionTypeClick("technical")}
+              sx={{
+                width: 280,
+                height: 60,
+                fontSize: "1.2rem",
+                textTransform: "none",
+                backgroundColor: "#50d900",
+                border: "none",
+                fontFamily: "inherit",
+                textAlign: "center",
+                cursor: "pointer",
+                transition: "0.4s",
+                zIndex: "2",
+                "&:hover": {
+                  boxShadow: "7px 5px 56px -14px #50d900",
+                  backgroundColor: "#30a813",
+                },
+                "&:active": {
+                  transform: "scale(0.97)",
+                  boxShadow: "7px 5px 56px -10px #50d900",
+                },
+                "&:focus": { outline: "none" },
+              }}
+            >
+              Technical Questions
+            </Button>
+          </Box>
+
+          <Paper
+            elevation={3}
+            sx={{
+              width: '60%',
+              padding: 3,
+              borderRadius: '12px',
+              backgroundColor: 'background.paper',
+            }}
+          >
+            {!questionType && (
+              <Typography variant="h5" align="center" color="text.secondary">
+                Please select a question type to begin.
+              </Typography>
+            )}
+            {generatedQuestion && (
+              <Typography variant="h6" align="center" color="text.primary">
+                  {generatedQuestion}
+              </Typography>
+            )}
+          </Paper>
+        </Box>
+      </GradientBackground>
+    </Box>
+  </Box>
+</ThemeProvider>
+);
 };
 
 export default InterviewPrep;
