@@ -17,55 +17,6 @@ import styled from "styled-components";
 import axios from "axios"; 
 
 const theme = createTheme({
-  typography: {
-    body1: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
-    },
-    body2: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
-    },
-    caption: {
-      fontFamily: 
-      'Inter',
-    },
-    h1: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
-    },
-    h2: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
-    },
-    h3: {fontFamily: 
-      'Inter', // Replace with your desired font
-    },
-    h4: {fontFamily: 
-      'Inter', // Replace with your desired font
-    },
-    h5: {fontFamily: 
-      'Inter', // Replace with your desired font
-    },
-    h6: {fontFamily: 
-      'Inter', // Replace with your desired font
-    },
-    inherit: {
-      fontFamily: 'Inter',
-    },
-    overline: {
-      fontFamily: 'Inter',
-    },
-    subtitle1: {
-      fontFamily: 'Inter',
-    },
-    subtitle2: {
-      fontFamily: 'Inter',
-    },
-    string: {
-      fontFamily: 'Inter',
-    },
-  },
   palette: {
     mode: "dark",
     primary: {
@@ -74,7 +25,6 @@ const theme = createTheme({
     secondary: {
       main: "#8bc34a", // Secondary light green
     },
-    success: { main: "#046A38"},
     background: {
       default: "#1b1b1b", // Black background
       paper: "#212121", // Paper with light background
@@ -284,7 +234,7 @@ const InterviewPrep = () => {
           handleSignOut={handleSignOut}
         />
         <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="#212121" p={2} boxShadow={1}>
+          <Box bgcolor="background.paper" p={2} boxShadow={1}>
             <Typography variant="h5" color="text.primary">
               Interview Preparation
             </Typography>
