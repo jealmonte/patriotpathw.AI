@@ -180,7 +180,7 @@ const Dashboard = () => {
           <Typography
             variant="h4"
             gutterBottom
-            sx={{ color: "#21eb86", fontWeight: 700 }}
+            sx={{ color: "#ffee8c", fontWeight: 700 }}
           >
             Dashboard
           </Typography>

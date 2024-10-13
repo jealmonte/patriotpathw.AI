@@ -135,7 +135,7 @@ function UploadResume() {
         />
         <Box flex={1} display="flex" flexDirection="column">
           <Box bgcolor="#212121" p={2}>
-            <Typography variant="h5">Upload Resume</Typography>
+            <Typography variant="h5" color="#ffee8c" >Upload Resume</Typography>
           </Box>
           <Box
             flex={1}

@@ -287,7 +287,7 @@ const InterviewPrep = () => {
         />
         <Box flex={1} display="flex" flexDirection="column">
           <Box bgcolor="#111111" p={2} boxShadow={1}>
-            <Typography variant="h5" color="text.primary">
+            <Typography variant="h5" color="#ffee8c">
               Interview Preparation
             </Typography>
           </Box>

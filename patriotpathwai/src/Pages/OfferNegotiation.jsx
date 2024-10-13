@@ -221,7 +221,7 @@ function OfferNegotiation() {
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           <AppBar position="static" sx={{ background: '#111113', boxShadow: 'none' }}>
             <Toolbar>
-              <Typography marginLeft="-10px" fontWeight="400" variant="h5" sx={{ flexGrow: 1 }}>
+              <Typography marginLeft="-10px" fontWeight="400" color="#ffee8c" variant="h5" sx={{ flexGrow: 1 }}>
                 Offer Negotiation AI
               </Typography>
             </Toolbar>
