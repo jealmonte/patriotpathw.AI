@@ -24,7 +24,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
   return (
     <Box 
       sx={{ width: 240 }} // Move width to sx prop
-      bgcolor="#212121" 
+      bgcolor="rgba(0, 0, 0, 0.3)" 
       p={2} 
       display="flex" 
       flexDirection="column"
