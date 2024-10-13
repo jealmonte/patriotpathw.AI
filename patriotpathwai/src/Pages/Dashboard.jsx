@@ -225,7 +225,7 @@ const Dashboard = () => {
                 onClick={() => handleNavigation("/uploadresume")}
               >
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="h5" gutterBottom>
                     Resume Upload
                   </Typography>
                   <Divider sx={{ my: 2 }} />
@@ -236,7 +236,9 @@ const Dashboard = () => {
                     borderRadius={2}
                     height="250px"
                   >
-                    <Typography>Upload your resume</Typography>
+                  <Typography variant="h6">
+                    Empower Your Career with AI: Upload, Analyze, and Elevate Your Resume Instantly!
+                  </Typography>
                     <IconButton
                       component="span"
                       sx={{
