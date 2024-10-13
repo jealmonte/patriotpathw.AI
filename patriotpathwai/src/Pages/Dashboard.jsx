@@ -11,10 +11,13 @@ import {
   Button,
   Grid,
   TextField,
+  IconButton,
   Divider,
 } from "@mui/material";
 import Sidebar from "../Components/Sidebar"; // Importing Sidebar component
 import { useLogoutFunction } from "@propelauth/react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { Plus } from "lucide-react";
 
 const darkTheme = createTheme({
   palette: {
@@ -49,6 +52,11 @@ const Dashboard = () => {
   const handleSignOut = async () => {
     await logout(true);
   };
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleNavigation = (path) => {
+    navigate(path); // Navigate to the respective feature page
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -78,6 +86,7 @@ const Dashboard = () => {
                   "&:hover": neonGlow,
                   transition: "0.3s ease-in-out",
                 }}
+                onClick={() => handleNavigation("/job-matching")}
               >
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -88,7 +97,6 @@ const Dashboard = () => {
                   {/* Software Engineer Button */}
                   <Button
                     fullWidth
-                    onClick={() => handleJobClick("Software Engineer")}
                     sx={{
                       justifyContent: "flex-start",
                       textTransform: "none",
@@ -113,7 +121,6 @@ const Dashboard = () => {
                   {/* Data Analyst Button */}
                   <Button
                     fullWidth
-                    onClick={() => handleJobClick("Data Analyst")}
                     sx={{
                       justifyContent: "flex-start",
                       textTransform: "none",
@@ -138,7 +145,6 @@ const Dashboard = () => {
                   {/* UX Designer Button */}
                   <Button
                     fullWidth
-                    onClick={() => handleJobClick("UX Designer")}
                     sx={{
                       justifyContent: "flex-start",
                       textTransform: "none",
@@ -171,6 +177,7 @@ const Dashboard = () => {
                   "&:hover": neonGlow,
                   transition: "0.3s ease-in-out",
                 }}
+                onClick={() => handleNavigation("/uploadresume")}
               >
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -182,9 +189,12 @@ const Dashboard = () => {
                     p={4}
                     textAlign="center"
                     borderRadius={2}
-                    height="300px"
+                    height="250px"
                   >
                     <Typography>Upload your resume</Typography>
+                    <IconButton component="span">
+                      <Plus size={128} color="#424242" />
+                    </IconButton>
                   </Box>
                 </CardContent>
                 <CardActions>
@@ -192,6 +202,7 @@ const Dashboard = () => {
                     variant="contained"
                     color="success"
                     sx={{ borderRadius: 2 }}
+                    fullWidth
                   >
                     Upload Resume
                   </Button>
@@ -209,6 +220,7 @@ const Dashboard = () => {
                   "&:hover": neonGlow,
                   transition: "0.3s ease-in-out",
                 }}
+                onClick={() => handleNavigation("/interview-prep")}
               >
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -267,6 +279,7 @@ const Dashboard = () => {
                   },
                   transition: "0.3s ease-in-out",
                 }}
+                onClick={() => handleNavigation("/offer-negotiation")}
               >
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -275,10 +288,17 @@ const Dashboard = () => {
                   <Divider
                     sx={{ my: 2, borderColor: "rgba(255, 255, 255, 0.3)" }}
                   />
-                  <Typography>AI-powered salary insights</Typography>
-                  <Typography variant="h3" mt={2}>
-                    $75,000
-                  </Typography>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection="column"
+                  >
+                    <Typography variant="h4">AI-powered salary insights</Typography>
+                    <Typography variant="h1" mt={2}>
+                      $75,000
+                    </Typography>
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
@@ -293,6 +313,7 @@ const Dashboard = () => {
                   "&:hover": neonGlow,
                   transition: "0.3s ease-in-out",
                 }}
+                onClick={() => handleNavigation("/chatpage")}
               >
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
