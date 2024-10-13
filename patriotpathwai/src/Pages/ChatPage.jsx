@@ -204,22 +204,22 @@ function ChatPage() {
     }
   };
 
-  const handleSendMessage = async () => {
-    if (userInput.trim()) {
+  const handleSendMessage = async (message) => {
+    if (message.trim()) {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: "user", text: userInput },
+        { sender: "user", text: message },
       ]);
-
-      const aiResponse = await fetchAIResponse(userInput);
-
+  
+      const aiResponse = await fetchAIResponse(message);
+  
       // Add AI response to messages
       setMessages((prevMessages) => [
         ...prevMessages,
         { sender: "ai", text: aiResponse },
       ]);
-
-      setUserInput("");
+  
+      setUserInput(""); // This line may be unnecessary if you're not using userInput here
     }
   };
 
@@ -299,26 +299,32 @@ function ChatPage() {
                     {
                       title: "Explore Opportunities",
                       text: "Discover your dream career path",
+                      message: "Give me a step by step guide on exploring my dream career path in technology",
                     },
                     {
                       title: "Skill Development",
                       text: "Develop new and current technical skills",
+                      message: "Give me resources for leveling up my technical skills",
                     },
                     {
                       title: "Career Path Planning",
                       text: "Plan your road map to career success",
+                      message: "Give me a step by step guide on how I can plan my career as a student in college.",
                     },
                     {
                       title: "Career Transition",
                       text: "Rethinking your goals",
+                      message: "Give me a step by step guide on exploring my dream career path in technology",
                     },
                     {
                       title: "Continuing Education",
                       text: "Pros and cons of higher Education",
+                      message: "Give me the pros and cons of continuing higher education after a Bachelor's degree",
                     },
                     {
                       title: "Networking Questions",
                       text: "What to ask to build connnections",
+                      message: "Give me a list of questions to ask people when trying to network and make connections"
                     },
                   ].map((item, index) => (
                     <Button
@@ -338,6 +344,7 @@ function ChatPage() {
                           outline: "none", // Disable focus outline when the button is focused
                         },
                       }}
+                      onClick={() => handleSendMessage(item.message)}
                     >
                       <Typography variant="subtitle1" color="#FFC300">
                         {item.title}
