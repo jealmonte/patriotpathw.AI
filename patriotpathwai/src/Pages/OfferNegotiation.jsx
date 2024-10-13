@@ -28,7 +28,7 @@ import Sidebar from '../Components/Sidebar';
 import axios from 'axios';
 import { useLogoutFunction } from '@propelauth/react';
 import { TypeAnimation } from 'react-type-animation';
-import { useSalary } from '../SalaryContext';
+import { useSalary } from '../Components/SalaryContext';
 
 const theme = createTheme({
   typography: {
