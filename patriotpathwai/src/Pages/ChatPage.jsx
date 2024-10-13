@@ -290,91 +290,101 @@ function ChatPage() {
                       </Typography>
                     </Box>
 
-                    <Box
-                      display="grid"
-                      gridTemplateColumns="repeat(3, 1fr)"
-                      gap={3}
+                <Box
+                  display="grid"
+                  gridTemplateColumns="repeat(3, 1fr)"
+                  gap={3}
+                >
+                  {[
+                    {
+                      title: "Explore Opportunities",
+                      text: "Discover your dream career path",
+                    },
+                    {
+                      title: "Skill Development",
+                      text: "Develop new and current technical skills",
+                    },
+                    {
+                      title: "Career Path Planning",
+                      text: "Plan your road map to career success",
+                    },
+                    {
+                      title: "Career Transition",
+                      text: "Rethinking your goals",
+                    },
+                    {
+                      title: "Continuing Education",
+                      text: "Pros and cons of higher Education",
+                    },
+                    {
+                      title: "Networking Questions",
+                      text: "What to ask to build connnections",
+                    },
+                  ].map((item, index) => (
+                    <Button
+                      key={index} // Assign key here to the Button element
+                      sx={{
+                        borderRadius: "30px",
+                        background: "#212121",
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
+                        p: 2,
+                        mb: 3,
+                        display: "flex",
+                        flexDirection: "column", // Ensure text is stacked vertically
+                        alignItems: "flex-start", // Align text to the left
+                        textTransform: "none", // Prevent uppercase transformation
+                        "&:focus": {
+                          outline: "none", // Disable focus outline when the button is focused
+                        },
+                      }}
                     >
-                      {[
-                        {
-                          title: "Explore Opportunities",
-                          text: "Discover your dream career path",
-                        },
-                        {
-                          title: "Skill Development",
-                          text: "Develop new and current technical skills",
-                        },
-                        {
-                          title: "Career Path Planning",
-                          text: "Plan your road map to career success",
-                        },
-                      ].map((item, index) => (
-                        <Button
-                          key={index} // Assign key here to the Button element
-                          sx={{
-                            borderRadius: "30px",
-                            background: "#212121",
-                            boxShadow:
-                              "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-                            p: 2,
-                            mb: 3,
-                            display: "flex",
-                            flexDirection: "column", // Ensure text is stacked vertically
-                            alignItems: "flex-start", // Align text to the left
-                            textTransform: "none", // Prevent uppercase transformation
-                            "&:focus": {
-                              outline: "none", // Disable focus outline when the button is focused
-                            },
-                          }}
-                        >
-                          <Typography variant="subtitle1" color="#FFC300">
-                            {item.title}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            {item.text}.
-                          </Typography>
-                        </Button>
-                      ))}
-                    </Box>
-                  </>
-                ) : (
-                  messages.map((msg, index) => (
-                    <Box
-                      key={index}
-                      display="flex"
-                      justifyContent={
-                        msg.sender === "user" ? "flex-end" : "flex-start"
-                      }
-                      mb={2}
-                    >
-                      <Box
-                        bgcolor={msg.sender === "user" ? "#c29a21" : "#006633"}
-                        borderRadius={1}
-                        p={2}
-                        maxWidth="60%"
-                        style={{
-                          boxShadow:
-                            "rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px",
-                        }}
-                      >
-                        <Typography variant="body1">
-                          {msg.sender === "ai" &&
-                          index === messages.length - 1 ? (
-                            <TypeAnimation
-                              sequence={[msg.text]}
-                              speed={50}
-                              wrapper="span"
-                              cursor
-                            />
-                          ) : (
-                            msg.text
-                          )}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  ))
-                )}
-              </Container>
+                      <Typography variant="subtitle1" color="#FFC300">
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {item.text}.
+                      </Typography>
+                    </Button>
+                  ))}
+                </Box>
+              </>
+            ) : (
+              messages.map((msg, index) => (
+                <Box
+                  key={index}
+                  display="flex"
+                  justifyContent={
+                    msg.sender === "user" ? "flex-end" : "flex-start"
+                  }
+                  mb={2}
+                >
+                  <Box
+                    bgcolor={msg.sender === "user" ? "#c29a21" : "#006633"}
+                    borderRadius={1}
+                    p={2}
+                    maxWidth="60%"
+                    style={{
+                      boxShadow: "rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px",
+                    }}
+                  >
+                    <Typography variant="body1">
+                      {msg.sender === "ai" && index === messages.length - 1 ? (
+                        <TypeAnimation
+                          sequence={[msg.text]}
+                          speed={50}
+                          wrapper="span"
+                          cursor
+                        />
+                      ) : (
+                        msg.text
+                      )}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))
+            )}
+          </Container>
 
               {/* Footer Box */}
               <Box bgcolor="rgba(0, 0, 0, 0.3)" p={2} mt="auto">
