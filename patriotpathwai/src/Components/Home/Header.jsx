@@ -1,6 +1,7 @@
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { AppBar, Toolbar, Button } from "@mui/material";
 import { createTheme, styled } from "@mui/system";
 import PropTypes from "prop-types"; // for prop validation
+import PPLogo from '../../../Images/PP-Logo.png'; // Adjust the path as necessary
 
 const StyledAppBar = styled(AppBar)({
   background: "transparent",
@@ -12,33 +13,48 @@ const handleLogin = () => {
   window.location.href = 'https://59746679014.propelauthtest.com/login';
 };
 
-const Header = ({scrollToSection, mainRef, featuresRef, aboutRef, contactRef, onLogin, onSignup}) => (
+const Header = ({ scrollToSection, mainRef, featuresRef, aboutRef, contactRef, onLogin, onSignup }) => (
   <StyledAppBar position="absolute">
     <Toolbar>
-      <Typography
-        variant="h6"
-        component="div"
-        sx={{ flexGrow: 1, cursor: "pointer" }}
-        onClick={() => scrollToSection(mainRef)}
+      <img 
+        src={PPLogo} 
+        alt="PatriotPath Logo" 
+        style={{ height: '150px', cursor: 'pointer' }} // Logo height
+      />
+      <div style={{ flexGrow: 1 }} /> {/* This div helps with spacing */}
+      <Button 
+        color="inherit" 
+        onClick={() => scrollToSection(featuresRef)} 
+        sx={{ fontSize: '1.5rem', fontWeight: 'bold' }} // Enlarged font size
       >
-        PatriotPath
-      </Typography>
-      <Button color="inherit" onClick={() => scrollToSection(featuresRef)}>
         Features
       </Button>
-      <Button color="inherit" onClick={() => scrollToSection(aboutRef)}>
+      <Button 
+        color="inherit" 
+        onClick={() => scrollToSection(aboutRef)} 
+        sx={{ fontSize: '1.5rem', fontWeight: 'bold' }} // Enlarged font size
+      >
         About
       </Button>
-      <Button color="inherit" onClick={() => scrollToSection(contactRef)}>
+      <Button 
+        color="inherit" 
+        onClick={() => scrollToSection(contactRef)} 
+        sx={{ fontSize: '1.5rem', fontWeight: 'bold' }} // Enlarged font size
+      >
         Contact
       </Button>
-      <Button color="inherit" variant="outlined" sx={{ ml: 2 }} onClick={handleLogin}>
+      <Button 
+        color="inherit" 
+        variant="outlined" 
+        sx={{ ml: 2, fontSize: '1.5rem', fontWeight: 'bold' }} // Enlarged font size
+        onClick={handleLogin}
+      >
         Login
       </Button>
       <Button
         color="inherit"
         variant="outlined"
-        sx={{ ml: 2 }}
+        sx={{ ml: 2, fontSize: '1.5rem', fontWeight: 'bold' }} // Enlarged font size
         onClick={onSignup}
       >
         Sign Up
