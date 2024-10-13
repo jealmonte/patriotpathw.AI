@@ -33,13 +33,31 @@ const Section = styled(Box)({
 
 const FeatureBox = styled(motion.div)({
   background: "rgba(255, 255, 255, 0.1)",
-  padding: "10px", // Reduced padding
+  padding: "10px",
   borderRadius: "8px",
   zIndex: 1,
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   cursor: "pointer",
+  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+
+  // Default state
+  "&:hover": {
+    transform: "scale(1.05)", // Scale up on hover
+    boxShadow: "0 0 15px rgba(33, 235, 134, 0.6)", // Neon glow effect
+  },
+  "&:hover::before": {
+    content: '""',
+    position: "absolute",
+    top: "-2px",
+    left: "-2px",
+    right: "-2px",
+    bottom: "-2px",
+    borderRadius: "10px",
+    boxShadow: "0 0 30px 5px rgba(33, 235, 134, 0.5)",
+    zIndex: -1, // Ensure the glow stays behind the box
+  },
 });
 
 // Animation variants
@@ -84,8 +102,8 @@ const Features = forwardRef((props, ref) => {
           container
           spacing={2}
           justifyContent="center"
-          alignItems="stretch" // Ensure all children stretch equally
-          style={{ zIndex: 1, padding: '10px 100px' }} // Added horizontal padding
+          alignItems="stretch"
+          style={{ zIndex: 1, padding: "10px 100px" }}
           ref={containerRef}
           component={motion.div}
           variants={containerVariants}
@@ -105,10 +123,10 @@ const Features = forwardRef((props, ref) => {
                 variants={featureVariants}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 style={{
-                  flex: 1, // Makes the box grow to fit available space
+                  flex: 1,
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between", // Ensure even spacing between elements
+                  justifyContent: "space-between",
                 }}
               >
                 <ListItemIcon>
