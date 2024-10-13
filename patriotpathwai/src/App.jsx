@@ -12,6 +12,7 @@ import UploadResume from "./Pages/UploadResume";
 import Questionnaire from "./Components/Questionaire.jsx";
 import JobMatching from "./Pages/JobMatching";
 import OfferNegotiation from "./Pages/OfferNegotiation.jsx";
+import ResumeReview from "./Pages/ResumeReview.jsx";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import InterviewPrep from "./Pages/InterviewPrep.jsx";
 
