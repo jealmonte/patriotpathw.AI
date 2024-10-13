@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const features = [
   { name: 'Career Coach', icon: MessageCircle, path: '/chatpage' },
   { name: 'Job Matching', icon: BriefcaseIcon, path: '/job-matching' },
-  { name: 'Interview Prep', icon: UserCheck, path: '/chatpage' },
+  { name: 'Interview Prep', icon: UserCheck, path: '/interview-prep' },
   { name: 'Offer Negotiation', icon: DollarSign, path: '/chatpage' },
   { name: 'Resume Review', icon: FileText, path: '/uploadresume' },
 ];
