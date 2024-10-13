@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import {
@@ -10,10 +10,11 @@ import {
   ListItemText,
   Paper,
 } from "@mui/material";
-import Sidebar from "../Components/Sidebar"; // Importing Sidebar component
+import Sidebar from "../Components/Sidebar";
 import { useLogoutFunction } from "@propelauth/react";
 import { TypeAnimation } from 'react-type-animation';
-import axios from "axios"; // Ensure axios is imported
+import styled from "styled-components";
+import axios from "axios"; 
 
 const theme = createTheme({
   typography: {
@@ -85,7 +86,98 @@ const theme = createTheme({
   },
 });
 
+const GradientBackground = styled(Box)({
+  background: "linear-gradient(to bottom, #1a3a2a, #0a0a0a)",
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
+  position: "relative",
+  overflow: "hidden",
+  scrollSnapAlign: "start", // Snap to the start of the section
+});
+
+const GridOverlay = styled(Box)({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundImage: `
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+  `,
+  backgroundSize: "50px 50px",
+  opacity: 1,
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background:
+      "linear-gradient(to bottom, rgba(26, 42, 58, 0) 0%, rgba(10, 10, 10, 0.8) 100%)",
+    pointerEvents: "none",
+  },
+});
+
+const AnimatedDots = styled("canvas")({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  zIndex: 1,
+});
+
 const InterviewPrep = () => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let animationFrameId;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 100;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2 + 1,
+        speed: Math.random() * 0.5 + 0.1,
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle) => {
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.fill();
+
+        particle.y -= particle.speed;
+
+        if (particle.y + particle.radius < 0) {
+          particle.y = canvas.height + particle.radius;
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
   const [activeFeature, setActiveFeature] = useState("Resume Review");
   const [questionType, setQuestionType] = useState(null);
   const [systemContent, setSystemContent] = useState("");
@@ -197,73 +289,116 @@ const InterviewPrep = () => {
               Interview Preparation
             </Typography>
           </Box>
-
-          <Box
-            flex={1}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            p={2}
-            gap={3}
-          >
-            <Box display="flex" gap={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleQuestionTypeClick("behavioral")}
-                sx={{
-                  width: 280,
-                  height: 60,
-                  fontSize: "1.2rem",
-                  "&:focus": { outline: "none" },
-                  textTransform: "none",
-                }}
-              >
-                Behavioral Questions
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleQuestionTypeClick("technical")}
-                sx={{
-                  width: 280,
-                  height: 60,
-                  fontSize: "1.2rem",
-                  "&:focus": { outline: "none" },
-                  textTransform: "none",
-                }}
-              >
-                Technical Questions
-              </Button>
-            </Box>
-
-            <Paper
-              elevation={3}
-              sx={{
-                width: "60%",
-                padding: 3,
-                borderRadius: "12px",
-                backgroundColor: "background.paper",
-              }}
+          <GradientBackground>
+            <GridOverlay />
+            <AnimatedDots ref={canvasRef} />
+            <Box
+              flex={1}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+              p={1}
+              gap={3}
             >
-              {!questionType && (
-                <Typography variant="h5" align="center" color="text.secondary">
-                  Please select a question type to begin.
-                </Typography>
-              )}
-              {generatedQuestion && (
-                <Typography variant="h6" align="center" color="text.primary">
-                  <TypeAnimation
-                    sequence={[
-                      generatedQuestion, // The text to type out
-                      1000,
-                    ]}
-                  />
-                </Typography>
-              )}
-            </Paper>
-          </Box>
+              <Typography variant="h1" color="#ffffff !important" align="center">
+                Ace Your Interview
+              </Typography>
+              <Typography variant="h3" color="#dedede !important" align="center">
+                Tailored Questions for Success
+              </Typography>
+              <Box display="flex" gap={2}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleQuestionTypeClick("behavioral")}
+                  sx={{
+                    width: 280,
+                    height: 60,
+                    fontSize: "1.2rem",
+                    textTransform: "none",
+                    backgroundColor: "#50d900",
+                    border: "none",
+                    fontFamily: "inherit",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    transition: "0.4s",
+                    zIndex: "2",
+                    "&:hover": {
+                      boxShadow: "7px 5px 56px -14px #50d900",
+                      backgroundColor: "#30a813",
+                    },
+                    "&:active": {
+                      transform: "scale(0.97)",
+                      boxShadow: "7px 5px 56px -10px #50d900",
+                    },
+                    "&:focus": { outline: "none" },
+                  }}
+                >
+                  Technical Questions
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleQuestionTypeClick("behavioral")}
+                  sx={{
+                    width: 280,
+                    height: 60,
+                    fontSize: "1.2rem",
+                    textTransform: "none",
+                    backgroundColor: "#50d900",
+                    border: "none",
+                    fontFamily: "inherit",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    transition: "0.4s",
+                    zIndex: "2",
+                    "&:hover": {
+                      boxShadow: "7px 5px 56px -14px #50d900",
+                      backgroundColor: "#30a813",
+                    },
+                    "&:active": {
+                      transform: "scale(0.97)",
+                      boxShadow: "7px 5px 56px -10px #50d900",
+                    },
+                    "&:focus": { outline: "none" },
+                  }}
+                >
+                  Behavioral Questions
+                </Button>
+              </Box>
+
+              <Paper
+                elevation={3}
+                sx={{
+                  width: "60%",
+                  padding: 3,
+                  borderRadius: "12px",
+                  backgroundColor: "background.paper",
+                }}
+              >
+                {!questionType && (
+                  <Typography
+                    variant="h5"
+                    align="center"
+                    color="text.secondary"
+                  >
+                    Please select a question type to begin.
+                  </Typography>
+                )}
+                {generatedQuestion && (
+                  <Typography variant="h6" align="center" color="text.primary">
+                    <TypeAnimation
+                      sequence={[
+                        generatedQuestion, // The text to type out
+                        1000,
+                      ]}
+                    />
+                  </Typography>
+                )}
+              </Paper>
+            </Box>
+          </GradientBackground>
         </Box>
       </Box>
     </ThemeProvider>
