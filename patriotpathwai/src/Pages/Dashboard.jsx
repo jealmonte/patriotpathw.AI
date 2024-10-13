@@ -206,7 +206,7 @@ const Dashboard = () => {
                       height: "100%",
                     }}
                   >
-                    <Typography variant="h6" gutterBottom>
+                    <Typography variant="h6" color="#ffee8c" gutterBottom>
                       Job Listings
                     </Typography>
                     <StyledApplyButton
@@ -308,7 +308,7 @@ const Dashboard = () => {
                 onClick={() => handleNavigation("/uploadresume")}
               >
                 <CardContent>
-                  <Typography variant="h5" gutterBottom>
+                  <Typography variant="h5" color="#ffee8c" gutterBottom>
                     Resume Upload
                   </Typography>
                   <Divider sx={{ my: 2 }} />
@@ -365,7 +365,7 @@ const Dashboard = () => {
                 onClick={() => handleNavigation("/interview-prep")}
               >
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="h6" color="#ffee8c" gutterBottom>
                     Interview Prep
                   </Typography>
                   <Divider sx={{ my: 2 }} />
