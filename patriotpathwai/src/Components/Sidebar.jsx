@@ -29,7 +29,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
       display="flex" 
       flexDirection="column"
     >
-      <Typography variant="h5" letterSpacing={4} gutterBottom>
+      <Typography variant="h5" letterSpacing={4} gutterBottom onClick={() => handleFeatureClick(features[0])}>
         PatriotPath
       </Typography>
       <List>
