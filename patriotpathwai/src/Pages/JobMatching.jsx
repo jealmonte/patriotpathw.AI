@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import {
@@ -23,6 +23,7 @@ import Sidebar from "../Components/Sidebar";
 import { useLogoutFunction } from "@propelauth/react";
 import JsonData from "../../../ScrapeData/dataset_indeed-scraper_2024-10-12_22-56-02-729.json";
 import { styled } from "@mui/material";
+import { keyframes } from '@emotion/react';
 
 
 const darkTheme = createTheme({
@@ -33,6 +34,105 @@ const darkTheme = createTheme({
     background: { default: "#303030", paper: "#424242" },
     text: { primary: "#ffffff", secondary: "#b0bec5" },
   },
+});
+
+const moveGradient = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+`;
+
+const StyledCard = styled(Card)`
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 1rem;
+  overflow: hidden;
+  z-index: 1;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    z-index: -1;
+    background: linear-gradient(
+      45deg,
+      #13b37f,
+      #FFCC33,
+      #13b37f,
+      #FFCC33
+    );
+    background-size: 400% 400%;
+    animation: ${moveGradient} 12s linear infinite;
+  }
+
+  & > * {
+    z-index: 2;
+  }
+`;
+
+const StyledCardContent = styled(CardContent)({
+  backgroundColor: '#212121', // card-info color
+  borderRadius: '1rem',
+});
+
+const StyledTypography = styled(Typography)({
+  fontWeight: 'light', // title font weight
+  letterSpacing: '0.2em', // title letter spacing
+});
+
+const GradientBackground = styled(Box)({
+  background: "linear-gradient(to bottom, #1a3a2a, #0a0a0a)",
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
+  position: "relative",
+  overflow: "hidden",
+  scrollSnapAlign: "start", // Snap to the start of the section
+});
+
+const GridOverlay = styled(Box)({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundImage: `
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+  `,
+  backgroundSize: "50px 50px",
+  opacity: 1,
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background:
+      "linear-gradient(to bottom, rgba(26, 42, 58, 0) 0%, rgba(10, 10, 10, 0.8) 100%)",
+    pointerEvents: "none",
+  },
+});
+
+const AnimatedDots = styled("canvas")({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  zIndex: 1,
 });
 
 const StyledApplyButton = styled(Button)(({ theme }) => ({
@@ -105,7 +205,7 @@ const jobData = JsonData.filter(
 const JobMatching = () => {
   const [activeFeature, setActiveFeature] = useState("Job Matching");
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage =4;
+  const jobsPerPage = 3;
  
   const logout = useLogoutFunction();
 
@@ -162,6 +262,55 @@ const JobMatching = () => {
     await logout(true);
   };
 
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let animationFrameId;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 100;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2 + 1,
+        speed: Math.random() * 0.5 + 0.1,
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle) => {
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.fill();
+
+        particle.y -= particle.speed;
+
+        if (particle.y + particle.radius < 0) {
+          particle.y = canvas.height + particle.radius;
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -173,12 +322,26 @@ const JobMatching = () => {
         />
 
         <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="background.paper" p={2} display="flex" alignItems="center">
+          <Box
+            bgcolor="background.paper"
+            p={2}
+            display="flex"
+            alignItems="center"
+            style={{ maxHeight: "64px" }}
+          >
             <Typography variant="h5">Job Matching</Typography>
-            <IconButton aria-label="filter" sx={{ marginLeft:"auto" }} onClick={handleFilterClick}>
+            <IconButton
+              aria-label="filter"
+              sx={{ marginLeft: "auto" }}
+              onClick={handleFilterClick}
+            >
               <FilterListIcon fontSize="large" />
             </IconButton>
-            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleFilterClose}>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleFilterClose}
+            >
               <MenuItem>
                 <Box display="flex" alignItems="center" gap={1}>
                   <TextField
@@ -189,7 +352,7 @@ const JobMatching = () => {
                     value={filterCriteria.minSalary}
                     onChange={handleSalaryInputChange}
                     type="number"
-                    style={{ maxWidth:"100px", minWidth:"100px" }}
+                    style={{ maxWidth: "100px", minWidth: "100px" }}
                   />
                   <Typography variant="h6">-</Typography>
                   <TextField
@@ -200,7 +363,7 @@ const JobMatching = () => {
                     value={filterCriteria.maxSalary}
                     onChange={handleSalaryInputChange}
                     type="number"
-                    style={{ maxWidth:"100px", minWidth:"100px" }}
+                    style={{ maxWidth: "100px", minWidth: "100px" }}
                   />
                 </Box>
               </MenuItem>
@@ -216,39 +379,65 @@ const JobMatching = () => {
             </Menu>
           </Box>
 
-          <Box flex={1} p={2} overflow="auto">
-            <Stack spacing={2}>
-              {currentJobs.map((job) => (
-                <Card key={job.id} sx={{ position:"relative", display:"flex", alignItems:"center", elevation: 3 }}>
-                  <StyledApplyButton endIcon={<OpenInNewIcon />}>
-                    Apply
-                  </StyledApplyButton>
-                  <Box sx={{ display:"flex", flexDirection:"column", flex :1 }}>
-                    <CardContent>
-                      <Typography variant="h6" fontWeight="bold">
-                        {job.positionName}
-                      </Typography>
-                      <Typography variant="subtitle1" color="text.secondary">
-                        {job.company}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ marginRight :1 }}>
-                        Location:{job.location}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        Salary:{job.salary}
-                      </Typography>
-                      <Typography variant="body2">
-                        {cleanDescription(job.description)}
-                      </Typography>
-                    </CardContent>
-                  </Box>
-                </Card>
-              ))}
-            </Stack>
+          <Box flex={1} overflow="auto">
+            <GradientBackground>
+              <GridOverlay />
+              <AnimatedDots ref={canvasRef} />
+              <Stack spacing={8} mt={1} m={2} overflow="hidden">
+                {currentJobs.map((job) => (
+                  <StyledCard key={job.id}>
+                    <StyledApplyButton
+                      style={{ zIndex: 3 }}
+                      endIcon={<OpenInNewIcon />}
+                    >
+                      Apply
+                    </StyledApplyButton>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", flex: 1 }}
+                    >
+                      <StyledCardContent>
+                        <StyledTypography
+                          variant="h6"
+                          fontWeight="bold"
+                          color="#FFCC33 !important"
+                        >
+                          {job.positionName}
+                        </StyledTypography>
+                        <Typography variant="subtitle1" color="textSecondary">
+                          {job.company}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          color="textSecondary"
+                          sx={{ marginRight: 1 }}
+                        >
+                          Location:{job.location}
+                        </Typography>
+                        <Typography variant="caption" color="textSecondary">
+                          Salary:{job.salary}
+                        </Typography>
+                        <Typography variant="body2" color="textPrimary">
+                          {cleanDescription(job.description)}
+                        </Typography>
+                      </StyledCardContent>
+                    </Box>
+                  </StyledCard>
+                ))}
+              </Stack>
+            </GradientBackground>
           </Box>
 
-          <Box display="flex" justifyContent="center" alignItems="center" p={2} bgcolor="background.paper">
-            <Pagination count={Math.ceil(filteredJobData.length / jobsPerPage)} page={currentPage} onChange={handlePageChange} color="primary"/>
+          <Box display="flex" justifyContent="center" alignItems="center" p={2} bgcolor="#0a0a0a">
+            <Pagination
+              count={Math.ceil(filteredJobData.length / jobsPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  backgroundColor: "transparent", 
+                },
+              }}
+            />
           </Box>
         </Box>
       </Box>
