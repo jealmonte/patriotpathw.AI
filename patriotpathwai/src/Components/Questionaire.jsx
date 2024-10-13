@@ -238,7 +238,7 @@ const theme = createTheme({
           lastQuestion();
           setCurrentQuestion(currentQuestion + 1);
         } else {
-            navigate('/ChatPage');
+            navigate('/Dashboard');
           console.log('Form submitted:', { major, skills, experiences });
         }
       };
