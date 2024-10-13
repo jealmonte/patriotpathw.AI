@@ -7,7 +7,7 @@ const features = [
   { name: 'Career Coach', icon: MessageCircle, path: '/chatpage' },
   { name: 'Job Matching', icon: BriefcaseIcon, path: '/job-matching' },
   { name: 'Interview Prep', icon: UserCheck, path: '/interview-prep' },
-  { name: 'Offer Negotiation', icon: DollarSign, path: '/chatpage' },
+  { name: 'Offer Negotiation', icon: DollarSign, path: '/offer-negotiation' },
   { name: 'Resume Review', icon: FileText, path: '/uploadresume' },
 ];
 
@@ -20,7 +20,13 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
   };
 
   return (
-    <Box width={240} bgcolor="#212121" p={2} display="flex" flexDirection="column">
+    <Box 
+      sx={{ width: 240 }} // Move width to sx prop
+      bgcolor="#212121" 
+      p={2} 
+      display="flex" 
+      flexDirection="column"
+    >
       <Typography variant="h5" letterSpacing={4} gutterBottom>
         PatriotPath
       </Typography>
@@ -38,7 +44,10 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
               backgroundColor: '#046A38',
               height: 48,
               '&:hover': {
-                backgroundColor: '#FFCC33', // Add yellow hover effect
+                backgroundColor: '#FFCC33',
+              },
+              '& .MuiListItemIcon-root': {
+                color: 'white',
               },
             }}
           >
@@ -47,7 +56,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
             </ListItemIcon>
             <ListItemText 
               primary={feature.name} 
-              primaryTypographyProps={{ noWrap: true }}
+              primaryTypographyProps={{ noWrap: true, color: 'white' }}
               sx={{ marginLeft: '-8px' }}
             />
           </ListItem>
