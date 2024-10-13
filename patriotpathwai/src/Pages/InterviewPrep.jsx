@@ -337,12 +337,12 @@ const InterviewPrep = () => {
                     "&:focus": { outline: "none" },
                   }}
                 >
-                  Technical Questions
+                  Behavioral Questions
                 </Button>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => handleQuestionTypeClick("behavioral")}
+                  onClick={() => handleQuestionTypeClick("technical")}
                   sx={{
                     width: 280,
                     height: 60,
@@ -366,7 +366,7 @@ const InterviewPrep = () => {
                     "&:focus": { outline: "none" },
                   }}
                 >
-                  Behavioral Questions
+                  Technical Questions
                 </Button>
               </Box>
 
