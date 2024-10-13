@@ -59,7 +59,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
             <ListItemText 
               primary={feature.name} 
               primaryTypographyProps={{ noWrap: true, color: 'white' }}
-              sx={{ marginLeft: '-8px', fontFamily: "Inter"}}
+              sx={{ marginLeft: '-20px', fontFamily: "Inter"}}
             />
           </ListItem>
         ))}
