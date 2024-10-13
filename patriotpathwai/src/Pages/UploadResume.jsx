@@ -78,21 +78,26 @@ function UploadResume() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Box display="flex" height="100vh">
-        <Sidebar 
-          activeFeature={activeFeature} 
-          setActiveFeature={setActiveFeature} 
+        <Sidebar
+          activeFeature={activeFeature}
+          setActiveFeature={setActiveFeature}
           handleSignOut={handleSignOut}
         />
         <Box flex={1} display="flex" flexDirection="column">
           <Box bgcolor="#212121" p={2}>
             <Typography variant="h5">Upload Resume</Typography>
           </Box>
-          <Box flex={1} display="flex" justifyContent="center" alignItems="center">
+          <Box
+            flex={1}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
             <label htmlFor="file-import">
               <Box
                 width={600}
                 height={400}
-                border='5px dashed #424242'
+                border="5px dashed #424242"
                 borderRadius={10}
                 display="flex"
                 justifyContent="center"
@@ -103,8 +108,19 @@ function UploadResume() {
                   <CircularProgress />
                 ) : (
                   <>
-                    <IconButton component="span">
-                      <Plus size={128} color="#424242" />
+                    <IconButton
+                      component="span"
+                      sx={{
+                        "& svg": {
+                          color: "#424242",
+                          transition: "color 0.5s",
+                        },
+                        "&:hover svg": {
+                          color: "#c7c5c5",
+                        },
+                      }}
+                    >
+                      <Plus size={128} />
                     </IconButton>
                     <Typography variant="h6" align="center">
                       Upload your resume
