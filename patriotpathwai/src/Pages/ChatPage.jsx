@@ -199,7 +199,7 @@ function ChatPage() {
                     borderRadius: "25px",
                     background: "#212121",
                     boxShadow:
-                      "10px 10px 15px rgb(25, 25, 25), -10px -10px 15px rgb(60, 60, 60)",
+                      "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
                     p: 3,
                     mb: 4.5,
                     mt: 4,
@@ -255,7 +255,7 @@ function ChatPage() {
                         borderRadius: "30px",
                         background: "#212121",
                         boxShadow:
-                          "10px 10px 15px rgb(25, 25, 25), -10px -10px 15px rgb(60, 60, 60)",
+                          "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
                         p: 2,
                         mb: 3,
                         display: "flex",
@@ -293,17 +293,7 @@ function ChatPage() {
                     p={2}
                     maxWidth="60%"
                     style={{
-                      boxShadow: `
-      0px 0px 10px 2px ${
-        msg.sender === "user" ? "#c29a21" : "#006633"
-      }, /* Glow effect */
-      rgba(0, 0, 0, 0.07) 0px 1px 2px, 
-      rgba(0, 0, 0, 0.07) 0px 2px 4px, 
-      rgba(0, 0, 0, 0.07) 0px 4px 8px, 
-      rgba(0, 0, 0, 0.07) 0px 8px 16px, 
-      rgba(0, 0, 0, 0.07) 0px 16px 32px, 
-      rgba(0, 0, 0, 0.07) 0px 32px 64px
-    `,
+                      boxShadow: "rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px",
                     }}
                   >
                     <Typography variant="body1">
