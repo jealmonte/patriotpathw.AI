@@ -346,7 +346,7 @@ function ChatPage() {
                       }}
                       onClick={() => handleSendMessage(item.message)}
                     >
-                      <Typography variant="subtitle1" color="#FFC300">
+                      <Typography variant="subtitle1" color="#ffee8c">
                         {item.title}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">

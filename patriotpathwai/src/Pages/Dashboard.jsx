@@ -85,6 +85,29 @@ const darkTheme = createTheme({
   },
 });
 
+const JobTitle = styled(Typography)(({ theme }) => ({
+  color: '#ffee8c', 
+  fontWeight: 'bold',
+}));
+
+const CompanyName = styled(Typography)(({ theme }) => ({
+  color: '#FFFFFF',
+}));
+
+const Salary = styled(Typography)(({ theme }) => ({
+  color: '#81C784', 
+}));
+
+const buttonStyles = {
+  justifyContent: "flex-start",
+  textTransform: "none",
+  color: "#ffffff",
+  borderRadius: 2,
+  "&:hover": {
+    backgroundColor: "#333333",
+  },
+};
+
 const StyledApplyButton = styled(Button)(({ theme }) => ({
   "--color": "#139F59",
   fontFamily: "Inter",
@@ -201,8 +224,8 @@ const Dashboard = () => {
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      alignItems: "center", 
-                      justifyContent: "space-between", 
+                      alignItems: "center",
+                      justifyContent: "space-between",
                       height: "100%",
                     }}
                   >
@@ -212,7 +235,7 @@ const Dashboard = () => {
                     <StyledApplyButton
                       style={{ zIndex: 4 }}
                       color="#fff !important"
-                      onClick={()=>navigate('/job-matching')}
+                      onClick={() => navigate("/job-matching")}
                     >
                       View More
                     </StyledApplyButton>
@@ -222,73 +245,64 @@ const Dashboard = () => {
                   {/* Software Engineer Button */}
                   <Button
                     fullWidth
-                    sx={{
-                      justifyContent: "flex-start",
-                      textTransform: "none",
-                      color: "#ffffff",
-                      borderRadius: 2,
-                      "&:hover": {
-                        backgroundColor: "#333333",
-                      },
+                    sx={buttonStyles}
+                    onClick={() => {
+                      window.open(
+                        "https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=c3ad204106562ea0&advn=9091402361108976",
+                        "_blank"
+                      );
                     }}
-                    onClick={() => {window.open("https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=c3ad204106562ea0&advn=9091402361108976", "_blank")}}
                   >
                     <Box textAlign="left">
-                      <Typography variant="subtitle1" fontWeight="bold">
+                      <JobTitle variant="subtitle1" fontWeight="bold">
                         Process Engineering Internship
-                      </Typography>
-                      <Typography>TTM Technologies - Remote</Typography>
-                      <Typography>$30/hr</Typography>
+                      </JobTitle>
+                      <CompanyName>TTM Technologies - Remote</CompanyName>
+                      <Salary>$30/hr</Salary>
                     </Box>
                   </Button>
 
                   <Divider sx={{ my: 1, borderColor: "#424242" }} />
 
-                  {/* Data Analyst Button */}
                   <Button
                     fullWidth
-                    sx={{
-                      justifyContent: "flex-start",
-                      textTransform: "none",
-                      color: "#ffffff",
-                      borderRadius: 2,
-                      "&:hover": {
-                        backgroundColor: "#333333",
-                      },
+                    sx={buttonStyles}
+                    onClick={() => {
+                      window.open(
+                        "https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=40810cfc9f61645c&advn=9943506443046871",
+                        "_blank"
+                      );
                     }}
-                    onClick={() => {window.open("https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=40810cfc9f61645c&advn=9943506443046871", "_blank")}}
                   >
                     <Box textAlign="left">
-                      <Typography variant="subtitle1" fontWeight="bold">
+                      <JobTitle variant="subtitle1" fontWeight="bold">
                         Summer Associate Internship
-                      </Typography>
-                      <Typography>Navy Federal Credit Union - Vienna, VA</Typography>
-                      <Typography>$26 - $46/hr</Typography>
+                      </JobTitle>
+                      <CompanyName>
+                        Navy Federal Credit Union - Vienna, VA
+                      </CompanyName>
+                      <Salary>$26 - $46/hr</Salary>
                     </Box>
                   </Button>
 
                   <Divider sx={{ my: 1, borderColor: "#424242" }} />
 
-                  {/* UX Designer Button */}
                   <Button
                     fullWidth
-                    sx={{
-                      justifyContent: "flex-start",
-                      textTransform: "none",
-                      color: "#ffffff",
-                      borderRadius: 2,
-                      "&:hover": {
-                        backgroundColor: "#333333",
-                      },
+                    sx={buttonStyles}
+                    onClick={() => {
+                      window.open(
+                        "https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=b36a9d2ef5387c0b",
+                        "_blank"
+                      );
                     }}
-                    onClick={() => {window.open("https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=b36a9d2ef5387c0b", "_blank")}}
                   >
                     <Box textAlign="left">
-                      <Typography variant="subtitle1" fontWeight="bold">
+                      <JobTitle variant="subtitle1" fontWeight="bold">
                         Full Stack Software Engineer Intern
-                      </Typography>
-                      <Typography>Autodesk - San Francisco, CA</Typography>
-                      <Typography>$47,840 - $162,240</Typography>
+                      </JobTitle>
+                      <CompanyName>Autodesk - San Francisco, CA</CompanyName>
+                      <Salary>$47,840 - $162,240</Salary>
                     </Box>
                   </Button>
                 </CardContent>
@@ -320,8 +334,8 @@ const Dashboard = () => {
                     height="250px"
                   >
                     <Typography variant="h6">
-                      Upload your resume and use our AI analysis to elevate
-                      your game. Get your resume past ATS and land an interview!
+                      Upload your resume and use our AI analysis to elevate your
+                      game. Get your resume past ATS and land an interview!
                     </Typography>
                     <IconButton
                       component="span"
@@ -390,13 +404,17 @@ const Dashboard = () => {
                       <Button
                         fullWidth
                         variant="contained"
-                        color="warning"
                         sx={{
                           borderRadius: 2,
                           textTransform: "none",
                           height: "150px",
-                          fontSize: "24px", // Increase text size
-                          fontWeight: "bold", // Make the text bold
+                          backgroundColor: "#dbcc79",
+                          color: "#fff",
+                          fontSize: "24px", 
+                          fontWeight: "bold", 
+                          "&:hover": {
+                            backgroundColor: "#8a804c", 
+                          },
                         }}
                       >
                         Technical Questions
