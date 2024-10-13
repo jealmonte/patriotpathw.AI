@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import {
@@ -9,14 +9,22 @@ import {
   Button,
   Stack,
   Pagination,
+  IconButton,
+  Menu,
+  MenuItem,
+  TextField,
   List,
   ListItem,
   ListItemText,
 } from "@mui/material";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import Sidebar from "../Components/Sidebar";
 import { useLogoutFunction } from "@propelauth/react";
+import JsonData from "../../../ScrapeData/dataset_indeed-scraper_2024-10-12_22-56-02-729.json";
+import { styled } from "@mui/material";
 
-// Dark Theme Configuration
+
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
@@ -27,214 +35,125 @@ const darkTheme = createTheme({
   },
 });
 
-// Example Job Data Array (Formatted with Lists for Descriptions)
-const jobData = [
-  {
-    id: 1,
-    title: "Principal Associate, Information Security Office Consultant",
-    company: "Capital One",
-    description: {
-      basicQualifications: [
-        "High School Diploma, GED or equivalent certification",
-        "At least 3 years of experience working in cybersecurity or information technology",
-        "At least 1 year of experience providing guidance and oversight of Security concepts",
-      ],
-      preferredQualifications: [
-        "Bachelor’s Degree",
-        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
-        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
-        "Familiarity with Cloud patch management practices such as system rehydration and image management",
-        "Experience utilizing Agile methodologies",
-        "Experience with Software Security Architecture",
-        "Experience with Application Security",
-        "Experience with Threat Modeling",
-        "Experience with Penetration Testing and/or Vulnerability Management",
-        "Experience with integrating SaaS products into an Enterprise Environment",
-        "Experience with securing Container services",
-        "Financial services industry experience",
-        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
-        "Experience in Offensive and/or Defensive Security techniques",
-        "Experience in a regulated environment",
-      ],
-    },
-    location: "McLean, VA",
-  },
-  {
-    id: 2,
-    title: "Principal Associate, Information Security Office Consultant",
-    company: "Capital One",
-    description: {
-      basicQualifications: [
-        "High School Diploma, GED or equivalent certification",
-        "At least 3 years of experience working in cybersecurity or information technology",
-        "At least 1 year of experience providing guidance and oversight of Security concepts",
-      ],
-      preferredQualifications: [
-        "Bachelor’s Degree",
-        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
-        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
-        "Familiarity with Cloud patch management practices such as system rehydration and image management",
-        "Experience utilizing Agile methodologies",
-        "Experience with Software Security Architecture",
-        "Experience with Application Security",
-        "Experience with Threat Modeling",
-        "Experience with Penetration Testing and/or Vulnerability Management",
-        "Experience with integrating SaaS products into an Enterprise Environment",
-        "Experience with securing Container services",
-        "Financial services industry experience",
-        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
-        "Experience in Offensive and/or Defensive Security techniques",
-        "Experience in a regulated environment",
-      ],
-    },
-    location: "McLean, VA",
-  },
-  {
-    id: 3,
-    title: "Principal Associate, Information Security Office Consultant",
-    company: "Capital One",
-    description: {
-      basicQualifications: [
-        "High School Diploma, GED or equivalent certification",
-        "At least 3 years of experience working in cybersecurity or information technology",
-        "At least 1 year of experience providing guidance and oversight of Security concepts",
-      ],
-      preferredQualifications: [
-        "Bachelor’s Degree",
-        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
-        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
-        "Familiarity with Cloud patch management practices such as system rehydration and image management",
-        "Experience utilizing Agile methodologies",
-        "Experience with Software Security Architecture",
-        "Experience with Application Security",
-        "Experience with Threat Modeling",
-        "Experience with Penetration Testing and/or Vulnerability Management",
-        "Experience with integrating SaaS products into an Enterprise Environment",
-        "Experience with securing Container services",
-        "Financial services industry experience",
-        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
-        "Experience in Offensive and/or Defensive Security techniques",
-        "Experience in a regulated environment",
-      ],
-    },
-    location: "McLean, VA",
-  },
-  {
-    id: 4,
-    title: "Principal Associate, Information Security Office Consultant",
-    company: "Capital One",
-    description: {
-      basicQualifications: [
-        "High School Diploma, GED or equivalent certification",
-        "At least 3 years of experience working in cybersecurity or information technology",
-        "At least 1 year of experience providing guidance and oversight of Security concepts",
-      ],
-      preferredQualifications: [
-        "Bachelor’s Degree",
-        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
-        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
-        "Familiarity with Cloud patch management practices such as system rehydration and image management",
-        "Experience utilizing Agile methodologies",
-        "Experience with Software Security Architecture",
-        "Experience with Application Security",
-        "Experience with Threat Modeling",
-        "Experience with Penetration Testing and/or Vulnerability Management",
-        "Experience with integrating SaaS products into an Enterprise Environment",
-        "Experience with securing Container services",
-        "Financial services industry experience",
-        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
-        "Experience in Offensive and/or Defensive Security techniques",
-        "Experience in a regulated environment",
-      ],
-    },
-    location: "McLean, VA",
-  },
-  {
-    id: 5,
-    title: "Principal Associate, Information Security Office Consultant",
-    company: "Capital One",
-    description: {
-      basicQualifications: [
-        "High School Diploma, GED or equivalent certification",
-        "At least 3 years of experience working in cybersecurity or information technology",
-        "At least 1 year of experience providing guidance and oversight of Security concepts",
-      ],
-      preferredQualifications: [
-        "Bachelor’s Degree",
-        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
-        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
-        "Familiarity with Cloud patch management practices such as system rehydration and image management",
-        "Experience utilizing Agile methodologies",
-        "Experience with Software Security Architecture",
-        "Experience with Application Security",
-        "Experience with Threat Modeling",
-        "Experience with Penetration Testing and/or Vulnerability Management",
-        "Experience with integrating SaaS products into an Enterprise Environment",
-        "Experience with securing Container services",
-        "Financial services industry experience",
-        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
-        "Experience in Offensive and/or Defensive Security techniques",
-        "Experience in a regulated environment",
-      ],
-    },
-    location: "McLean, VA",
-  },
-  {
-    id: 6,
-    title: "Principal Associate, Information Security Office Consultant",
-    company: "Capital One",
-    description: {
-      basicQualifications: [
-        "High School Diploma, GED or equivalent certification",
-        "At least 3 years of experience working in cybersecurity or information technology",
-        "At least 1 year of experience providing guidance and oversight of Security concepts",
-      ],
-      preferredQualifications: [
-        "Bachelor’s Degree",
-        "3+ years of experience in securing a public cloud environment (e.g. AWS, GCP, Azure)",
-        "Experience building software utilizing public cloud (e.g. AWS, GCP, Azure)",
-        "Familiarity with Cloud patch management practices such as system rehydration and image management",
-        "Experience utilizing Agile methodologies",
-        "Experience with Software Security Architecture",
-        "Experience with Application Security",
-        "Experience with Threat Modeling",
-        "Experience with Penetration Testing and/or Vulnerability Management",
-        "Experience with integrating SaaS products into an Enterprise Environment",
-        "Experience with securing Container services",
-        "Financial services industry experience",
-        "Professional certifications such as AWS Certified Solutions Architect and Certified Information Systems Security Professional (CISSP)",
-        "Experience in Offensive and/or Defensive Security techniques",
-        "Experience in a regulated environment",
-      ],
-    },
-    location: "McLean, VA",
-  },
-  // Other job entries here...
-];
+const StyledApplyButton = styled(Button)(({ theme }) => ({
+  "--color": "#139F59",
+  fontFamily: "inherit",
+  paddingLeft: '7px',
+  paddingRight: '7px',
+  display: "inline-flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "auto",
+  maxHeight: "40px", 
+  lineHeight: "2.5em",
+  margin: "10px",
+  position: "absolute",
+  top: 15,
+  right: 15,
+  cursor: "pointer",
+  overflow: "hidden",
+  border: `2px solid var(--color)`,
+  transition: "color 0.5s, border-color 0.5s",
+  zIndex: 1,
+  fontSize: "17px",
+  borderRadius: "6px",
+  fontWeight: 500,
+  color: "var(--color)",
+  textTransform: 'none',
 
-// Render Bullet Points Function
-const renderBulletPoints = (items) => (
-  <List dense>
-    {items.map((item, index) => (
-      <ListItem key={index} disablePadding>
-        <ListItemText primary={`• ${item}`} />
-      </ListItem>
-    ))}
-  </List>
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    zIndex: -1,
+    backgroundColor: "var(--color)",
+    height: "150px",
+    width: "200px",
+    borderRadius: "50%",
+    top: "100%",
+    left: "100%",
+    transition: "all 0.7s",
+  },
+
+  "&:hover": {
+    color: "#fff !important",
+    borderColor: "#139F59 !important",
+
+    "&:before": {
+      top: "-30px",
+      left: "-30px",
+    },
+  },
+
+  "&:active": {
+    "&:before": {
+      backgroundColor: "#139F59",
+      transition: "background-color 0s",
+    },
+  },
+}));
+
+const jobData = JsonData.filter(
+  (job) =>
+    job.positionName &&
+    job.company &&
+    job.location &&
+    job.salary &&
+    job.url &&
+    job.description
 );
 
 const JobMatching = () => {
   const [activeFeature, setActiveFeature] = useState("Job Matching");
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const jobsPerPage = 3; // Number of jobs per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage =4;
+ 
   const logout = useLogoutFunction();
 
-  // Calculate the jobs to display based on current page
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [filterCriteria, setFilterCriteria] = useState({ minSalary:'', maxSalary:'', locationInput:'' });
+
+  const handleFilterClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleFilterClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSalaryInputChange = (event) => {
+    const { name, value } = event.target;
+    setFilterCriteria((prev) => ({ ...prev, [name]:value }));
+  };
+
+  const handleLocationInputChange = (event) => {
+    setFilterCriteria((prev) => ({ ...prev, locationInput:event.target.value }));
+  };
+
+  // Function to parse salary string
+  const parseSalary = (salaryString) => {
+    return parseInt(salaryString.replace(/[^0-9]/g, ''));
+  };
+
+  // Apply filters to job data
+  const filteredJobData = jobData.filter((job) => {
+    const jobSalary = parseSalary(job.salary);
+    const minSalaryValid = filterCriteria.minSalary === '' || jobSalary >= parseInt(filterCriteria.minSalary);
+    const maxSalaryValid = filterCriteria.maxSalary === '' || jobSalary <= parseInt(filterCriteria.maxSalary);
+    const locationValid = filterCriteria.locationInput === '' || job.location.toLowerCase().includes(filterCriteria.locationInput.toLowerCase());
+
+    return minSalaryValid && maxSalaryValid && locationValid;
+  });
+
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = jobData.slice(indexOfFirstJob, indexOfLastJob);
+  const currentJobs = filteredJobData.slice(indexOfFirstJob, indexOfLastJob);
 
-  // Handle page change
+  const cleanDescription = (description) => {
+    const sentences = description.split('. ');
+    const summary = sentences.slice(0,3).join('. ') + '...';
+    return summary;
+  };
+
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
@@ -247,7 +166,6 @@ const JobMatching = () => {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Box display="flex" height="100vh">
-        {/* Sidebar Component */}
         <Sidebar
           activeFeature={activeFeature}
           setActiveFeature={setActiveFeature}
@@ -255,77 +173,82 @@ const JobMatching = () => {
         />
 
         <Box flex={1} display="flex" flexDirection="column">
-          {/* Header Section */}
-          <Box bgcolor="background.paper" p={2}>
+          <Box bgcolor="background.paper" p={2} display="flex" alignItems="center">
             <Typography variant="h5">Job Matching</Typography>
+            <IconButton aria-label="filter" sx={{ marginLeft:"auto" }} onClick={handleFilterClick}>
+              <FilterListIcon fontSize="large" />
+            </IconButton>
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleFilterClose}>
+              <MenuItem>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <TextField
+                    label="Min Salary"
+                    variant="outlined"
+                    size="small"
+                    name="minSalary"
+                    value={filterCriteria.minSalary}
+                    onChange={handleSalaryInputChange}
+                    type="number"
+                    style={{ maxWidth:"100px", minWidth:"100px" }}
+                  />
+                  <Typography variant="h6">-</Typography>
+                  <TextField
+                    label="Max Salary"
+                    variant="outlined"
+                    size="small"
+                    name="maxSalary"
+                    value={filterCriteria.maxSalary}
+                    onChange={handleSalaryInputChange}
+                    type="number"
+                    style={{ maxWidth:"100px", minWidth:"100px" }}
+                  />
+                </Box>
+              </MenuItem>
+              <MenuItem>
+                <TextField
+                  label="Location"
+                  variant="outlined"
+                  size="small"
+                  value={filterCriteria.locationInput}
+                  onChange={handleLocationInputChange}
+                />
+              </MenuItem>
+            </Menu>
           </Box>
 
-          {/* Job Cards Section */}
           <Box flex={1} p={2} overflow="auto">
             <Stack spacing={2}>
               {currentJobs.map((job) => (
-                <Card
-                  key={job.id}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", flex: 1 }}
-                  >
+                <Card key={job.id} sx={{ position:"relative", display:"flex", alignItems:"center", elevation: 3 }}>
+                  <StyledApplyButton endIcon={<OpenInNewIcon />}>
+                    Apply
+                  </StyledApplyButton>
+                  <Box sx={{ display:"flex", flexDirection:"column", flex :1 }}>
                     <CardContent>
                       <Typography variant="h6" fontWeight="bold">
-                        {job.title}
+                        {job.positionName}
                       </Typography>
                       <Typography variant="subtitle1" color="text.secondary">
                         {job.company}
                       </Typography>
-
-                      {/* Basic Qualifications */}
-                      <Typography variant="subtitle2" sx={{ marginTop: 2 }}>
-                        Basic Qualifications:
+                      <Typography variant="caption" color="text.secondary" sx={{ marginRight :1 }}>
+                        Location:{job.location}
                       </Typography>
-                      {renderBulletPoints(job.description.basicQualifications)}
-
-                      {/* Preferred Qualifications */}
-                      <Typography variant="subtitle2" sx={{ marginTop: 2 }}>
-                        Preferred Qualifications:
+                      <Typography variant="caption" color="text.secondary">
+                        Salary:{job.salary}
                       </Typography>
-                      {renderBulletPoints(
-                        job.description.preferredQualifications
-                      )}
-
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        sx={{ marginTop: 2 }}
-                      >
-                        Location: {job.location}
+                      <Typography variant="body2">
+                        {cleanDescription(job.description)}
                       </Typography>
                     </CardContent>
-                  </Box>
-                  <Box pr={2}>
-                    <Button variant="outlined" color="white">
-                      Apply
-                    </Button>
                   </Box>
                 </Card>
               ))}
             </Stack>
           </Box>
 
-          {/* Pagination Section */}
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            p={2}
-            bgcolor="background.paper"
-          >
-            <Pagination
-              count={Math.ceil(jobData.length / jobsPerPage)}
-              page={currentPage}
-              onChange={handlePageChange}
-              color="primary"
-            />
+          <Box display="flex" justifyContent="center" alignItems="center" p={2} bgcolor="background.paper">
+            <Pagination count={Math.ceil(filteredJobData.length / jobsPerPage)} page={currentPage} onChange={handlePageChange} color="primary"/>
           </Box>
         </Box>
       </Box>
