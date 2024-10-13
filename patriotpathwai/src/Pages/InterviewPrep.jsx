@@ -22,6 +22,7 @@ const theme = createTheme({
     secondary: {
       main: "#8bc34a", // Secondary light green
     },
+    success: { main: "#046A38"},
     background: {
       default: "#1b1b1b", // Black background
       paper: "#2c2c2c", // Paper with light background
@@ -92,7 +93,7 @@ const InterviewPrep = () => {
           handleSignOut={handleSignOut}
         />
         <Box flex={1} display="flex" flexDirection="column">
-          <Box bgcolor="background.paper" p={2} boxShadow={1}>
+          <Box bgcolor="#212121" p={2} boxShadow={1}>
             <Typography variant="h5" color="text.primary">
               Interview Preparation
             </Typography>

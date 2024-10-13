@@ -30,6 +30,7 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: { main: "#90caf9" },
+    success: { main: "#046A38"},
     secondary: { main: "#f48fb1" },
     background: { default: "#303030", paper: "#424242" },
     text: { primary: "#ffffff", secondary: "#b0bec5" },
@@ -323,7 +324,7 @@ const JobMatching = () => {
 
         <Box flex={1} display="flex" flexDirection="column">
           <Box
-            bgcolor="background.paper"
+            bgcolor="#212121"
             p={2}
             display="flex"
             alignItems="center"
