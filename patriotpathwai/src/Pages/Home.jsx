@@ -43,7 +43,7 @@ function Home({ onSignup, onLogin }) {
       />
       <Features
         ref={featuresRef}
-        sx={{ scrollSnapAlign: 'start', height: '100vh' }}
+        sx={{ scrollSnapAlign: 'start', height: '100vh'}}
       />
       <AboutUs
         ref={aboutRef}
