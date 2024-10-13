@@ -3,6 +3,10 @@ import { Box, Container, Typography, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import PropTypes from "prop-types";
 
+const handleLogin = () => {
+  window.location.href = 'https://59746679014.propelauthtest.com/login';
+};
+
 // Styles
 const GradientBackground = styled(Box)({
   background: "linear-gradient(to bottom, #1a3a2a, #0a0a0a)",
@@ -239,7 +243,7 @@ const Main = ({ scrollToSection, featureRef, mainRef }) => {
           control of their own careers. Simple. Intuitive. Effective.
         </Subtitle>
         <Box>
-          <GetStartedButton>Get Started</GetStartedButton>
+          <GetStartedButton onClick={handleLogin}>Get Started</GetStartedButton>
           <LearnMoreButton onClick={() => scrollToSection(featureRef)}>
             Learn More
           </LearnMoreButton>
