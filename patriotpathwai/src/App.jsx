@@ -65,6 +65,7 @@ function AppRoutes() {
         <Route path="/SignUp/Questionnaire" element={<Questionnaire />} />
         <Route path="/uploadresume" element={<UploadResume />} />
         <Route path="/job-matching" element={<JobMatching />} />
+        <Route path="/resume-review" element={<ResumeReview />} />
       </Routes>
     </BrowserRouter>
   );
