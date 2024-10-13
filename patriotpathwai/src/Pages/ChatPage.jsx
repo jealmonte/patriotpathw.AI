@@ -297,6 +297,18 @@ function ChatPage() {
                       title: "Career Path Planning",
                       text: "Plan your road map to career success",
                     },
+                    {
+                      title: "Career Transition",
+                      text: "Rethinking your goals",
+                    },
+                    {
+                      title: "Continuing Education",
+                      text: "Pros and cons of higher Education",
+                    },
+                    {
+                      title: "Networking Questions",
+                      text: "What to ask to build connnections",
+                    },
                   ].map((item, index) => (
                     <Button
                       key={index} // Assign key here to the Button element
