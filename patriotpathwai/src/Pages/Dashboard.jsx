@@ -236,8 +236,8 @@ const Dashboard = () => {
                     height="250px"
                   >
                     <Typography variant="h6">
-                      Empower Your Career with AI: Upload, Analyze, and Elevate
-                      Your Resume Instantly!
+                      Upload your resume and use our AI analysis to elevate
+                      your game. Get your resume past ATS and land an interview!
                     </Typography>
                     <IconButton
                       component="span"
