@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Plus } from "lucide-react";
 import BackgroundAnimation from "../Components/BackgroundAnimation";
 import { SalaryProvider, useSalary } from "../Components/SalaryContext";
+import zIndex from "@mui/material/styles/zIndex";
+import styled from "styled-components";
 
 const darkTheme = createTheme({
   palette: {
@@ -83,6 +85,69 @@ const darkTheme = createTheme({
   },
 });
 
+const StyledApplyButton = styled(Button)(({ theme }) => ({
+  "--color": "#139F59",
+  fontFamily: "Inter",
+  paddingLeft: '7px',
+  paddingRight: '7px',
+  display: "inline-flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "auto",
+  maxHeight: "40px", 
+  lineHeight: "2.5em",
+  margin: "10px",
+  position: "absolute",
+  cursor: "pointer",
+  overflow: "hidden",
+  border: `2px solid var(--color)`,
+  transition: "color 0.5s, border-color 0.5s, background-color 0.5s", 
+  zIndex: 1,
+  fontSize: "17px",
+  borderRadius: "6px",
+  fontWeight: 500,
+  color: "var(--color)",
+  textTransform: 'none',
+  
+  backgroundColor: "transparent !important",
+
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    zIndex: -1,
+    backgroundColor: "var(--color)",
+    height: "150px",
+    width: "200px",
+    borderRadius: "50%",
+    top: "100%",
+    left: "100%",
+    transition: "all 0.7s",
+  },
+
+  "&:hover": {
+    color: "#fff !important",
+    borderColor: "#139F59 !important",
+
+    "&:before": {
+      top: "-30px",
+      left: "-30px",
+    },
+    
+    // Ensure hover effect includes background change
+    backgroundColor: "#139F59 !important", 
+  },
+
+  "&:active": {
+    "&:before": {
+      backgroundColor: "#139F59",
+      transition: "background-color 0s",
+    },
+    
+    // Maintain active state styling
+    backgroundColor: "#139F59", 
+  },
+
+}));
 const neonGlow = {
   boxShadow: "0 4px 30px rgba(33, 235, 134, 0.6)", // Neon green glow
 };
@@ -130,12 +195,28 @@ const Dashboard = () => {
                   "&:hover": neonGlow,
                   transition: "0.3s ease-in-out",
                 }}
-                onClick={() => handleNavigation("/job-matching")}
               >
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    Job Listings
-                  </Typography>
+                  <Box
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center", 
+                      justifyContent: "space-between", 
+                      height: "100%",
+                    }}
+                  >
+                    <Typography variant="h6" gutterBottom>
+                      Job Listings
+                    </Typography>
+                    <StyledApplyButton
+                      style={{ zIndex: 4 }}
+                      color="#fff !important"
+                      onClick={()=>navigate('/job-matching')}
+                    >
+                      View More
+                    </StyledApplyButton>
+                  </Box>
                   <Divider sx={{ my: 2 }} />
 
                   {/* Software Engineer Button */}
@@ -150,13 +231,14 @@ const Dashboard = () => {
                         backgroundColor: "#333333",
                       },
                     }}
+                    onClick={() => {window.open("https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=c3ad204106562ea0&advn=9091402361108976", "_blank")}}
                   >
                     <Box textAlign="left">
                       <Typography variant="subtitle1" fontWeight="bold">
-                        Software Engineer
+                        Process Engineering Internship
                       </Typography>
-                      <Typography>TechCorp - Remote</Typography>
-                      <Typography>$100,000 - $150,000</Typography>
+                      <Typography>TTM Technologies - Remote</Typography>
+                      <Typography>$30/hr</Typography>
                     </Box>
                   </Button>
 
@@ -174,13 +256,14 @@ const Dashboard = () => {
                         backgroundColor: "#333333",
                       },
                     }}
+                    onClick={() => {window.open("https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=40810cfc9f61645c&advn=9943506443046871", "_blank")}}
                   >
                     <Box textAlign="left">
                       <Typography variant="subtitle1" fontWeight="bold">
-                        Data Analyst
+                        Summer Associate Internship
                       </Typography>
-                      <Typography>DataCo - New York, NY</Typography>
-                      <Typography>$80,000 - $120,000</Typography>
+                      <Typography>Navy Federal Credit Union - Vienna, VA</Typography>
+                      <Typography>$26 - $46/hr</Typography>
                     </Box>
                   </Button>
 
@@ -198,13 +281,14 @@ const Dashboard = () => {
                         backgroundColor: "#333333",
                       },
                     }}
+                    onClick={() => {window.open("https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=b36a9d2ef5387c0b", "_blank")}}
                   >
                     <Box textAlign="left">
                       <Typography variant="subtitle1" fontWeight="bold">
-                        UX Designer
+                        Full Stack Software Engineer Intern
                       </Typography>
-                      <Typography>DesignHub - San Francisco, CA</Typography>
-                      <Typography>$90,000 - $130,000</Typography>
+                      <Typography>Autodesk - San Francisco, CA</Typography>
+                      <Typography>$47,840 - $162,240</Typography>
                     </Box>
                   </Button>
                 </CardContent>
@@ -339,7 +423,7 @@ const Dashboard = () => {
                   },
                   transition: "0.3s ease-in-out",
                   zIndex: 1, // Higher z-index
-                  position: 'relative', // Set position to relative
+                  position: "relative", // Set position to relative
                 }}
                 onClick={() => handleNavigation("/offer-negotiation")}
               >
@@ -360,13 +444,12 @@ const Dashboard = () => {
                       AI-powered salary insights
                     </Typography>
                     <Typography variant="h1" fontWeight="bold" mt={2}>
-                      ${salary !== null ? salary : 'Loading...'}
+                      ${salary !== null ? salary : "Loading..."}
                     </Typography>
                   </Box>
                 </CardContent>
               </Card>
             </Grid>
-
 
             {/* Career Coach Card */}
             <Grid item xs={12}>
