@@ -1,86 +1,83 @@
-import React, { useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { Box, Typography, IconButton, CircularProgress } from '@mui/material';
-import Sidebar from '../Components/Sidebar'; // Importing Sidebar component
-import { Plus } from 'lucide-react';
-import { useLogoutFunction } from '@propelauth/react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { Box, Typography, IconButton, CircularProgress } from "@mui/material";
+import Sidebar from "../Components/Sidebar"; // Importing Sidebar component
+import { Plus } from "lucide-react";
+import { useLogoutFunction } from "@propelauth/react";
+import { useNavigate } from "react-router-dom";
+import BackgroundAnimation from "../Components/BackgroundAnimation";
 
 const darkTheme = createTheme({
   typography: {
     body1: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
+      fontFamily: "Inter", // Replace with your desired font
     },
     body2: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
+      fontFamily: "Inter", // Replace with your desired font
     },
     caption: {
-      fontFamily: 
-      'Inter',
+      fontFamily: "Inter",
     },
     h1: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
+      fontFamily: "Inter", // Replace with your desired font
     },
     h2: {
-      fontFamily: 
-      'Inter', // Replace with your desired font
+      fontFamily: "Inter", // Replace with your desired font
     },
-    h3: {fontFamily: 
-      'Inter', // Replace with your desired font
+    h3: {
+      fontFamily: "Inter", // Replace with your desired font
     },
-    h4: {fontFamily: 
-      'Inter', // Replace with your desired font
+    h4: {
+      fontFamily: "Inter", // Replace with your desired font
     },
-    h5: {fontFamily: 
-      'Inter', // Replace with your desired font
+    h5: {
+      fontFamily: "Inter", // Replace with your desired font
     },
-    h6: {fontFamily: 
-      'Inter', // Replace with your desired font
+    h6: {
+      fontFamily: "Inter", // Replace with your desired font
     },
     inherit: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     overline: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     subtitle1: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     subtitle2: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
     string: {
-      fontFamily: 'Inter',
+      fontFamily: "Inter",
     },
   },
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#90caf9',
+      main: "#90caf9",
     },
     secondary: {
-      main: '#f48fb1',
+      main: "#f48fb1",
     },
     success: {
-      main: '#046A38',
+      main: "#046A38",
     },
     background: {
-      default: '#303030',
-      paper: '#424242',
+      default: "#303030",
+      paper: "#424242",
     },
     text: {
-      primary: '#ffffff',
-      secondary: '#b0bec5',
+      primary: "#ffffff",
+      secondary: "#b0bec5",
     },
   },
 });
 
+
 function UploadResume() {
-  const [activeFeature, setActiveFeature] = useState('Resume Review');
+  const [activeFeature, setActiveFeature] = useState("Resume Review");
   const logout = useLogoutFunction();
   const navigate = useNavigate();
   const [isUploading, setIsUploading] = useState(false);
@@ -94,37 +91,41 @@ function UploadResume() {
     if (file) {
       setIsUploading(true);
       const formData = new FormData();
-      formData.append('resume', file);
-  
+      formData.append("resume", file);
+
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/upload-resume/', {
-          method: 'POST',
-          body: formData,
-        });
-  
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/upload-resume/",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('Error uploading resume:', response.status, errorText);
+          console.error("Error uploading resume:", response.status, errorText);
           return;
         }
-  
+
         const data = await response.json();
-        console.log('Uploaded and parsed data:', data); // Log the response data
+        console.log("Uploaded and parsed data:", data); // Log the response data
 
         // Navigate to ResumeReview with the latest ID
-        navigate('/resume-review', { state: { latestId: data.resume_data.id } });
-
+        navigate("/resume-review", {
+          state: { latestId: data.resume_data.id },
+        });
       } catch (error) {
-        console.error('Error uploading resume:', error);
+        console.error("Error uploading resume:", error);
       } finally {
         setIsUploading(false);
       }
     }
   };
-  
 
   return (
     <ThemeProvider theme={darkTheme}>
+      <BackgroundAnimation />
       <CssBaseline />
       <Box display="flex" height="100vh">
         <Sidebar
