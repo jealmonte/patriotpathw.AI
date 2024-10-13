@@ -29,7 +29,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
       display="flex" 
       flexDirection="column"
     >
-      <Typography variant="h5" letterSpacing={4} gutterBottom onClick={() => handleFeatureClick(features[0])}>
+      <Typography variant="h5" gutterBottom onClick={() => handleFeatureClick(features[0])}>
         PatriotPath
       </Typography>
       <List>
@@ -59,7 +59,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
             <ListItemText 
               primary={feature.name} 
               primaryTypographyProps={{ noWrap: true, color: 'white' }}
-              sx={{ marginLeft: '-8px' }}
+              sx={{ marginLeft: '-8px', fontFamily: "Inter"}}
             />
           </ListItem>
         ))}
@@ -68,7 +68,7 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
         startIcon={<LogOut />}
         variant="contained"
         color="success"
-        style={{ marginTop: "auto" }}
+        style={{ marginTop: "auto", fontFamily: "Inter"}}
         onClick={handleSignOut}
       >
         Sign Out
