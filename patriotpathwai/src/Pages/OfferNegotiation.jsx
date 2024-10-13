@@ -28,7 +28,7 @@ import Sidebar from '../Components/Sidebar';
 import axios from 'axios';
 import { useLogoutFunction } from '@propelauth/react';
 
-const darkTheme = createTheme({
+const theme = createTheme({
   typography: {
     body1: {
       fontFamily: 
