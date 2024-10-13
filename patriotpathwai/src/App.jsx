@@ -15,6 +15,7 @@ import OfferNegotiation from "./Pages/OfferNegotiation.jsx";
 import ResumeReview from "./Pages/ResumeReview.jsx";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import InterviewPrep from "./Pages/InterviewPrep.jsx";
+import Dashboard from "./Pages/Dashboard";
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function AppRoutes() {
         <Route path="/interview-prep" element={<InterviewPrep />} />
         <Route path="/resume-review" element={<ResumeReview />} />
         <Route path="/offer-negotiation" element={<OfferNegotiation />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
