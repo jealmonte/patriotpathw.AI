@@ -19,8 +19,7 @@ import React, { forwardRef } from "react";
 
 // Styled components
 const Section = styled(Box)({
-  minHeight: "80vh",
-  padding: "100px 50px",
+  minHeight: "100vh",
   background:
     "linear-gradient(to bottom, #0a0a0a 0%, #2a2a2a 50%, #444444 100%)",
   position: "relative",
@@ -34,10 +33,8 @@ const Section = styled(Box)({
 
 const FeatureBox = styled(motion.div)({
   background: "rgba(255, 255, 255, 0.1)",
-  padding: "50px",
+  padding: "10px", // Reduced padding
   borderRadius: "8px",
-  margin: "20px 0",
-  minHeight: "250px",
   zIndex: 1,
   display: "flex",
   flexDirection: "column",
@@ -77,7 +74,6 @@ const Features = forwardRef((props, ref) => {
           style={{
             color: "#FFCC33",
             fontWeight: "bold",
-            marginBottom: "50px",
             fontSize: "4rem",
           }}
         >
@@ -86,10 +82,10 @@ const Features = forwardRef((props, ref) => {
 
         <Grid
           container
-          spacing={4}
+          spacing={2}
           justifyContent="center"
           alignItems="stretch" // Ensure all children stretch equally
-          style={{ zIndex: 1 }}
+          style={{ zIndex: 1, padding: '10px 100px' }} // Added horizontal padding
           ref={containerRef}
           component={motion.div}
           variants={containerVariants}

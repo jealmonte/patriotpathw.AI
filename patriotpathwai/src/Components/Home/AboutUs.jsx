@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 // Styled components
 const Section = styled(Box)({
-  minHeight: "80vh",
+  minHeight: "70vh",
   padding: "100px 50px",
   background: "linear-gradient(to bottom, #444444, #0a0a0a)", // Darker gradient
   position: "relative",
@@ -40,7 +40,7 @@ const AboutUs = forwardRef(({ scrollToSection, contactRef, ...props }, ref) => {
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.8, delayChildren: 0.3, staggerChildren: 0.2 }}
         variants={fadeIn}
-        style={{ zIndex: 1 }}
+        style={{ zIndex: 1,  }}
       >
         <Grid item xs={12} md={6}>
           <Typography
