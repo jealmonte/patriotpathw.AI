@@ -11,6 +11,8 @@ import ChatPage from "./Pages/ChatPage";
 import UploadResume from "./Pages/UploadResume";
 import Questionnaire from "./Components/Questionaire.jsx";
 import JobMatching from "./Pages/JobMatching";
+import OfferNegotiation from "./Pages/OfferNegotiation.jsx";
+import ResumeReview from "./Pages/ResumeReview.jsx";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import InterviewPrep from "./Pages/InterviewPrep.jsx";
 
@@ -67,6 +69,8 @@ function AppRoutes() {
         <Route path="/uploadresume" element={<UploadResume />} />
         <Route path="/job-matching" element={<JobMatching />} />
         <Route path="/interview-prep" element={<InterviewPrep />} />
+        <Route path="/resume-review" element={<ResumeReview />} />
+        <Route path="/offer-negotiation" element={<OfferNegotiation />} />
       </Routes>
     </BrowserRouter>
   );

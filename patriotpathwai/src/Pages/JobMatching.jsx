@@ -400,7 +400,7 @@ const JobMatching = () => {
                         <StyledTypography
                           variant="h6"
                           fontWeight="bold"
-                          color="#FFCC33 !important"
+                          color="#a6e890 !important"
                         >
                           {job.positionName}
                         </StyledTypography>
