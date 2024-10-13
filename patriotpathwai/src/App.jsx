@@ -16,15 +16,18 @@ import ResumeReview from "./Pages/ResumeReview.jsx";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import InterviewPrep from "./Pages/InterviewPrep.jsx";
 import Dashboard from "./Pages/Dashboard";
+import { SalaryProvider } from "./Components/SalaryContext.jsx";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <SalaryProvider>
       <Box width="100vw" height="100vh" overflow="auto">
         <AuthProvider authUrl="https://59746679014.propelauthtest.com">
           <AppRoutes />
         </AuthProvider>
       </Box>
+      </SalaryProvider>
     </ThemeProvider>
   );
 }

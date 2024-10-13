@@ -19,6 +19,7 @@ import { useLogoutFunction } from "@propelauth/react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Plus } from "lucide-react";
 import BackgroundAnimation from "../Components/BackgroundAnimation";
+import { SalaryProvider, useSalary } from "../Components/SalaryContext";
 
 const darkTheme = createTheme({
   palette: {
@@ -87,6 +88,7 @@ const neonGlow = {
 };
 
 const Dashboard = () => {
+  const { salary } = useSalary();
   const [activeFeature, setActiveFeature] = useState("Resume Review");
   const logout = useLogoutFunction();
 
@@ -322,6 +324,7 @@ const Dashboard = () => {
             </Grid>
 
             {/* Salary Analysis Card */}
+            {/* Salary Analysis Card */}
             <Grid item xs={12} md={6}>
               <Card
                 sx={{
@@ -331,9 +334,12 @@ const Dashboard = () => {
                   color: "#fff",
                   "&:hover": {
                     boxShadow: "0px 8px 30px #21eb86",
-                    transform: "scale(1.05)",
+                    transform: "scale(1.05)", // Enlarge on hover
+                    transition: "transform 0.3s ease-in-out", // Smooth transition
                   },
                   transition: "0.3s ease-in-out",
+                  zIndex: 1, // Higher z-index
+                  position: 'relative', // Set position to relative
                 }}
                 onClick={() => handleNavigation("/offer-negotiation")}
               >
@@ -353,13 +359,14 @@ const Dashboard = () => {
                     <Typography variant="h4">
                       AI-powered salary insights
                     </Typography>
-                    <Typography variant="h1" mt={2}>
-                      $75,000
+                    <Typography variant="h1" fontWeight="bold" mt={2}>
+                      ${salary !== null ? salary : 'Loading...'}
                     </Typography>
                   </Box>
                 </CardContent>
               </Card>
             </Grid>
+
 
             {/* Career Coach Card */}
             <Grid item xs={12}>
