@@ -233,7 +233,7 @@ const Main = ({ scrollToSection, featureRef, mainRef }) => {
       <GridOverlay />
       <AnimatedDots ref={canvasRef} />
       <ContentContainer>
-        <Typography>
+        <Typography variant="h7">
           Unleash the power of career planning with
         </Typography>
         <Title variant="h1">PatriotPath</Title>

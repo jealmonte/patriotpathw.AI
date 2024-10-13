@@ -3,6 +3,7 @@ import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Typography } f
 import { MessageCircle, BriefcaseIcon, UserCheck, FileText, DollarSign, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import PPLogo from '../../Images/PP-Logo.png'; // Import your logo
 
 const features = [
   { name: 'Dashboard', icon: DashboardIcon, path: '/dashboard' },
@@ -23,15 +24,18 @@ const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
 
   return (
     <Box 
-      sx={{ width: 240 }} // Move width to sx prop
+      sx={{ width: 240 }} 
       bgcolor="rgba(0, 0, 0, 0.3)" 
       p={2} 
       display="flex" 
       flexDirection="column"
     >
-      <Typography variant="h5" gutterBottom onClick={() => handleFeatureClick(features[0])}>
-        PatriotPath
-      </Typography>
+      <img 
+        src={PPLogo} 
+        alt="PatriotPath Logo" 
+        style={{ cursor: 'pointer', marginBottom: '16px' }} 
+        onClick={() => handleFeatureClick(features[0])}
+      />
       <List>
         {features.map((feature) => (
           <ListItem
