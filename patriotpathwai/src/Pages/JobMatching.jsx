@@ -426,7 +426,7 @@ const JobMatching = () => {
             alignItems="center"
             style={{ maxHeight: "64px" }}
           >
-            <Typography variant="h5">Job Matching</Typography>
+            <Typography variant="h5" color="#ffee8c" >Job Matching</Typography>
             <IconButton
               aria-label="filter"
               sx={{ marginLeft: "auto" }}

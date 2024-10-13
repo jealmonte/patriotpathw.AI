@@ -136,7 +136,7 @@ function ResumeReview() {
         <Box flex={1} display="flex" flexDirection="column">
           <AppBar position="static" sx={{ background: '#222322', boxShadow: 'none' }}>
             <Toolbar>
-              <Typography variant="h5" sx={{ flexGrow: 1 }}>
+              <Typography variant="h5" color="#ffee8c" sx={{ flexGrow: 1 }}>
                 Resume Review
               </Typography>
             </Toolbar>
