@@ -33,8 +33,6 @@ const theme = createTheme({
     body1: {
       fontFamily: 
       'Inter', // Replace with your desired font
-      fontWeight: 500,
-      fontSize: '0.98em'
     },
     body2: {
       fontFamily: 
@@ -60,9 +58,6 @@ const theme = createTheme({
     },
     h5: {fontFamily: 
       'Inter', // Replace with your desired font
-      fontSize: '1.5rem',
-      fontWeight: 600,
-      letterSpacing: -1,
     },
     h6: {fontFamily: 
       'Inter', // Replace with your desired font
@@ -84,6 +79,9 @@ const theme = createTheme({
     },
   },
   palette: {
+    success: {
+      main: "#046A38",
+    },
     mode: 'dark',
     primary: {
       main: '#22c55e',
@@ -98,20 +96,6 @@ const theme = createTheme({
     text: {
       primary: '#f4f4f5',
       secondary: '#CFFAFE',
-    },
-  },
-  typography: {
-    fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif',
-    h5: {
-      fontFamily: 'Inter',
-      fontSize: '1.5rem',
-      fontWeight: 600,
-      letterSpacing: -1,
-    },
-    body1: {
-      fontFamily: 'Inter',
-      fontWeight: 500,
-      fontSize: '0.98em'
     },
   },
 });
