@@ -81,7 +81,7 @@ const darkTheme = createTheme({
     primary: { main: "#90caf9" },
     success: { main: "#046A38"},
     secondary: { main: "#f48fb1" },
-    background: { default: "#303030", paper: "#424242" },
+    background: { default: "#303030", paper: "#1b1b1b" },
     text: { primary: "#ffffff", secondary: "#b0bec5" },
   },
 });

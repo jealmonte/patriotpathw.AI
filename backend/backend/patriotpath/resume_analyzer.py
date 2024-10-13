@@ -6,7 +6,7 @@ import os
 
 load_dotenv()
 
-openai.api_key = os.getenv("AZURE_OPENAI_API_KEY")  # Use environment variable
+openai.api_key = os.getenv("VITE_LAW_PER_API_KEY")
 openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT")  # Use environment variable
 openai.api_type = 'azure'
 openai.api_version = '2024-04-09'
