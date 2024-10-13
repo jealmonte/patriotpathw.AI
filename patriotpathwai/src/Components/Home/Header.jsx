@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { styled } from "@mui/system";
+import { createTheme, styled } from "@mui/system";
 import PropTypes from "prop-types"; // for prop validation
 
 const StyledAppBar = styled(AppBar)({

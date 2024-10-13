@@ -73,7 +73,7 @@ const AnimatedDots = styled("canvas")({
 
 const GetStartedButton = styled(Button)(() => ({
   "--color": "#139F59",
-  fontFamily: "inherit",
+  fontFamily: "Inter",
   display: "inline-flex",
   justifyContent: "center",
   alignItems: "center",
@@ -125,7 +125,7 @@ const GetStartedButton = styled(Button)(() => ({
 
 const LearnMoreButton = styled(Button)(() => ({
   "--color": "#FFCC33",
-  fontFamily: "inherit",
+  fontFamily: "Inter",
   display: "inline-flex",
   justifyContent: "center",
   alignItems: "center",
@@ -229,7 +229,7 @@ const Main = ({ scrollToSection, featureRef, mainRef }) => {
       <GridOverlay />
       <AnimatedDots ref={canvasRef} />
       <ContentContainer>
-        <Typography variant="h3">
+        <Typography>
           Unleash the power of career planning with
         </Typography>
         <Title variant="h1">PatriotPath</Title>
