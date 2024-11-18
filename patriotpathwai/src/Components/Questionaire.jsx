@@ -370,7 +370,89 @@ const theme = createTheme({
       },
       {
         title:
+          "What is your desired location?",
+        component: (
+          <>
+            <TextField
+              value={yearsOfExperienceInput}
+              onChange={(e) => setYearsOfExperienceInput(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addyearsExperience();
+                }
+              }}
+              fullWidth
+              placeholder="Enter your desired location"
+            />
+            <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: "wrap" }}>
+              {yearsOfExperience && (
+                <Chip
+                  label={yearsOfExperience}
+                  onDelete={removeyearsExperience}
+                />
+              )}
+            </Stack>
+          </>
+        ),
+      },
+      {
+        title:
+          "What is your willingness to travel? (in miles)",
+        component: (
+            <>
+            <Box style={{paddingTop: "25px", paddingLeft: "10px", paddingRight: "10px"}}>
+            <Slider
+              aria-labelledby="math-comfort-slider"
+              valueLabelDisplay="auto"
+              step={25}
+              marks
+              min={0}
+              max={250}
+            />
+            </Box>
+          </>
+        ),
+      },
+      {
+        title:
           "How comfortable are you with complex mathematical and statistical concepts?",
+        component: (
+            <>
+            <Box style={{paddingTop: "25px", paddingLeft: "10px", paddingRight: "10px"}}>
+            <Slider
+              aria-labelledby="math-comfort-slider"
+              valueLabelDisplay="auto"
+              step={1}
+              marks
+              min={1}
+              max={5}
+            />
+            </Box>
+          </>
+        ),
+      },
+      {
+        title:
+          "How much do you value creativity in your work?",
+        component: (
+            <>
+            <Box style={{paddingTop: "25px", paddingLeft: "10px", paddingRight: "10px"}}>
+            <Slider
+              aria-labelledby="math-comfort-slider"
+              valueLabelDisplay="auto"
+              step={1}
+              marks
+              min={1}
+              max={5}
+            />
+            </Box>
+          </>
+        ),
+      },
+      {
+        title:
+          "How important is it for you to work in a field with clear, established guidelines and protocols?",
         component: (
             <>
             <Box style={{paddingTop: "25px", paddingLeft: "10px", paddingRight: "10px"}}>
@@ -407,6 +489,42 @@ const theme = createTheme({
       {
         title:
           "How comfortable are you with public speaking and presenting information to groups?",
+        component: (
+            <>
+            <Box style={{paddingTop: "25px", paddingLeft: "10px", paddingRight: "10px"}}>
+            <Slider
+              aria-labelledby="math-comfort-slider"
+              valueLabelDisplay="auto"
+              step={1}
+              marks
+              min={1}
+              max={5}
+            />
+            </Box>
+          </>
+        ),
+      },
+      {
+        title:
+          "How much do you value working in technology?",
+        component: (
+            <>
+            <Box style={{paddingTop: "25px", paddingLeft: "10px", paddingRight: "10px"}}>
+            <Slider
+              aria-labelledby="math-comfort-slider"
+              valueLabelDisplay="auto"
+              step={1}
+              marks
+              min={1}
+              max={5}
+            />
+            </Box>
+          </>
+        ),
+      },
+      {
+        title:
+          "How much do you value being about to work in a team enviroment?",
         component: (
             <>
             <Box style={{paddingTop: "25px", paddingLeft: "10px", paddingRight: "10px"}}>
