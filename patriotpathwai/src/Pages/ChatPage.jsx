@@ -171,7 +171,7 @@ function ChatPage() {
             { role: "system", content: systemContent },
             { role: "user", content: userInput },
           ],
-          max_tokens: 500,
+          max_tokens: 70,
           temperature: 0.7,
           top_p: 0.9,
           return_citations: true,
@@ -204,7 +204,7 @@ function ChatPage() {
     }
   };
 
-  const handleSendMessage = async (message = "") => {
+  const handleSendMessage = async (message) => {
     if (message.trim()) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -344,7 +344,7 @@ function ChatPage() {
                           outline: "none", // Disable focus outline when the button is focused
                         },
                       }}
-                      onClick={() => handleSendMessage(userInput)}
+                      onClick={() => handleSendMessage(item.message)}
                     >
                       <Typography variant="subtitle1" color="#ffee8c">
                         {item.title}
@@ -411,7 +411,7 @@ function ChatPage() {
                     onKeyPress={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
-                        handleSendMessage(userInput);
+                        handleSendMessage();
                       }
                     }}
                   />
