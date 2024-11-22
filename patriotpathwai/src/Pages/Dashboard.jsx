@@ -220,26 +220,31 @@ const Dashboard = () => {
                 }}
               >
                 <CardContent>
-                  <Box
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      height: "100%",
-                    }}
+                <Box style={{ 
+                  display: "flex", 
+                  flexDirection: "row", 
+                  alignItems: "center", 
+                  justifyContent: "space-between",
+                  height: "100%",
+                  width: "100%", // Add this
+                  position: "relative" // Add this
+                }} >
+                  <Typography variant="h6" color="#ffee8c" gutterBottom>
+                    Job Listings
+                  </Typography>
+                  <StyledApplyButton 
+                    style={{ 
+                      position: "absolute", // Change to absolute
+                      right: 0, // Add this
+                      top: 0, // Add this
+                      zIndex: 4 
+                    }} 
+                    color="#fff !important" 
+                    onClick={() => navigate("/job-matching")}
                   >
-                    <Typography variant="h6" color="#ffee8c" gutterBottom>
-                      Job Listings
-                    </Typography>
-                    <StyledApplyButton
-                      style={{ zIndex: 4 }}
-                      color="#fff !important"
-                      onClick={() => navigate("/job-matching")}
-                    >
-                      View More
-                    </StyledApplyButton>
-                  </Box>
+                    View More
+                  </StyledApplyButton>
+                </Box>
                   <Divider sx={{ my: 2 }} />
 
                   {/* Software Engineer Button */}
