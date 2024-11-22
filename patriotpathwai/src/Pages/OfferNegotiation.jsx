@@ -121,20 +121,6 @@ function OfferNegotiation() {
     sessionStorage.removeItem('userSalary');
   };
 
-  const generateRandomSalary = () => {
-    const min = 72000;
-    const max = 86000;
-    const randomSalary = Math.floor(Math.random() * (max - min + 1) + min);
-    return Math.floor(randomSalary / 100) * 100;
-  };
-
-  useEffect(() => {
-    if (salary === null) {
-      const newSalary = generateRandomSalary();
-      setSalary(newSalary);
-      sessionStorage.setItem('userSalary', newSalary);
-    }
-  }, [salary, setSalary]);
 
   const fetchAIResponse = async (userInput) => {
     const apiKey = import.meta.env.VITE_LAW_PER_API_KEY;

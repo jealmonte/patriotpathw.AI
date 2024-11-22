@@ -17,6 +17,7 @@ import { TypeAnimation } from "react-type-animation";
 import BackgroundAnimation from "../Components/BackgroundAnimation";
 import { styled } from "@mui/system";
 
+
 const darkTheme = createTheme({
   typography: {
     body1: {

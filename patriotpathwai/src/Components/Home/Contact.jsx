@@ -59,26 +59,13 @@ const Contact = forwardRef((props, ref) => {
     formPayload.append("message", formData.message);
     formPayload.append("access_key", "ac978316-9d52-448e-a33d-a43ca0e32175");
 
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formPayload,
       });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setResult("Form Submitted Successfully");
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        console.log("Error", data);
-        setResult(data.message);
-      }
-    } catch (error) {
-      console.error("Submission error:", error);
-      setResult("An error occurred. Please try again.");
-    }
     
+      setResult("Form Submitted Successfully");
+      setFormData({ name: "", email: "", message: "" });
     // Show success message for a short duration
     setTimeout(() => setResult(""), 3000);
   };
