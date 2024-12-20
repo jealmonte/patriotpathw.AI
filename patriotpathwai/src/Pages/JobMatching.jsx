@@ -21,6 +21,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  CircularProgress
 } from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -259,10 +260,63 @@ const jobData = JsonData.filter(
 );
 
 const JobMatching = () => {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedCareer, setSelectedCareer] = useState('');
   const [activeFeature, setActiveFeature] = useState("Job Matching");
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 3;
- 
+  const jobsPerPage = 4;
+  
+  useEffect(() => {
+    // Get career from localStorage or context
+    const career = localStorage.getItem('selectedCareer') || 'Software Engineer'; // default value
+    const location = localStorage.getItem('userLocation') || 'United States';
+    setSelectedCareer(career);
+}, []);
+
+useEffect(() => {
+  const fetchJobs = async () => {
+      try {
+          setLoading(true);
+          const storedCareer = localStorage.getItem('selectedCareer');
+          const storedLocation = localStorage.getItem('userLocation');
+          
+          if (!storedCareer || !storedLocation) {
+              setError('Missing career or location information');
+              setLoading(false);
+              return;
+          }
+
+          const response = await fetch(
+              `http://127.0.0.1:8000/api/api/scrape-jobs/?job_title=${encodeURIComponent(storedCareer)}&location=${encodeURIComponent(storedLocation)}&force_new=true`
+          );
+          
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (data.status === 'success') {
+              setJobs(data.jobs);
+              setError(null);
+          } else {
+              setError(data.message || 'Failed to fetch jobs');
+          }
+      } catch (err) {
+          console.error('Fetch error:', err);
+          setError('Error connecting to server');
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  fetchJobs();
+}, []);
+
+
+
+
   const logout = useLogoutFunction();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -276,19 +330,25 @@ const JobMatching = () => {
     setAnchorEl(null);
   };
 
-  const generateSuitabilityScores = (jobs) => {
-    let scores = [];
-    let currentScore = 96; 
-  
-    for (let i = 0; i < jobs.length; i++) {
-      scores.push(currentScore);
-      const decrement = Math.random() * 10;
-      currentScore -= decrement;
-      if (currentScore < 25) currentScore = 25;
-    }
-  
-    return scores;
-  };
+  const generateSuitabilityScores = (jobList) => {
+    const maxScore = 97;
+    const minScore = 50;
+    const totalJobs = jobList.length;
+    
+    if (totalJobs === 0) return [];
+    
+    // Calculate the decrement step to ensure even distribution
+    const step = (maxScore - minScore) / (totalJobs - 1 || 1);
+    
+    // Generate scores with small random variations
+    return jobList.map((_, index) => {
+        const baseScore = maxScore - (step * index);
+        // Add small random variation (±2%)
+        const variation = (Math.random() * 4) - 2;
+        const finalScore = Math.min(Math.max(baseScore + variation, minScore), maxScore);
+        return Math.round(finalScore);
+    });
+};
 
   const [applicationStatus, setApplicationStatus] = useState({});
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -336,6 +396,11 @@ const JobMatching = () => {
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentPageJobs = jobs.slice(indexOfFirstJob, indexOfLastJob).map((job, index) => ({
+    ...job,
+    suitabilityScore: generateSuitabilityScores(jobs)[indexOfFirstJob + index]
+}));
+
 
   const suitabilityScores = generateSuitabilityScores(filteredJobData);
 
@@ -356,6 +421,16 @@ const JobMatching = () => {
   };
 
   const handleSignOut = async () => {
+    // Clear all localStorage items
+    localStorage.removeItem('cachedJobs');
+    localStorage.removeItem('selectedCareer');
+    localStorage.removeItem('userLocation');
+    localStorage.removeItem('userId');
+    
+    // Clear any other cached data
+    sessionStorage.clear();
+    
+    // Call the original sign out function
     await logout(true);
   };
 
@@ -410,184 +485,142 @@ const JobMatching = () => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Box display="flex" height="100vh">
-        <Sidebar
-          activeFeature={activeFeature}
-          setActiveFeature={setActiveFeature}
-          handleSignOut={handleSignOut}
-        />
-
-        <Box flex={1} display="flex" flexDirection="column">
-          <Box
-            bgcolor="#212121"
-            p={2}
-            display="flex"
-            alignItems="center"
-            style={{ maxHeight: "64px" }}
-          >
-            <Typography variant="h5" color="#ffee8c" >Job Matching</Typography>
-            <IconButton
-              aria-label="filter"
-              sx={{ marginLeft: "auto" }}
-              onClick={handleFilterClick}
-            >
-              <FilterListIcon fontSize="large" />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleFilterClose}
-            >
-              <MenuItem>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <TextField
-                    label="Min Salary"
-                    variant="outlined"
-                    size="small"
-                    name="minSalary"
-                    value={filterCriteria.minSalary}
-                    onChange={handleSalaryInputChange}
-                    type="number"
-                    style={{ maxWidth: "100px", minWidth: "100px" }}
-                  />
-                  <Typography variant="h6">-</Typography>
-                  <TextField
-                    label="Max Salary"
-                    variant="outlined"
-                    size="small"
-                    name="maxSalary"
-                    value={filterCriteria.maxSalary}
-                    onChange={handleSalaryInputChange}
-                    type="number"
-                    style={{ maxWidth: "100px", minWidth: "100px" }}
-                  />
+        <CssBaseline />
+        <Box display="flex" height="100vh">
+            <Sidebar activeFeature={activeFeature} setActiveFeature={setActiveFeature} handleSignOut={handleSignOut} />
+            <Box flex={1} display="flex" flexDirection="column">
+                <Box bgcolor="#212121" p={2} display="flex" alignItems="center" style={{ maxHeight: "64px" }}>
+                    <Typography variant="h5" color="#ffee8c">Job Matching</Typography>
+                    <IconButton aria-label="filter" sx={{ marginLeft: "auto" }} onClick={handleFilterClick}>
+                        <FilterListIcon fontSize="large" />
+                    </IconButton>
+                    <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleFilterClose}>
+                        <MenuItem>
+                            <Box display="flex" alignItems="center" gap={1}>
+                                <TextField
+                                    label="Min Salary"
+                                    variant="outlined"
+                                    size="small"
+                                    name="minSalary"
+                                    value={filterCriteria.minSalary}
+                                    onChange={handleSalaryInputChange}
+                                    type="number"
+                                    style={{ maxWidth: "100px", minWidth: "100px" }}
+                                />
+                                <Typography variant="h6">-</Typography>
+                                <TextField
+                                    label="Max Salary"
+                                    variant="outlined"
+                                    size="small"
+                                    name="maxSalary"
+                                    value={filterCriteria.maxSalary}
+                                    onChange={handleSalaryInputChange}
+                                    type="number"
+                                    style={{ maxWidth: "100px", minWidth: "100px" }}
+                                />
+                            </Box>
+                        </MenuItem>
+                        <MenuItem>
+                            <TextField
+                                label="Location"
+                                variant="outlined"
+                                size="small"
+                                value={filterCriteria.locationInput}
+                                onChange={handleLocationInputChange}
+                            />
+                        </MenuItem>
+                    </Menu>
                 </Box>
-              </MenuItem>
-              <MenuItem>
-                <TextField
-                  label="Location"
-                  variant="outlined"
-                  size="small"
-                  value={filterCriteria.locationInput}
-                  onChange={handleLocationInputChange}
-                />
-              </MenuItem>
-            </Menu>
-          </Box>
 
-          <Box flex={1} overflow="auto">
-            <GradientBackground>
-              <GridOverlay />
-              <AnimatedDots ref={canvasRef} />
-              <Stack spacing={8} mt={1} m={2} overflow="hidden">
-                {currentJobs.map((job) => (
-                  <StyledCard key={job.id}>
-                    <StyledApplyButton
-                      style={{zIndex:3}}
-                      variant="contained"
-                      endIcon={<OpenInNewIcon />}
-                      onClick={() => handleApplyClick(job.id)}
-                      disabled={applicationStatus[job.id] === "Applied"}
-                    >
-                      {applicationStatus[job.id] === "Applied"
-                        ? "Applied"
-                        : applicationStatus[job.id] === "Viewed"
-                        ? "Viewed"
-                        : "Apply"}
-                    </StyledApplyButton>
-                    <Box
-                      sx={{ display: "flex", flexDirection: "column", flex: 1 }}
-                    >
-                      <Dialog
-                        open={dialogOpen}
-                        onClose={() => handleDialogClose(false)}
-                      >
-                        <DialogTitle>Application Status</DialogTitle>
-                        <DialogContent>
-                          <DialogContentText>
-                            Did you successfully apply for this job?
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button
-                            onClick={() => handleDialogClose(false)}
-                            color="primary"
-                          >
-                            No
-                          </Button>
-                          <Button
-                            onClick={() => handleDialogClose(true)}
-                            color="primary"
-                          >
-                            Yes
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
-                      <StyledCardContent>
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <StyledTypography
-                            variant="h6"
-                            fontWeight="bold"
-                            color="#a6e890 !important"
-                          >
-                            {job.positionName}:
-                          </StyledTypography>
-                          <Typography
-                            variant="h7"
-                            color="textSecondary"
-                            sx={{ fontStyle: "italic", marginLeft: 1 }} // Add margin for spacing
-                          >
-                            Compatibility Score:{" "}
-                            {Math.round(job.suitabilityScore)}%
-                          </Typography>
-                        </Box>
-                        <Typography variant="subtitle1" color="textSecondary">
-                          {job.company}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          color="textSecondary"
-                          sx={{ marginRight: 1 }}
-                        >
-                          Location:{job.location}
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          Salary:{job.salary}
-                        </Typography>
-                        <Typography variant="body2" color="textPrimary">
-                          {cleanDescription(job.description)}
-                        </Typography>
-                      </StyledCardContent>
-                    </Box>
-                  </StyledCard>
-                ))}
-              </Stack>
-            </GradientBackground>
-          </Box>
+                <Box flex={1} overflow="auto">
+                    <GradientBackground>
+                        <GridOverlay />
+                        <AnimatedDots ref={canvasRef} />
+                        {loading ? (
+                            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                                <CircularProgress size={60} />
+                            </Box>
+                        ) : error ? (
+                            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                                <Typography color="error">{error}</Typography>
+                            </Box>
+                        ) : (
+                            <Stack spacing={8} mt={1} m={2} overflow="hidden">
+                                {currentPageJobs.map((job, index) => (
+                                    <StyledCard key={index}>
+                                        <StyledApplyButton
+                                            style={{zIndex:3}}
+                                            variant="contained"
+                                            endIcon={<OpenInNewIcon />}
+                                            onClick={() => window.open(job.link, '_blank')}
+                                            disabled={applicationStatus[job.id] === "Applied"}
+                                        >
+                                            {applicationStatus[job.id] === "Applied"
+                                                ? "Applied"
+                                                : applicationStatus[job.id] === "Viewed"
+                                                ? "Viewed"
+                                                : "Apply"}
+                                        </StyledApplyButton>
+                                        <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
+                                            <Dialog open={dialogOpen} onClose={() => handleDialogClose(false)}>
+                                                <DialogTitle>Application Status</DialogTitle>
+                                                <DialogContent>
+                                                    <DialogContentText>
+                                                        Did you successfully apply for this job?
+                                                    </DialogContentText>
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <Button onClick={() => handleDialogClose(false)} color="primary">No</Button>
+                                                    <Button onClick={() => handleDialogClose(true)} color="primary">Yes</Button>
+                                                </DialogActions>
+                                            </Dialog>
+                                            <StyledCardContent>
+                                                <Box sx={{ display: "flex", alignItems: "center" }}>
+                                                    <StyledTypography variant="h6" fontWeight="bold" color="#a6e890 !important">
+                                                        {job.title}:
+                                                    </StyledTypography>
+                                                    <Typography variant="h7" color="textSecondary" sx={{ fontStyle: "italic", marginLeft: 1 }}>
+                                                        Compatibility Score: {Math.round(job.suitabilityScore || 95)}%
+                                                    </Typography>
+                                                </Box>
+                                                <Typography variant="subtitle1" color="textSecondary">
+                                                    {job.company}
+                                                </Typography>
+                                                <Typography variant="caption" color="textSecondary" sx={{ marginRight: 1 }}>
+                                                    Location: {job.location}
+                                                </Typography>
+                                                <Typography variant="caption" color="textSecondary">
+                                                    Source: {job.source}
+                                                </Typography>
+                                                <Typography variant="body2" color="textPrimary">
+                                                    {job.description ? cleanDescription(job.description) : ''}
+                                                </Typography>
+                                            </StyledCardContent>
+                                        </Box>
+                                    </StyledCard>
+                                ))}
+                            </Stack>
+                        )}
+                    </GradientBackground>
+                </Box>
 
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            p={2}
-            bgcolor="#0a0a0a"
-          >
-            <Pagination
-              count={Math.ceil(filteredJobData.length / jobsPerPage)}
-              page={currentPage}
-              onChange={handlePageChange}
-              sx={{
-                "& .MuiPaginationItem-root": {
-                  backgroundColor: "transparent",
-                },
-              }}
-            />
-          </Box>
+                <Box display="flex" justifyContent="center" alignItems="center" p={2} bgcolor="#0a0a0a">
+                    <Pagination
+                        count={Math.ceil(jobs.length / jobsPerPage)}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        sx={{
+                            "& .MuiPaginationItem-root": {
+                                backgroundColor: "transparent",
+                            },
+                        }}
+                    />
+                </Box>
+            </Box>
         </Box>
-      </Box>
     </ThemeProvider>
-  );
+);
+
 };
 
 export default JobMatching;

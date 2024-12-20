@@ -115,13 +115,29 @@ function OfferNegotiation() {
   const [userInput, setUserInput] = useState('');
   const { salary, setSalary } = useSalary();
 
+  useEffect(() => {
+    const storedSalary = localStorage.getItem('calculatedSalary');
+    if (storedSalary) {
+        setSalary(parseInt(storedSalary).toLocaleString());
+    }
+}, []);
+
   const logout = useLogoutFunction();
   const handleSignOut = async () => {
+    // Clear all localStorage items
+    localStorage.removeItem('cachedJobs');
+    localStorage.removeItem('selectedCareer');
+    localStorage.removeItem('userLocation');
+    localStorage.removeItem('userId');
+    
+    // Clear any other cached data
+    sessionStorage.clear();
+    
+    // Call the original sign out function
     await logout(true);
-    sessionStorage.removeItem('userSalary');
   };
 
-
+  sessionStorage.removeItem('userSalary');
   const fetchAIResponse = async (userInput) => {
     const apiKey = import.meta.env.VITE_LAW_PER_API_KEY;
 

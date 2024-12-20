@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ThemeProvider,
   createTheme,
@@ -22,6 +22,7 @@ import BackgroundAnimation from "../Components/BackgroundAnimation";
 import { SalaryProvider, useSalary } from "../Components/SalaryContext";
 import zIndex from "@mui/material/styles/zIndex";
 import styled from "styled-components";
+import { CircularProgress } from '@mui/material';
 
 const darkTheme = createTheme({
   palette: {
@@ -179,15 +180,77 @@ const Dashboard = () => {
   const { salary } = useSalary();
   const [activeFeature, setActiveFeature] = useState("Resume Review");
   const logout = useLogoutFunction();
+  const [selectedCareer, setSelectedCareer] = useState('');
+  const [topJobs, setTopJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const storedSalary = localStorage.getItem('calculatedSalary');
+    if (storedSalary) {
+        setSalary(parseInt(storedSalary).toLocaleString());
+    }
+}, []);
 
   const handleSignOut = async () => {
+    // Clear only job-related cache
+    localStorage.removeItem('cachedJobs');
+    
+    // Keep user preferences until successful logout
+    const userPrefs = {
+        career: localStorage.getItem('selectedCareer'),
+        location: localStorage.getItem('userLocation')
+    };
+    
+    // Clear everything else
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Restore user preferences
+    localStorage.setItem('selectedCareer', userPrefs.career);
+    localStorage.setItem('userLocation', userPrefs.location);
+    
+    // Finally logout
     await logout(true);
-  };
+    
+    // Clear everything after successful logout
+    localStorage.clear();
+};
+
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleNavigation = (path) => {
     navigate(path); // Navigate to the respective feature page
   };
+
+  useEffect(() => {
+      const fetchTopJobs = async () => {
+        try {
+            setLoading(true);
+            const storedCareer = localStorage.getItem('selectedCareer');
+            const storedLocation = localStorage.getItem('userLocation');
+            
+            if (!storedCareer) {
+                setLoading(false);
+                return;
+            }
+
+            const response = await fetch(
+                `http://127.0.0.1:8000/api/api/scrape-jobs/?job_title=${encodeURIComponent(storedCareer)}&location=${encodeURIComponent(storedLocation || 'United States')}&force_new=true`
+            );
+            
+            const data = await response.json();
+            if (data.status === 'success') {
+                setTopJobs(data.jobs.slice(0, 3));
+            }
+        } catch (err) {
+            console.error('Error fetching top jobs:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchTopJobs();
+}, []);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -210,109 +273,74 @@ const Dashboard = () => {
           <Grid container spacing={5} sx={{ flexGrow: 1 }}>
             {/* Job Listings Card */}
             <Grid item xs={12} md={6}>
-              <Card
-                sx={{
-                  height: "100%",
-                  borderRadius: 3,
+              <Card sx={{ 
+                  height: "100%", 
+                  borderRadius: 3, 
                   background: "#2a2a2a",
-                  "&:hover": neonGlow,
+                  "&:hover": neonGlow, 
                   transition: "0.3s ease-in-out",
-                }}
-              >
-                <CardContent>
-                <Box style={{ 
-                  display: "flex", 
-                  flexDirection: "row", 
-                  alignItems: "center", 
-                  justifyContent: "space-between",
-                  height: "100%",
-                  width: "100%", // Add this
-                  position: "relative" // Add this
-                }} >
-                  <Typography variant="h6" color="#ffee8c" gutterBottom>
-                    Job Listings
-                  </Typography>
-                  <StyledApplyButton 
-                    style={{ 
-                      position: "absolute", // Change to absolute
-                      right: 0, // Add this
-                      top: 0, // Add this
-                      zIndex: 4 
-                    }} 
-                    color="#fff !important" 
-                    onClick={() => navigate("/job-matching")}
-                  >
-                    View More
-                  </StyledApplyButton>
-                </Box>
-                  <Divider sx={{ my: 2 }} />
-
-                  {/* Software Engineer Button */}
-                  <Button
-                    fullWidth
-                    sx={buttonStyles}
-                    onClick={() => {
-                      window.open(
-                        "https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=c3ad204106562ea0&advn=9091402361108976",
-                        "_blank"
-                      );
-                    }}
-                  >
-                    <Box textAlign="left">
-                      <JobTitle variant="subtitle1" fontWeight="bold">
-                        Process Engineering Internship
-                      </JobTitle>
-                      <CompanyName>TTM Technologies - Remote</CompanyName>
-                      <Salary>$30/hr</Salary>
-                    </Box>
-                  </Button>
-
-                  <Divider sx={{ my: 1, borderColor: "#424242" }} />
-
-                  <Button
-                    fullWidth
-                    sx={buttonStyles}
-                    onClick={() => {
-                      window.open(
-                        "https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=40810cfc9f61645c&advn=9943506443046871",
-                        "_blank"
-                      );
-                    }}
-                  >
-                    <Box textAlign="left">
-                      <JobTitle variant="subtitle1" fontWeight="bold">
-                        Summer Associate Internship
-                      </JobTitle>
-                      <CompanyName>
-                        Navy Federal Credit Union - Vienna, VA
-                      </CompanyName>
-                      <Salary>$26 - $46/hr</Salary>
-                    </Box>
-                  </Button>
-
-                  <Divider sx={{ my: 1, borderColor: "#424242" }} />
-
-                  <Button
-                    fullWidth
-                    sx={buttonStyles}
-                    onClick={() => {
-                      window.open(
-                        "https://www.indeed.com/q-Software-Engineering-Internship-2025-Graduation-jobs.html?mna=&aceid=&gad_source=1&vjk=b36a9d2ef5387c0b",
-                        "_blank"
-                      );
-                    }}
-                  >
-                    <Box textAlign="left">
-                      <JobTitle variant="subtitle1" fontWeight="bold">
-                        Full Stack Software Engineer Intern
-                      </JobTitle>
-                      <CompanyName>Autodesk - San Francisco, CA</CompanyName>
-                      <Salary>$47,840 - $162,240</Salary>
-                    </Box>
-                  </Button>
-                </CardContent>
+              }}>
+                  <CardContent>
+                      <Box style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          height: "100%",
+                          width: "100%",
+                          position: "relative"
+                      }}>
+                          <Typography variant="h6" color="#ffee8c" gutterBottom>
+                              Job Listings
+                          </Typography>
+                          <StyledApplyButton
+                              style={{
+                                  position: "absolute",
+                                  right: 0,
+                                  top: 0,
+                                  zIndex: 4
+                              }}
+                              color="#fff !important"
+                              onClick={() => navigate("/job-matching")}
+                          >
+                              View More
+                          </StyledApplyButton>
+                      </Box>
+                      <Divider sx={{ my: 2 }} />
+                      
+                      {loading ? (
+                      <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+                          <CircularProgress sx={{ color: "#21eb86" }} />
+                      </Box>
+                  ) : topJobs && topJobs.length > 0 ? (
+                      topJobs.map((job, index) => (
+                          <React.Fragment key={index}>
+                              <Button fullWidth sx={buttonStyles} onClick={() => {
+                                  window.open(job.link, "_blank");
+                              }}>
+                                  <Box textAlign="left">
+                                      <JobTitle variant="subtitle1" fontWeight="bold">
+                                          {job.title}
+                                      </JobTitle>
+                                      <CompanyName>{job.company}</CompanyName>
+                                      <Typography variant="caption" color="textSecondary">
+                                          {job.location}
+                                      </Typography>
+                                  </Box>
+                              </Button>
+                              {index < topJobs.length - 1 && (
+                                  <Divider sx={{ my: 1, borderColor: "#424242" }} />
+                              )}
+                          </React.Fragment>
+                      ))
+                  ) : (
+                      <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+                          <CircularProgress sx={{ color: "#21eb86" }} />
+                      </Box>
+                  )}
+                  </CardContent>
               </Card>
-            </Grid>
+          </Grid>
 
             {/* Resume Upload Card */}
             <Grid item xs={12} md={6}>

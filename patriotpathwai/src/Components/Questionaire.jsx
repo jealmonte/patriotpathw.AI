@@ -213,17 +213,28 @@ const theme = createTheme({
     const [workStyle, setWorkStyle] = useState('');
     const [resume, setResume] = useState(null);
     const [selectedCareer, setSelectedCareer] = useState('');
+    const [location, setLocation] = useState('');
 
     const getCareerSuggestions = async (userData) => {
-      const apiKey = import.meta.env.VITE_LAW_PER_API_KEY;
+    const apiKey = import.meta.env.VITE_LAW_PER_API_KEY;
       
-      const systemContent = "You are a career advisor. Based on the user's profile, return ONLY a JSON array of exactly three career paths. Format: [\"Career 1\", \"Career 2\", \"Career 3\"]. No additional text or explanation.";
+    const getCareerLevel = (yearsExp, major) => {
+          if (!major || yearsExp < 2) return 'Intern';
+          if (yearsExp < 3) return 'Junior';
+          if (yearsExp < 6) return 'Mid-Level';
+          return 'Senior';
+      };
+  
+      const careerLevel = getCareerLevel(parseFloat(userData.yearsOfExperience), userData.major);
       
-      const userPrompt = `Based on this profile, suggest three specific career paths:
-        - Education: ${userData.major}
-        - Technical Skills: ${userData.skills.join(', ')}
-        - Years of Experience: ${userData.yearsOfExperience}
-        - Math Comfort Level: ${userData.comfortLevel}`;
+      const systemContent = `You are a career advisor. Based on the user's profile with ${userData.yearsOfExperience} years of experience, return ONLY a JSON array of exactly three career paths that are ALL at the ${careerLevel} level. For example, if they are at Intern level, all three suggestions must be internships. Format: ["Career Title 1", "Career Title 2", "Career Title 3"]. Each title MUST include the word "${careerLevel}" in it. No additional text or explanation.`;
+  
+      const userPrompt = `Suggest three ${careerLevel}-level positions based on:
+      - Education: ${userData.major}
+      - Technical Skills: ${userData.skills.join(', ')}
+      - Years of Experience: ${userData.yearsOfExperience} (${careerLevel} level)
+      - Math Comfort Level: ${userData.comfortLevel}
+      Remember: ALL suggestions must be ${careerLevel}-level positions.`;
     
       try {
         const options = {
@@ -348,12 +359,15 @@ const theme = createTheme({
         workStyle,
         yearsOfExperience,
         comfortLevel,
+        location,
         resume: resume ? resume.name : null
       };
 
       try {
         const suggestions = await getCareerSuggestions(userData);
         setCareerOptions(suggestions);
+        
+        localStorage.setItem('userLocation', location);
       } catch (error) {
         console.error('Error getting career suggestions:', error);
         setCareerOptions(['Software Engineer', 'Data Analyst', 'Product Manager']);
@@ -386,11 +400,36 @@ const theme = createTheme({
         return false;
       };
     
-      const handleCareerClick = (career) => {
+      const handleCareerClick = async (career) => {
+        
+        // Set new career and location
         setCareer(career);
         setSelectedCareer(career);
-        console.log(career);
-      };
+        localStorage.setItem('selectedCareer', career);
+        
+        try {
+            
+            const storedLocation = localStorage.getItem('userLocation');
+            const response = await fetch(
+                `http://127.0.0.1:8000/api/api/scrape-jobs/?job_title=${encodeURIComponent(career)}&location=${encodeURIComponent(storedLocation)}&force_new=true`
+            );
+            
+            const data = await response.json();
+            if (data.status === 'success') {
+                localStorage.setItem('cachedJobs', JSON.stringify({
+                    jobs: data.jobs,
+                    career: career,
+                    location: storedLocation,
+                    timestamp: new Date().getTime()
+                }));
+            }
+        } catch (err) {
+            console.error('Error fetching initial jobs:', err);
+        }
+        
+        navigate('/Dashboard');
+    };
+    
 
 
       const questions = [
@@ -527,8 +566,37 @@ const theme = createTheme({
                 />
               )}
             </Stack>
-          </>
+          </> 
         ),
+      },
+      {
+          title: "Where are you looking for work?",
+          component: (
+              <>
+                  <TextField
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                              e.preventDefault();
+                              if (location.trim()) {
+                                  localStorage.setItem('userLocation', location.trim());
+                              }
+                          }
+                      }}
+                      fullWidth
+                      placeholder="Enter city, state, or country"
+                  />
+                  <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: "wrap" }}>
+                      {location && (
+                          <Chip 
+                              label={location} 
+                              onDelete={() => setLocation('')}
+                          />
+                      )}
+                  </Stack>
+              </>
+          )
       },
       {
         title:

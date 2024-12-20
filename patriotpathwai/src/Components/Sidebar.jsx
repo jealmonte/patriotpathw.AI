@@ -14,6 +14,23 @@ const features = [
   { name: 'Resume Review', icon: FileText, path: '/uploadresume' },
 ];
 
+const handleSignOut = async () => {
+  // Clear all localStorage items
+  localStorage.clear();  // Clear all localStorage instead of individual items
+  sessionStorage.clear();
+  
+  // Clear server-side cache
+  try {
+      await fetch('http://127.0.0.1:8000/api/clear-job-cache/', {
+          method: 'POST',
+      });
+  } catch (err) {
+      console.error('Error clearing job cache:', err);
+  }
+  
+  await logout(true);
+};
+
 const Sidebar = ({ activeFeature, setActiveFeature, handleSignOut }) => {
   const navigate = useNavigate();
 

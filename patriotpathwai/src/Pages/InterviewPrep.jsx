@@ -188,6 +188,16 @@ const InterviewPrep = () => {
 
   
   const handleSignOut = async () => {
+    // Clear all localStorage items
+    localStorage.removeItem('cachedJobs');
+    localStorage.removeItem('selectedCareer');
+    localStorage.removeItem('userLocation');
+    localStorage.removeItem('userId');
+    
+    // Clear any other cached data
+    sessionStorage.clear();
+    
+    // Call the original sign out function
     await logout(true);
   };
   

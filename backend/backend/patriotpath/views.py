@@ -12,9 +12,15 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import PDFPageAggregator
 import docx
 import tempfile
-from .models import ResumeData
+from .models import ResumeData, JobListing, UserPreferences
 import json
 from django.http import JsonResponse
+from .job_scraper import JobScraper
+import time
+import random
+from datetime import timedelta
+from django.utils import timezone
+
 
 def parse_pdf(file_path):
     output = {'sections': [], 'entries': []}
@@ -156,3 +162,109 @@ def analyze_resume_view(request):
         return Response(analysis_result, status=status.HTTP_200_OK)
     
     return Response({'error': 'Invalid resume data provided.'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def scrape_jobs(request):
+    job_title = request.GET.get('job_title', '')
+    location = request.GET.get('location', '')
+    
+    if not job_title or not location:
+        return Response({
+            'status': 'error',
+            'message': 'Both job title and location are required'
+        }, status=400)
+    
+    scraper = JobScraper()
+    try:
+        linkedin_jobs = scraper.scrape_linkedin(job_title, location)
+        
+        # Store new jobs in database
+        for job in linkedin_jobs:
+            JobListing.objects.create(
+                title=job['title'],
+                company=job['company'],
+                location=job['location'],
+                link=job['link'],
+                source=job['source'],
+                career_type=job_title
+            )
+        
+        return Response({
+            'status': 'success',
+            'jobs': linkedin_jobs,
+            'source': 'fresh'
+        })
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+    finally:
+        scraper.close_session()
+
+
+@api_view(['GET'])
+def get_top_jobs(request):
+    try:
+        # Get the stored career type from the request
+        career_type = request.GET.get('career_type', '')
+        
+        # Get the most recent jobs for this career (limit to 3)
+        recent_jobs = JobListing.objects.filter(career_type=career_type).order_by('-created_at')[:3]
+        
+        if recent_jobs:
+            jobs_data = list(recent_jobs.values('title', 'company', 'location', 'link', 'source'))
+            return Response({
+                'status': 'success',
+                'jobs': jobs_data
+            })
+        return Response({
+            'status': 'success',
+            'jobs': []
+        })
+    except Exception as e:
+        return Response({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+    
+@api_view(['POST'])
+def clear_cache(request):
+    JobListing.objects.all().delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['POST'])
+def save_user_preferences(request):
+    career = request.data.get('career')
+    location = request.data.get('location')
+    
+    if not career or not location:
+        return Response({
+            'status': 'error',
+            'message': 'Career and location are required'
+        }, status=400)
+    
+    UserPreferences.objects.update_or_create(
+        user=request.user,
+        defaults={
+            'selected_career': career,
+            'location': location
+        }
+    )
+    
+    return Response({'status': 'success'})
+
+@api_view(['GET'])
+def get_user_preferences(request):
+    try:
+        prefs = UserPreferences.objects.get(user=request.user)
+        return Response({
+            'status': 'success',
+            'career': prefs.selected_career,
+            'location': prefs.location
+        })
+    except UserPreferences.DoesNotExist:
+        return Response({
+            'status': 'error',
+            'message': 'No preferences found'
+        })
